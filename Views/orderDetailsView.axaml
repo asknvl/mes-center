@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="mes_center.Views.orderDetailsView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+
+	<Grid>
+		<StackPanel
+			Orientation="Vertical"
+			HorizontalAlignment="Left"
+			Width="250">					
+			<TextBlock
+				Classes="TextBlock Header">
+				Номер задания:
+			</TextBlock>
+			<TextBlock				
+				Text="{Binding Order.order_num}"/>
+			<TextBlock
+				Classes="TextBlock Header">
+				Дата регистрации:
+			</TextBlock>
+			<TextBlock
+				Text="{Binding Order.text_reg_date}"/>
+			<TextBlock
+				Classes="TextBlock Header">
+				Модель изделия:
+			</TextBlock>
+			<TextBlock
+				Text="{Binding Order.model.name}"/>
+			<TextBlock
+				Classes="TextBlock Header">
+				Конфигурация изделия:
+			</TextBlock>
+			<TextBlock
+				Text="{Binding Order.config.name}"/>
+			<TextBlock
+				Classes="TextBlock Header">
+				Количество изделий:
+			</TextBlock>
+			<TextBlock
+				Text="{Binding Order.amount}"/>
+			<TextBlock
+				Classes="TextBlock Header">
+				Дополнительное количество:
+			</TextBlock>
+			<TextBox
+				IsReadOnly="{Binding !IsAcceptRejectNeed}"
+				HorizontalAlignment="Left"
+				Width="100"
+				Text="{Binding Order.amount_aux}"/>
+			<TextBlock
+				Classes="TextBlock Header"
+				IsVisible="{Binding IsSerialVisible}">
+				Серийный номер первого изделия:
+			</TextBlock>
+			<TextBox
+				IsReadOnly="True"
+				IsVisible="{Binding IsSerialVisible}"
+				HorizontalAlignment="Left"
+				Width="150"
+				Text="{Binding Order.first_serial}"/>
+			<TextBlock
+				Classes="TextBlock Header">
+				Версия ВПО:
+			</TextBlock>
+			<TextBlock
+				Text="{Binding Order.fwv}"/>
+			<TextBlock
+				Classes="TextBlock Header">
+				Комментарий:
+			</TextBlock>
+			<TextBox
+				IsReadOnly="{Binding !IsAcceptRejectNeed}"
+				Height="100"
+				VerticalContentAlignment="Top"
+				AcceptsReturn="True"
+				Text="{Binding Order.comment}">
+			</TextBox>
+
+			<Grid
+				IsVisible="{Binding IsAcceptRejectNeed}"
+				Margin="2, 0, 2, 0"
+				ColumnDefinitions="*, *"				
+				HorizontalAlignment="Right">
+				<Button										
+					Grid.Column="0"
+					Width="100"
+					Command="{Binding acceptOrderCmd}">
+					Подтвердить
+				</Button>
+				<Button								
+					Grid.Column="1"
+					Width="100"
+					Command="{Binding rejectOrderCmd}">
+					Отклонить
+				</Button>
+			</Grid>
+
+			<StackPanel.Styles>
+				<Style Selector="TextBlock">
+					<Setter Property="Margin" Value="4, 2, 4, 2"/>
+				</Style>
+				<Style Selector="TextBox">
+					<Setter Property="Margin" Value="4, 2, 4, 2"/>
+				</Style>
+				<Style Selector="ComboBox">
+					<Setter Property="Margin" Value="4, 2, 4, 2"/>
+				</Style>
+			</StackPanel.Styles>
+		</StackPanel>
+	</Grid>
+</UserControl>

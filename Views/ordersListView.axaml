@@ -1,0 +1,50 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:views="using:mes_center.Views"
+			 xmlns:vm="using:mes_center.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="mes_center.Views.ordersListView">
+	<Design.DataContext>
+		<vm:ordersListVM/>
+	</Design.DataContext>
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>		
+	<Grid
+		RowDefinitions="*, Auto"
+		MinWidth="250">
+		<ScrollViewer
+			Grid.Row="0">
+			<ListBox
+				Items="{Binding OrdersList}"
+				SelectedItem="{Binding Order}"
+				Margin="2"				
+				ScrollViewer.VerticalScrollBarVisibility="Auto">			
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Vertical">
+							<Grid
+								ColumnDefinitions="100, *">
+								<TextBlock
+									Grid.Column="0">
+									Номер задания:
+								</TextBlock>
+								<TextBlock
+									Grid.Column="1"
+									Text="{Binding order_num}"/>
+							</Grid>											
+							<TextBlock
+								Text="{Binding text_status}"/>
+							<TextBlock
+								HorizontalAlignment="Right"
+								Text="{Binding text_reg_date}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ListBox.ItemTemplate>			
+			</ListBox>
+		</ScrollViewer>		
+	</Grid>	
+</UserControl>

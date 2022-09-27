@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="mes_center.Views.taskView">
+	
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+
+	<Grid>
+		<StackPanel
+			Orientation="Vertical"
+			HorizontalAlignment="Left"
+			Width="250">
+			<TextBlock>
+				Версия формата сообщения:
+			</TextBlock>
+			<TextBox
+				Text="{Binding Version}"/>			
+			<TextBlock>
+				Номер задания:
+			</TextBlock>
+			<TextBox
+				Text="{Binding OrderNumber}"/>
+			<TextBlock>
+				Код площадки:
+			</TextBlock>
+			<TextBox
+				Text="{Binding ZoneCode}"/>
+			<TextBlock>
+				Модель изделия:
+			</TextBlock>
+			<ComboBox				
+				Items="{Binding Models}"
+				SelectedItem="{Binding Model}"				
+				HorizontalAlignment="Stretch">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Vertical">							
+							<TextBlock
+								Text="{Binding name}"/>
+						</StackPanel>							
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<TextBlock>
+				Конфигурация изделия:
+			</TextBlock>
+			<ComboBox
+				Items="{Binding Configurations}"
+				SelectedItem="{Binding Configuration}"
+				Grid.Row="7"
+				HorizontalAlignment="Stretch">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Vertical">							
+							<TextBlock
+								Text="{Binding name}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<TextBlock>
+				Количество изделий:
+			</TextBlock>
+			<TextBox
+				Text="{Binding Amount}"/>
+			<TextBlock>
+				Версия ВПО:
+			</TextBlock>
+			<TextBox
+				Text="{Binding Fwv}"/>
+			<TextBlock>
+				Комментарий:
+			</TextBlock>
+			<TextBox				
+				Height="100"
+				VerticalContentAlignment="Top"
+				AcceptsReturn="True"
+				Text="{Binding Comment}">				
+			</TextBox>
+
+			<Grid
+				HorizontalAlignment="Right"
+				Margin="4">				
+				<Button
+					Command="{Binding createTaskCmd}"
+					IsEnabled="{Binding IsDataReady}">			
+					Создать задание
+				</Button>
+			</Grid>
+			
+			<StackPanel.Styles>
+				<Style Selector="TextBlock">
+					<Setter Property="Margin" Value="4, 2, 4, 2"/>
+				</Style>
+				<Style Selector="TextBox">
+					<Setter Property="Margin" Value="4, 2, 4, 2"/>
+				</Style>
+				<Style Selector="ComboBox">
+					<Setter Property="Margin" Value="4, 2, 4, 2"/>
+				</Style>
+			</StackPanel.Styles>
+		</StackPanel>
+	</Grid>
+	
+</UserControl>

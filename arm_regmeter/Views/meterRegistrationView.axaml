@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vms="using:mes_center.arm_regmeter.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="mes_center.arm_regmeter.Views.meterRegistrationView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	<Grid
+		RowDefinitions="Auto, *, Auto, Auto">
+		<Grid
+			Grid.Row="0"
+			Height="40"
+			Background="LightGray">
+			<TextBlock
+				Classes="TextBlock Title">
+				Регистрация ПУ
+			</TextBlock>
+		</Grid>
+		<Grid			
+			ColumnDefinitions="*, Auto"
+			Grid.Row="1">
+			<ContentControl
+				Content="{Binding Content}"
+				Margin="10"
+				VerticalAlignment="Center"
+				Grid.Column="0">
+				<ContentControl.DataTemplates>
+					<DataTemplate DataType="{x:Type vms:componentItemVM}">
+						<StackPanel
+							Orientation="Vertical">
+							<TextBlock>
+								Отсканируйте штрих код компонента:
+							</TextBlock>
+							<TextBlock
+								Text="{Binding Name}">
+							</TextBlock>
+							<TextBox
+								Text="{Binding SerialNumber}">
+							</TextBox>
+						</StackPanel>
+					</DataTemplate>
+				</ContentControl.DataTemplates>
+			</ContentControl>
+			<ListBox
+				Grid.Column="1"
+				Width="300">				
+			</ListBox>
+		</Grid>
+
+		<Grid
+			Grid.Row="2"
+			Height="45"
+			ColumnDefinitions="*,*"
+			Width="250"
+			HorizontalAlignment="Right">
+			<Button
+				Command="{Binding completeOrderCmd}"
+				Grid.Column="0"
+				VerticalAlignment="Stretch"
+				HorizontalAlignment="Stretch"
+				VerticalContentAlignment="Center">
+				Завершить
+			</Button>
+			<Button
+				Command="{Binding cancelOrderCmd}"
+				Grid.Column="1"
+				VerticalAlignment="Stretch"
+				HorizontalAlignment="Stretch"
+				VerticalContentAlignment="Center">
+				Отмена
+			</Button>
+		</Grid>
+
+	</Grid>
+</UserControl>

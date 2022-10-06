@@ -22,7 +22,7 @@ namespace mes_center.Models.kafka.kafka_dto
         [JsonProperty]
         public int amount { get; set; }
         [JsonProperty]
-        public string? fwv { get; set; }
+        public string? fwv { get; set; } = "0.0.0";
         [JsonProperty]
         public string? comment { get; set; }
 

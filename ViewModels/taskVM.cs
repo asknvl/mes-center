@@ -29,7 +29,7 @@ namespace mes_center.ViewModels
     public class taskVM : ViewModelBase, IReloadable
     {
         #region vars                
-        producer kafkaProducer = new producer("172.16.118.105");
+        producer kafkaProducer = new producer();
         consumer kafkaConsumer = new consumer("test");
         #endregion
 
@@ -55,8 +55,8 @@ namespace mes_center.ViewModels
             set => this.RaiseAndSetIfChanged(ref zoneCode, value);
         }
 
-        List<Model> models = new();
-        public List<Model> Models
+        List<ModelDTO> models = new();
+        public List<ModelDTO> Models
         {
             get => models;
             set
@@ -67,15 +67,15 @@ namespace mes_center.ViewModels
             }
         }
 
-        Model model;
-        public Model Model
+        ModelDTO model;
+        public ModelDTO Model
         {
             get => model;
             set => this.RaiseAndSetIfChanged(ref model, value);
         }
 
-        List<Configuration> configurations = new();
-        public List<Configuration> Configurations
+        List<ConfigurationDTO> configurations = new();
+        public List<ConfigurationDTO> Configurations
         {
             get => configurations;
             set {
@@ -84,8 +84,8 @@ namespace mes_center.ViewModels
             }
         }
 
-        Configuration configuration;
-        public Configuration Configuration
+        ConfigurationDTO configuration;
+        public ConfigurationDTO Configuration
         {
             get => configuration;
             set => this.RaiseAndSetIfChanged(ref configuration, value);
@@ -137,7 +137,7 @@ namespace mes_center.ViewModels
                 order.meter_modelid = Model.id;
                 order.configurationid = Configuration.id;
                 order.amount = Amount;
-                order.fwv = Fwv;
+                //order.fwv = Fwv;
                 order.comment = Comment;
 
                 try

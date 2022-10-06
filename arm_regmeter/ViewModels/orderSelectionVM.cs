@@ -30,7 +30,7 @@ namespace mes_center.arm_regmeter.ViewModels
         {
 
             Orders = new ordersListVM();
-            Orders.OrderStatuses = new Order.OrderStatus[] { Order.OrderStatus.READY_TO_EXECUTE };
+            Orders.OrderStatuses = new OrderDTO.OrderStatus[] { OrderDTO.OrderStatus.READY_TO_EXECUTE };
 
             #region commands
             selectOrderCmd = ReactiveCommand.Create(() => {
@@ -53,7 +53,7 @@ namespace mes_center.arm_regmeter.ViewModels
         #endregion
 
         #region events
-        public event Action<Order> OrderSelectedEvent;
+        public event Action<OrderDTO> OrderSelectedEvent;
         #endregion
     }
 }

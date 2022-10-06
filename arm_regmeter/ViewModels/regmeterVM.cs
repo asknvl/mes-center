@@ -6,10 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using mes_center.Models.rest.server_dto;
+using mes_center.Models.scanner;
+using System.Diagnostics;
 
 namespace mes_center.arm_regmeter.ViewModels
 {
-    public class regmeterVM : LifeCycleViewModelBase
+    public class regmeterVM : LifeCycleViewModelBase, IScanner
     {
         #region vars
         loginVM login;        
@@ -17,6 +19,9 @@ namespace mes_center.arm_regmeter.ViewModels
 
         #region properties        
         object? content;
+
+        public event Action<string> OnScanEvent;
+
         public object? Content
         {
             get => content;
@@ -35,9 +40,9 @@ namespace mes_center.arm_regmeter.ViewModels
                 showOrderSelection();
             };
 
-            //Content = login;
+            Content = login;
 
-            Content = new meterRegistrationVM();
+            //Content = new meterRegistrationVM();
 
         }
         #region helpers
@@ -54,12 +59,25 @@ namespace mes_center.arm_regmeter.ViewModels
             Content = os;
         }
 
-        void showMeterRegistration(Order order)
+        void showMeterRegistration(OrderDTO order)
         {
             var mr = new meterRegistrationVM();
+            mr.CloseRequestEvent += () =>
+            {
+                showOrderSelection();
+            };
             mr.Order = order;
             Content = mr;
         }
+
+        public void OnScan(string text)
+        {
+            if (Content is meterRegistrationVM)
+            {
+                IScanner scanner = (IScanner)Content;
+                scanner.OnScan(text);
+            }
+        } 
         #endregion
     }
 }

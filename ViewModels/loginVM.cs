@@ -32,8 +32,8 @@ namespace mes_center.ViewModels
         #endregion
         public loginVM() {
 
-            Login = "TestLogin";
-            Password = "TestPassword";
+            Login = "tester_login";
+            Password = "tester_password";
 
             #region commands
             loginCmd = ReactiveCommand.CreateFromTask(async () => {

@@ -15,8 +15,9 @@ namespace mes_center.Models.kafka
         IProducer<Null, string> producerBuilder;
         ILogger logger = Logger.getInstance();
         #endregion
-        public producer(string url)
+        public producer()
         {
+            string url = "172.16.118.105";
             config = new ProducerConfig { BootstrapServers = url };
             producerBuilder = new ProducerBuilder<Null, string>(config).Build();
         }
@@ -27,7 +28,8 @@ namespace mes_center.Models.kafka
             try
             {
                 var message = new Message<Null, string> { Value = msg };
-                var deliv = await producerBuilder.ProduceAsync(topic, message);
+                var deliv = await producerBuilder.ProduceAsync(topic, message);   
+                
             } catch (Exception ex)
             {
                 logger.dbg($"producer: {ex.Message}");                

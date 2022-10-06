@@ -11,7 +11,14 @@ namespace mes_center.arm_regmeter.ViewModels
 {
     public class componentItemVM : ViewModelBase, IReloadable
     {
-        #region properties
+        #region properties       
+        int id;
+        public int Id
+        {
+            get => id;
+            set => this.RaiseAndSetIfChanged(ref id, value);
+        }
+
         string name;
         public string Name
         {
@@ -25,13 +32,26 @@ namespace mes_center.arm_regmeter.ViewModels
             get => serialNumber;
             set => this.RaiseAndSetIfChanged(ref serialNumber, value);
         }
+
+        string actionName;
+        public string ActionName
+        {
+            get => actionName;
+            set => this.RaiseAndSetIfChanged(ref actionName, value);
+        }
         #endregion
 
         static int cntr = 0;
 
-        public componentItemVM()
+        public componentItemVM(ComponentDTO dto)
         {
-            Name = $"Test {cntr++}";
+            Name = $"{dto.name}";
+            
+        }
+
+        public componentItemVM(string name)
+        {
+            Name = $"{name}";
         }
 
         #region public

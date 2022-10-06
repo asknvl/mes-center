@@ -19,14 +19,13 @@ namespace mes_center.Models.kafka
         #endregion
         public consumer(string groupid)
         {
-
             string url = "172.16.118.105";
 
             config = new ConsumerConfig
             {
-                GroupId = groupid,
+                GroupId = $"{groupid}_{DateTime.Now}",
                 BootstrapServers = url,
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                AutoOffsetReset = AutoOffsetReset.Latest
             };
 
             consumerBuilder = new ConsumerBuilder<Ignore, string>(config).Build();

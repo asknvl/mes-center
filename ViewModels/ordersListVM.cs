@@ -18,15 +18,15 @@ namespace mes_center.ViewModels
         #endregion
 
         #region properties
-        List<Order> ordersList = new();
-        public List<Order> OrdersList
+        List<OrderDTO> ordersList = new();
+        public List<OrderDTO> OrdersList
         {
             get => ordersList;
             set => this.RaiseAndSetIfChanged(ref ordersList, value);
         }
 
-        Order order;
-        public Order Order
+        OrderDTO order;
+        public OrderDTO Order
         {
             get => order;
             set
@@ -35,14 +35,14 @@ namespace mes_center.ViewModels
 
                 if (order != null)
                 {
-                    Order rdOrder = serverApi.GetOrder(order.order_num);
+                    OrderDTO rdOrder = serverApi.GetOrder(order.order_num);
                     OrderCheckedAction?.Invoke(rdOrder);
                     lastCheckedOrder = rdOrder.order_num;
                 }
             }
         }
 
-        public Order.OrderStatus[] OrderStatuses { get; set; } = new Order.OrderStatus[] { Order.OrderStatus.RECEIVED, Order.OrderStatus.READY_TO_EXECUTE };
+        public OrderDTO.OrderStatus[] OrderStatuses { get; set; } = new OrderDTO.OrderStatus[] { OrderDTO.OrderStatus.RECEIVED, OrderDTO.OrderStatus.READY_TO_EXECUTE };
         #endregion
 
         #region commands
@@ -52,9 +52,10 @@ namespace mes_center.ViewModels
         public ordersListVM()
         {
 
-            consumer order_events = new consumer("orderslist_" + DateTime.Now);
+            consumer order_events = new consumer("orderslist");
             order_events.TopicUpdatedEvent += async (msg) =>
             {
+                //TODO парсить ошибки
                 await Reload();
             };
             order_events.start("order_event");
@@ -101,7 +102,7 @@ namespace mes_center.ViewModels
         #endregion
 
         #region callbacks
-        public Action<Order> OrderCheckedAction;
+        public Action<OrderDTO> OrderCheckedAction;
         #endregion
     }
 }

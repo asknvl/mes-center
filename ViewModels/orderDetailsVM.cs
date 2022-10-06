@@ -13,8 +13,8 @@ namespace mes_center.ViewModels
     {
 
         #region properties
-        Order order = new();
-        public Order Order
+        OrderDTO order = new();
+        public OrderDTO Order
         {
             get => order;
             set => this.RaiseAndSetIfChanged(ref order, value);
@@ -50,13 +50,13 @@ namespace mes_center.ViewModels
                 IsAcceptRejectNeed = false;
                 IsSerialVisible = false;
 
-                switch ((Order.OrderStatus)order.status)
+                switch ((OrderDTO.OrderStatus)order.status)
                 {
-                    case Order.OrderStatus.RECEIVED:
+                    case OrderDTO.OrderStatus.RECEIVED:
                         IsAcceptRejectNeed = true;
                         break;
 
-                    case Order.OrderStatus.READY_TO_EXECUTE:
+                    case OrderDTO.OrderStatus.READY_TO_EXECUTE:
                         IsSerialVisible = true;
                         break;
                 }
@@ -77,7 +77,7 @@ namespace mes_center.ViewModels
             rejectOrderCmd = ReactiveCommand.CreateFromTask(async () => {
                 try
                 {
-                    await serverApi.SetOrderStatus(Order.order_num, Order.OrderStatus.REJECTED, Order.comment);
+                    await serverApi.SetOrderStatus(Order.order_num, OrderDTO.OrderStatus.REJECTED, Order.comment);
                 } catch (Exception ex)
                 {
                     showError(ex.Message);

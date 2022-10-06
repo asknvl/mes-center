@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static mes_center.Models.rest.server_dto.Order;
+using static mes_center.Models.rest.server_dto.OrderDTO;
 
 namespace mes_center.Models.rest
 {
@@ -25,47 +25,47 @@ namespace mes_center.Models.rest
         }
 
         #region public
-        public async Task<List<Configuration>> GetConfigurations()
+        public async Task<List<ConfigurationDTO>> GetConfigurations()
         {
-            List<Configuration> res = new();
+            List<ConfigurationDTO> res = new();
             await Task.Run(() => {
                 var client = new RestClient($"{url}/configurations");
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                     throw new ServerApiException($"GetConfigurations request fail (stasus code={response.StatusCode})");
-                res = JsonConvert.DeserializeObject<List<Configuration>>(response.Content);
+                res = JsonConvert.DeserializeObject<List<ConfigurationDTO>>(response.Content);
 
             });
             return res;
         }
 
-        public async Task<Configuration> GetConfiguration(int id)
+        public async Task<ConfigurationDTO> GetConfiguration(int id)
         {
-            Configuration res = new();
+            ConfigurationDTO res = new();
             await Task.Run(() => { 
             });
             return res;
         }
 
-        public async Task<List<Model>> GetModels()
+        public async Task<List<ModelDTO>> GetModels()
         {
-            List<Model> res = new();
+            List<ModelDTO> res = new();
             await Task.Run(() => {
                 var client = new RestClient($"{url}/models");
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                     throw new ServerApiException($"GetModels request fail (stasus code={response.StatusCode})");
-                res = JsonConvert.DeserializeObject<List<Model>>(response.Content);
+                res = JsonConvert.DeserializeObject<List<ModelDTO>>(response.Content);
             });
             return res;
         }
 
 
-        public async Task<List<Order>> GetOrders(Order.OrderStatus[] statuses)
+        public async Task<List<OrderDTO>> GetOrders(OrderDTO.OrderStatus[] statuses)
         {
-            List<Order> res = new();
+            List<OrderDTO> res = new();
             string statusParam = "";
 
             foreach (var status in statuses) {
@@ -82,37 +82,22 @@ namespace mes_center.Models.rest
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                     throw new ServerApiException($"GetOrders request fail (stasus code={response.StatusCode})");
 
-                res = JsonConvert.DeserializeObject<List<Order>>(response.Content);
-
-                //JObject json = JObject.Parse(response.Content);
-                //JToken items = json["items"];
-
-                //foreach (var item in items)
-                //{
-                //    Order order = new Order()
-                //    {
-                //        order_num = item["order_num"].ToObject<string>(),
-                //        status = item["status"].ToObject<int>(),
-                //        reg_date = item["reg_date"].ToObject<string>()
-                //        //reg
-                //    };
-                //    res.Add(order);
-                //}
+                res = JsonConvert.DeserializeObject<List<OrderDTO>>(response.Content);
             });
 
             return res;
         }
 
-        public Order GetOrder(string order_num)
+        public OrderDTO GetOrder(string order_num)
         {
-            Order res = new();
+            OrderDTO res = new();
 
             var client = new RestClient($"{url}/orders/{order_num}");
             var request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 throw new ServerApiException($"GetOrders request fail (stasus code={response.StatusCode})");            
-            res = JsonConvert.DeserializeObject<Order>(response.Content);
+            res = JsonConvert.DeserializeObject<OrderDTO>(response.Content);
             if (res == null)
                 throw new ServerApiException($"GetOrders returns null");
             return res;
@@ -195,7 +180,7 @@ namespace mes_center.Models.rest
             public int equipmentid { get; set; }
         }
 
-        public async Task<List<ComponentDTO>> GetComponents(Model model)
+        public async Task<List<ComponentDTO>> GetComponents(ModelDTO model)
         {
             List<ComponentDTO> res = new();
             var client = new RestClient($"{url}/models/{model.id}/components");
@@ -212,10 +197,9 @@ namespace mes_center.Models.rest
             return res;
         }
 
-        public async Task<int?> OpenSession(string order_num, string login, int equipmentid)
+        public async Task<int> OpenSession(string order_num, string login, int equipmentid)
         {
-            int? id = null;
-
+            int id = 0;
             var client = new RestClient($"{url}/session");
             var request = new RestRequest(Method.POST);
             sessionparam param = new sessionparam()
@@ -247,14 +231,59 @@ namespace mes_center.Models.rest
             var client = new RestClient($"{url}/session/{id}");
             var request = new RestRequest(Method.PATCH);
 
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 IRestResponse response = client.Execute(request);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                } else
+                }
+                else
                     throw new ServerApiException($"CloseSession {id} request fail (stasus code={response.StatusCode})");
             });
+        }
+
+        public async Task<int> GetMetersAmount(string order_num, int stage)
+        {
+            int res = 0;
+
+            var client = new RestClient($"{url}/orders/{order_num}/meters_for_stage/{stage}");
+            var request = new RestRequest(Method.GET);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+
+                    JObject json = JObject.Parse(response.Content);
+                    res = json["metersAmount"].ToObject<int>();
+                }
+                else
+                    throw new ServerApiException($"GetMetersAmount {order_num} request fail (stasus code={response.StatusCode})");
+            });
+            return res;
+
+            return res;
+        }
+
+        public Task<List<StageDTO>> GetStages()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<StrategyDTO>> GetStrategies()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateStrategy(string name, List<StageDTO> stages)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteStrategy(int id)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

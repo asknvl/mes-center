@@ -1,4 +1,5 @@
 ﻿using mes_center.Models.rest;
+using mes_center.Models.scanner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace mes_center.arm_regmeter.Models
     {
         #region properties
         public User User { get; set; }
-        public IServerApi ServerApi { get; set; }        
+        public IServerApi ServerApi { get; set; }                  
         #endregion
 
         #region singletone

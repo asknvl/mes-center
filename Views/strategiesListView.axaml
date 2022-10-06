@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="mes_center.Views.strategiesListView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	<Grid
+		RowDefinitions="Auto, *"
+		ColumnDefinitions="*, Auto"
+		MinWidth="250">
+		<TextBlock
+			Grid.Row="0"
+			Grid.ColumnSpan="2"
+			HorizontalAlignment="Center"
+			Margin="2">
+			Стратегии
+		</TextBlock>
+		<ScrollViewer
+			Grid.Row="1"
+			Grid.Column="0">
+			<ListBox>				
+			</ListBox>
+		</ScrollViewer>
+		<StackPanel
+			Grid.Row="1"
+			Grid.Column="1"
+			MinWidth="50">
+			<Button>
+				+
+			</Button>
+			<Button>
+				-
+			</Button>
+			<StackPanel.Styles>
+				<Style Selector="StackPanel Button">
+					<Setter Property="HorizontalAlignment" Value="Stretch"/>
+					<Setter Property="Margin" Value="2"/>
+				</Style>
+			</StackPanel.Styles>
+		</StackPanel>
+	</Grid>
+</UserControl>

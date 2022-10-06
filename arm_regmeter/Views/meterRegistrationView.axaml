@@ -15,12 +15,18 @@
 			Height="40"
 			Background="LightGray">
 			<TextBlock
-				Classes="TextBlock Title">
-				Регистрация ПУ
+				Classes="TextBlock Title"
+				>
+				<TextBlock.Text>
+					<MultiBinding StringFormat="{}Регистрация ПУ ({0} из {1})">
+						<Binding Path="CurrentAmount" />
+						<Binding Path="TotalAmount" />
+					</MultiBinding>
+				</TextBlock.Text>
 			</TextBlock>
 		</Grid>
 		<Grid			
-			ColumnDefinitions="*, Auto"
+			ColumnDefinitions="*, Auto"			
 			Grid.Row="1">
 			<ContentControl
 				Content="{Binding Content}"
@@ -31,47 +37,118 @@
 					<DataTemplate DataType="{x:Type vms:componentItemVM}">
 						<StackPanel
 							Orientation="Vertical">
-							<TextBlock>
-								Отсканируйте штрих код компонента:
-							</TextBlock>
 							<TextBlock
+								Text="{Binding ActionName}"/>
+							<TextBlock
+								Margin="10"
+								FontWeight="DemiBold"
+								FontSize="14"
 								Text="{Binding Name}">
+							</TextBlock>							
+						</StackPanel>
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type vms:userMessageVM}">
+						<StackPanel
+							Orientation="Vertical">							
+							<TextBlock
+								Margin="10"
+								FontWeight="DemiBold"
+								FontSize="14"
+								Text="{Binding Message}">
 							</TextBlock>
-							<TextBox
-								Text="{Binding SerialNumber}">
-							</TextBox>
 						</StackPanel>
 					</DataTemplate>
 				</ContentControl.DataTemplates>
 			</ContentControl>
-			<ListBox
+			<ItemsControl
+				Items="{Binding OrderComponentsList}"
+				Background="#FFEAEAEA"
 				Grid.Column="1"
-				Width="300">				
-			</ListBox>
+				Width="300">
+				<ItemsControl.DataTemplates>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Vertical">
+							<TextBlock
+								Text="{Binding Name}"/>
+							<TextBlock
+								Text="{Binding SerialNumber}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.DataTemplates>
+			</ItemsControl>
 		</Grid>
 
 		<Grid
 			Grid.Row="2"
-			Height="45"
-			ColumnDefinitions="*,*"
-			Width="250"
-			HorizontalAlignment="Right">
+			Height="140"
+			ColumnDefinitions="*,*,*"			
+			Margin="10">
 			<Button
+				IsVisible="{Binding AllowButtons}"
 				Command="{Binding completeOrderCmd}"
-				Grid.Column="0"
-				VerticalAlignment="Stretch"
-				HorizontalAlignment="Stretch"
+				Grid.Column="0"	
+				HorizontalAlignment="Center"
+				Background="White">
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Регистрация
+					</TextBlock>
+					<Svg						
+						Grid.Row="1"
+						Path="/Assets/svg/register_dec.svg">
+					</Svg>
+				</Grid>
+			</Button>
+			<Button
+				IsVisible="{Binding AllowButtons}"
+				Command="{Binding trashOrderCmd}"
+				Grid.Column="1"
+				HorizontalAlignment="Center"
 				VerticalContentAlignment="Center">
-				Завершить
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Брак
+					</TextBlock>
+					<Svg						
+						Grid.Row="1"
+						Path="/Assets/svg/trash_dec.svg">
+					</Svg>
+				</Grid>				
 			</Button>
 			<Button
 				Command="{Binding cancelOrderCmd}"
-				Grid.Column="1"
-				VerticalAlignment="Stretch"
-				HorizontalAlignment="Stretch"
+				Grid.Column="2"				
+				HorizontalAlignment="Center"
 				VerticalContentAlignment="Center">
-				Отмена
-			</Button>
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Отмена
+					</TextBlock>
+					<Svg						
+						Grid.Row="1"
+						Path="/Assets/svg/cancel_dec.svg">
+					</Svg>					
+				</Grid>				
+			</Button>			
+			<Grid.Styles>
+				<Style Selector="Grid Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
+					<Setter Property="Background" Value="Transparent"/>
+				</Style>
+				<Style Selector="Grid Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+					<Setter Property="Background" Value="Transparent"/>
+					<Setter Property="BorderBrush" Value="Gray"/>
+				</Style>				
+			</Grid.Styles>
 		</Grid>
 
 	</Grid>

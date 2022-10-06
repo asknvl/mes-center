@@ -3,6 +3,91 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="mes_center.Views.addStrategyView">
+             x:Class="mes_center.Views.addstrategyView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	
+	<Grid
+		RowDefinitions="Auto, Auto, *, Auto"
+		ColumnDefinitions="*, Auto, *">
+		<TextBlock
+			Classes="TextBlock Title"
+			Grid.ColumnSpan="3"
+			HorizontalAlignment="Center"
+			Margin="2">
+			Добавить стратегию
+		</TextBlock>
+		<TextBox
+			Watermark="Название стратегии"
+			Grid.Row="1"
+			Grid.Column="0"
+			Margin="2"/>
+		<TextBlock
+			Grid.Row="1"
+			Grid.Column="2"
+			Margin="2"
+			VerticalAlignment="Center">
+			Этапы:
+		</TextBlock>
+		<ListBox
+			Items="{Binding DestinationStages}"
+			SelectedItem="{Binding DestinationStage}"
+			Grid.Row="2"
+			Grid.Column="0"
+			Margin="2">
+		</ListBox>
+		<StackPanel
+			Orientation="Vertical"
+			Grid.Row="2"
+			Grid.Column="1"
+			VerticalAlignment="Center">
+			<Button
+				Background="Transparent"
+				HorizontalAlignment="Center">
+				<Svg					
+					Path="/Assets/svg/left_arrow.svg"
+					Height="30"
+					Width="30">
+				</Svg>
+			</Button>
+			<Button
+				Background="Transparent"
+				HorizontalAlignment="Center">
+				<Svg
+					Path="/Assets/svg/right_arrow.svg"
+					Height="30"
+					Width="30">
+				</Svg>
+			</Button>
+		</StackPanel>
+		<ListBox
+			Items="{Binding SourceStages}"
+			SelectedItem="{Binding SourceStage}"
+			Grid.Row="2"
+			Grid.Column="2">
+		</ListBox>
+		<Grid.Styles>
+			<Style Selector="Grid ListBox">
+				<Setter Property="Margin" Value="2"/>
+			</Style>
+		</Grid.Styles>
+		<Grid
+			ColumnDefinitions="100, 100"			
+			Grid.Row="3"
+			Grid.Column="2"
+			HorizontalAlignment="Right">
+			<Button
+				Grid.Column="0"
+				HorizontalAlignment="Stretch">
+				ОК
+			</Button>
+			<Button
+				Grid.Column="1"
+				HorizontalAlignment="Stretch">
+				Отмена
+			</Button>
+		</Grid>
+	</Grid>
   
 </UserControl>

@@ -10,7 +10,7 @@ namespace mes_center.ViewModels
 {
     public class strategiesListVM : ViewModelBase, IReloadable
     {
-        #region properties
+        #region properties        
         #endregion
 
         #region commands

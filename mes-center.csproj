@@ -23,9 +23,11 @@
     <None Remove=".gitignore" />
     <None Remove="Assets\svg\cancel.svg" />
     <None Remove="Assets\svg\cancel_dec.svg" />
+    <None Remove="Assets\svg\left_arrow.svg" />
     <None Remove="Assets\svg\refresh.svg" />
     <None Remove="Assets\svg\register.svg" />
     <None Remove="Assets\svg\register_dec.svg" />
+    <None Remove="Assets\svg\right_arrow.svg" />
     <None Remove="Assets\svg\trash.svg" />
     <None Remove="Assets\svg\trash_dec.svg" />
   </ItemGroup>
@@ -50,5 +52,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\dto\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\addstrategyView.axaml.cs">
+      <DependentUpon>addstrategyView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

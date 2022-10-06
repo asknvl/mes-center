@@ -192,7 +192,7 @@ namespace mes_center.arm_regmeter.ViewModels
                 TotalAmount = await serverApi.GetMetersAmount(order.order_num, 1);
                 CurrentAmount++;
                 OrderComponentsList.Clear();
-                regStartTime = DateTime.Now;
+                regStartTime = DateTime.UtcNow;
             });
         }
 
@@ -200,7 +200,7 @@ namespace mes_center.arm_regmeter.ViewModels
         {
             base.OnStarted();
 
-            regStartTime = DateTime.Now;
+            regStartTime = DateTime.UtcNow;
 
             try
             {

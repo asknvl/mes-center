@@ -40,8 +40,8 @@ namespace mes_center.Models.kafka.kafka_dto
             version = 1;
             sessionid = sessionID;
             production_stageid = stageid;
-            start_dt = beginTime.ToString("o");
-            finish_dt = endTime.ToString("o");
+            start_dt = beginTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            finish_dt = endTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
             is_ok = (isOk) ? 1 : 0;
             sn = serialNumber;
             this.components = new();

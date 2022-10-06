@@ -106,7 +106,7 @@
 			<Button
 				IsVisible="{Binding AllowButtons}"
 				Command="{Binding trashOrderCmd}"
-				Grid.Column="1"
+				Grid.Column="2"
 				HorizontalAlignment="Center"
 				VerticalContentAlignment="Center">
 				<Grid RowDefinitions="30, *">
@@ -124,7 +124,7 @@
 			</Button>
 			<Button
 				Command="{Binding cancelOrderCmd}"
-				Grid.Column="2"				
+				Grid.Column="1"				
 				HorizontalAlignment="Center"
 				VerticalContentAlignment="Center">
 				<Grid RowDefinitions="30, *">

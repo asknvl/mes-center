@@ -12,6 +12,7 @@
 		ColumnDefinitions="*, Auto"
 		MinWidth="250">
 		<TextBlock
+			Classes="TextBlock Title"
 			Grid.Row="0"
 			Grid.ColumnSpan="2"
 			HorizontalAlignment="Center"

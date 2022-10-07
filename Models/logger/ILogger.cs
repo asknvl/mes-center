@@ -9,5 +9,6 @@ namespace mes_center.Models.logger
     public interface ILogger
     {
         void dbg(string message);
+        void err(string message);
     }
 }

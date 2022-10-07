@@ -23,10 +23,15 @@ namespace mes_center.ViewModels
             logger.dbg($"{this.GetType().Name} started");
         }
 
+        public virtual void OnStopped()
+        {
+            logger.dbg($"{this.GetType().Name} close");
+        }
+
         public void Close()
         {
             CloseRequestEvent?.Invoke();
-        }
+        }        
         #endregion
 
         #region callbacks

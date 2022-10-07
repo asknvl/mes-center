@@ -84,37 +84,32 @@ namespace mes_center.arm_regmeter.ViewModels
             CurrentAmount = 0;
             TotalAmount = 0;
 
-            meter_created = new kafka.producer();
-            kafka.consumer meter_created_response;
+            meter_created = new kafka.producer();            
+
+            meter_created_response = new kafka.consumer(this.GetType().Name);
+
+            meter_created_response.TopicUpdatedEvent -= Meter_created_response_TopicUpdatedEvent;
+            meter_created_response.TopicUpdatedEvent += Meter_created_response_TopicUpdatedEvent;  
 
             #region commands
             completeOrderCmd = ReactiveCommand.CreateFromTask(async () => {
 
-                List<(int, string)> components = new();
-                for (int i = 0; i < componentsList.Count - 1; i++) {
-                    var c = componentsList[i];
-                    components.Add((c.Id, c.SerialNumber));
-                }
-                string SerialNumber = componentsList[componentsList.Count - 1].SerialNumber;
-                kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,"1", true, regStartTime, DateTime.Now, SerialNumber, components);
-
-                await meter_created.produceAsync("meter_created", meterDTO.ToString());
+                await markMeterAssembled(true);
 
                 if (CurrentAmount == TotalAmount)
                     Close();
 
                 AllowButtons = false;
-
-                await startRegistration();
 
             });
             trashOrderCmd = ReactiveCommand.CreateFromTask(async () => {
 
+                await markMeterAssembled(false);
+
                 if (CurrentAmount == TotalAmount)
                     Close();
 
                 AllowButtons = false;
-                await startRegistration();
 
             });
             cancelOrderCmd = ReactiveCommand.CreateFromTask(async () => {
@@ -129,11 +124,42 @@ namespace mes_center.arm_regmeter.ViewModels
 
         }
 
-        #region helpers        
+        private async void Meter_created_response_TopicUpdatedEvent(string message)
+        {
+            var res = JsonConvert.DeserializeObject<kafka.kafka_dto.MeterCreatedDTO>(message);
+            logger.dbg("<" + message);
+
+            if (res.error == 0)
+            {
+                await startRegistration();
+            }
+            else
+            {
+                logger.dbg(res.message);
+            }
+        }
+        
+        #region helpers     
+        async Task markMeterAssembled(bool isOk)
+        {
+            List<(int, string)> components = new();
+            for (int i = 0; i < componentsList.Count - 1; i++)
+            {
+                var c = componentsList[i];
+                components.Add((c.Id, c.SerialNumber));
+            }
+
+            string SerialNumber = componentsList[componentsList.Count - 1].SerialNumber;
+            kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID, "1", isOk, regStartTime, DateTime.Now, SerialNumber, components);
+
+            await meter_created.produceAsync("meter_created", meterDTO.ToString());
+        }
         #endregion
 
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
+
+            logger.dbg("timer");
 
             switch (text)
             {
@@ -198,44 +224,40 @@ namespace mes_center.arm_regmeter.ViewModels
 
         public override async void OnStarted()
         {
-            base.OnStarted();
 
+            logger.dbg("OnStarted");
+
+            base.OnStarted();
             regStartTime = DateTime.UtcNow;
 
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 0);
-
-                meter_created_response = new kafka.consumer(this.GetType().Name);
-                
-
-                //kafka.consumer meter_created_check = new kafka.consumer("testmeter");
-                //meter_created_check.start("meter_created");
-                //meter_created_check.TopicUpdatedEvent += (msg) => {                    
-                //    logger.dbg(msg);                                //};
-
-
-                meter_created_response.TopicUpdatedEvent += (message) => {
-
-                    var res = JsonConvert.DeserializeObject<kafka.kafka_dto.MeterCreatedDTO>(message);
-                    Debug.WriteLine(message);
-
-                };
+                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 0);                
                 meter_created_response.start("meter_created_response");
-
                 await startRegistration();                
 
             } catch (Exception ex)
             {
-
+                showError(ex.Message);
             }
+        }
+
+        public override void OnStopped()
+        {
+            base.OnStopped();
+            meter_created_response?.stop();
         }
 
         public void OnScan(string text)
         {
-            timer.Start();
+            if (!timer.Enabled)
+                timer.Start();
+
             this.text += text;
+
+            logger.dbg(text);
         }
 
+        
     }
 }

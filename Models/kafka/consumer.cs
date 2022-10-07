@@ -15,7 +15,7 @@ namespace mes_center.Models.kafka
         ConsumerConfig config;
         CancellationTokenSource cts;
         IConsumer<Ignore, string> consumerBuilder;
-        ILogger logger = Logger.getInstance();
+        ILogger logger = Logger.getInstance();        
         #endregion
         public consumer(string groupid)
         {
@@ -45,9 +45,8 @@ namespace mes_center.Models.kafka
                     while (true)
                     {
                         var cr = consumerBuilder.Consume(cts.Token);
-
-                        TopicUpdatedEvent?.Invoke($"consumer: Message={cr.Value} at: {cr.Topic} {cr.TopicPartitionOffset}");
-
+                        //TopicUpdatedEvent?.Invoke($"consumer: Message={cr.Value} at: {cr.Topic} {cr.TopicPartitionOffset}");                        
+                        TopicUpdatedEvent?.Invoke($"{cr.Value}");
                         logger.dbg($"consumer: Message={cr.Value} at: {cr.Topic} {cr.TopicPartitionOffset}");
                     }
                 }
@@ -67,7 +66,7 @@ namespace mes_center.Models.kafka
 
         public void stop()
         {
-
+            cts?.Cancel();
         }
     }
 }

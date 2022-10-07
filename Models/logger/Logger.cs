@@ -24,7 +24,12 @@ namespace mes_center.Models.logger
 
         public void dbg(string message)
         {
-            Debug.WriteLine(message);
+            Debug.WriteLine($"DBG > {message}");
+        }
+
+        public void err(string message)
+        {
+            Debug.WriteLine($"ERR > {message}");
         }
     }
 }

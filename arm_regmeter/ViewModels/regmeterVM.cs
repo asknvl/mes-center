@@ -26,10 +26,18 @@ namespace mes_center.arm_regmeter.ViewModels
         {
             get => content;
             set {
-                this.RaiseAndSetIfChanged(ref content, value);                
-                var lcc = content as LifeCycleViewModelBase;
+
+                var c = content as LifeCycleViewModelBase;
+                if (c != null)
+                    c.OnStopped();
+
+                var lcc = value as LifeCycleViewModelBase;                
                 if (lcc != null)
-                    lcc.OnStarted();                                      
+                {                    
+                    lcc.OnStarted();
+                }
+
+                this.RaiseAndSetIfChanged(ref content, value);
             }
         }      
         #endregion
@@ -66,7 +74,7 @@ namespace mes_center.arm_regmeter.ViewModels
             {
                 showOrderSelection();
             };
-            mr.Order = order;
+            mr.Order = order;            
             Content = mr;
         }
 

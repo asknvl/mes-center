@@ -22,17 +22,57 @@
 		<ScrollViewer
 			Grid.Row="1"
 			Grid.Column="0">
-			<ListBox>				
+			<ListBox				
+				Items="{Binding Strategies}"
+				MinWidth="250">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid							
+							RowDefinitions="Auto, *"
+							Margin="4">
+							<Grid
+								Grid.Row="0"
+								ColumnDefinitions="*, Auto">
+								<TextBlock
+									VerticalAlignment="Center"
+									Text="{Binding name}"
+									FontWeight="DemiBold"
+									Grid.Column="0">									
+								</TextBlock>
+								<ToggleButton								
+									Name="TBExpand"
+									Grid.Column="1"
+									VerticalAlignment="Center">
+									<Svg
+										Path="/Assets/svg/arrow_down.svg">										
+									</Svg>
+								</ToggleButton>
+							</Grid>
+							<ItemsControl
+								IsVisible="{Binding #TBExpand.IsChecked}"
+								Grid.Row="1"
+								Items="{Binding stages}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding name}"/>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
 			</ListBox>
 		</ScrollViewer>
 		<StackPanel
 			Grid.Row="1"
 			Grid.Column="1"
 			MinWidth="50">
-			<Button>
+			<Button
+				Command="{Binding addCmd}">
 				+
 			</Button>
-			<Button>
+			<Button
+				Command="{Binding removeCmd}">
 				-
 			</Button>
 			<StackPanel.Styles>

@@ -67,15 +67,21 @@ namespace mes_center.arm_regmeter.ViewModels
             Content = os;
         }
 
-        void showMeterRegistration(OrderDTO order)
+        async void showMeterRegistration(OrderDTO order)
         {
-            var mr = new meterRegistrationVM();
-            mr.CloseRequestEvent += () =>
+            var total_amount = await serverApi.GetMetersAmount(order.order_num, 1);
+            if (total_amount > 0)
             {
-                showOrderSelection();
-            };
-            mr.Order = order;            
-            Content = mr;
+                var mr = new meterRegistrationVM();
+                mr.CloseRequestEvent += () =>
+                {
+                    showOrderSelection();
+                };
+                mr.Order = order;
+                Content = mr;
+            }
+            else
+                showError("Данное задание уже выполнено");
         }
 
         public void OnScan(string text)

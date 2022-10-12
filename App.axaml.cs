@@ -26,8 +26,8 @@ namespace mes_center
 #if REGMETER_DEBUG
                 main = new regmeterVM();
 #elif DEBUG
-                //main = new mainVM();
-                main = new regmeterVM();
+                main = new mainVM();
+                //main = new regmeterVM();
 #endif
 
                 ws.ShowWindow(main);

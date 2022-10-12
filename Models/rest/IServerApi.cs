@@ -18,10 +18,11 @@ namespace mes_center.Models.rest
         Task SetOrderStatus(string order_num, OrderStatus status, string comment);
         Task<List<ComponentDTO>> GetComponents(ModelDTO model);
         Task<int> OpenSession(string order_num, string login, int equipmentid);
+        Task CloseSession(int id);
         Task<int> GetMetersAmount(string order_num, int stage);
         Task<List<StageDTO>> GetStages();
         Task<List<StrategyDTO>> GetStrategies();
-        Task CreateStrategy(string name, List<StageDTO> stages);
+        Task CreateStrategy(StrategyDTO strategy);
         Task DeleteStrategy(int id);
     }
 

@@ -2,7 +2,9 @@
 using mes_center.arm_regmeter.ViewModels;
 using mes_center.arm_regmeter.Views;
 using mes_center.ViewModels;
+using mes_center.ViewModels.dialogs;
 using mes_center.Views;
+using mes_center.Views.dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,7 @@ namespace mes_center.WS
     {
         #region vars
         static WindowService instance;
+        Window mainWindow;
 
         #endregion
 
@@ -30,9 +33,32 @@ namespace mes_center.WS
             return instance;
         }
 
-        public void ShowDialog(LifeCycleViewModelBase vm)
+        public void ShowDialog(DialogViewModelBase vm)
         {
-            
+            Window wnd = null;
+
+            switch (vm)
+            {
+                case addStrategyDlgVM:
+                    wnd = new addStrategyDlg();
+                    break;
+
+                case dialogVM:
+                    wnd = new containerDlg();
+                    break;
+            }
+
+            vm.CloseRequestEvent += () =>
+            {
+                if (wnd != null)
+                    wnd.Close();
+            };
+
+            wnd.DataContext = vm;
+
+            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            wnd.ShowDialog(mainWindow);
+            vm.OnStarted();
         }
 
         public void ShowWindow(LifeCycleViewModelBase vm)
@@ -44,11 +70,13 @@ namespace mes_center.WS
             {
                 case mainVM wvm:
                     wnd = new mainWnd();
+                    mainWindow = wnd;
                     break;
 
                 case regmeterVM rvm:
                     wnd = new regmeterWnd();
-                    break;                   
+                    mainWindow = wnd;
+                    break;                
             }
 
             vm.CloseRequestEvent += () =>

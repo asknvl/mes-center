@@ -10,7 +10,7 @@ namespace mes_center.Models.kafka.kafka_dto
 
     public class SN_DTO
     {
-        public int componentid { get; set; }
+        public int id { get; set; }
         public string sn { get; set; }
     }
 
@@ -18,7 +18,7 @@ namespace mes_center.Models.kafka.kafka_dto
     {
         public int version { get; set; }
         public int sessionid { get; set; }
-        public string production_stageid { get; set; }
+        public int stagecode { get; set; }
         public string start_dt { get; set; }
         public string finish_dt { get; set; }
         public string comment { get; set; }
@@ -30,7 +30,7 @@ namespace mes_center.Models.kafka.kafka_dto
 
         public MeterDTO() { }
         public MeterDTO(int sessionID,
-                        string stageid, 
+                        int stageCode, 
                         bool isOk,
                         DateTime beginTime,
                         DateTime endTime,
@@ -39,7 +39,7 @@ namespace mes_center.Models.kafka.kafka_dto
         {
             version = 1;
             sessionid = sessionID;
-            production_stageid = stageid;
+            stagecode = stageCode;
             start_dt = beginTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
             finish_dt = endTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
             is_ok = (isOk) ? 1 : 0;
@@ -49,7 +49,7 @@ namespace mes_center.Models.kafka.kafka_dto
             foreach (var item in components)
             {
                 SN_DTO snd = new();
-                snd.componentid = item.Item1;
+                snd.id = item.Item1;
                 snd.sn = item.Item2;
                 this.components.Add(snd);
             }

@@ -12,6 +12,7 @@ namespace mes_center.ViewModels
         public taskVM task { get; set; }
         public ordersListVM orders { get; set; }
         public orderDetailsVM orderDetails { get; set; }
+        public strategiesListVM strategies { get; set; }
         #endregion
 
         public mainVM()
@@ -19,12 +20,14 @@ namespace mes_center.ViewModels
             task = new taskVM();
             orders = new ordersListVM();
             orderDetails = new orderDetailsVM(orders);
+            strategies = new strategiesListVM();
         }
 
         public override void OnStarted()
         {
             task.Reload();
             orders.Reload();
+            strategies.Reload();
             base.OnStarted();
         }
     }

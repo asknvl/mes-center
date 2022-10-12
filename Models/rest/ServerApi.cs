@@ -228,7 +228,7 @@ namespace mes_center.Models.rest
 
         public async Task CloseSession(int id)
         {
-            var client = new RestClient($"{url}/session/{id}");
+            var client = new RestClient($"{url}/sessions/{id}");
             var request = new RestRequest(Method.PATCH);
 
             await Task.Run(() =>
@@ -261,24 +261,72 @@ namespace mes_center.Models.rest
                 else
                     throw new ServerApiException($"GetMetersAmount {order_num} request fail (stasus code={response.StatusCode})");
             });
+            return res;            
+        }
+
+        public async Task<List<StageDTO>> GetStages()
+        {
+            List<StageDTO> res = new();
+            var client = new RestClient($"{url}/productionStage");
+            var request = new RestRequest(Method.GET);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+
+                    //JObject json = JObject.Parse(response.Content);
+                    //res = json.ToObject<List<StrategyDTO>>();
+                    res = JsonConvert.DeserializeObject<List<StageDTO>>(response.Content);
+
+
+                }
+                else
+                    throw new ServerApiException($"GetStrategies request fail (stasus code={response.StatusCode})");
+            });
             return res;
+        }
 
+        public async Task<List<StrategyDTO>> GetStrategies()
+        {
+            List<StrategyDTO> res = new();
+            var client = new RestClient($"{url}/productionStrategy");
+            var request = new RestRequest(Method.GET);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+
+                    //JObject json = JObject.Parse(response.Content);
+                    //res = json.ToObject<List<StrategyDTO>>();
+                    res = JsonConvert.DeserializeObject<List<StrategyDTO>>(response.Content);
+
+
+                }
+                else
+                    throw new ServerApiException($"GetStrategies request fail (stasus code={response.StatusCode})");
+            });
             return res;
         }
 
-        public Task<List<StageDTO>> GetStages()
+        public async Task CreateStrategy(StrategyDTO strategy)
         {
-            throw new NotImplementedException();
-        }
+            int id = 0;
+            var client = new RestClient($"{url}/productionStrategy");
+            var request = new RestRequest(Method.POST);            
+            string sparam = JsonConvert.SerializeObject(strategy);
+            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
 
-        public Task<List<StrategyDTO>> GetStrategies()
-        {
-            throw new NotImplementedException();
-        }
+            await Task.Run(() => {
+                IRestResponse response = client.Execute(request);
 
-        public Task CreateStrategy(string name, List<StageDTO> stages)
-        {
-            throw new NotImplementedException();
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                }
+                else
+                    throw new ServerApiException($"CreateStrategy request fail (stasus code={response.StatusCode})");
+            });            
         }
 
         public Task DeleteStrategy(int id)

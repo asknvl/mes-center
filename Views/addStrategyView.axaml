@@ -2,8 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="mes_center.Views.addstrategyView">
+             mc:Ignorable="d" 
+             x:Class="mes_center.Views.addstrategyView"
+			 Width="500"
+			 Height="600">
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>
@@ -15,15 +17,16 @@
 			Classes="TextBlock Title"
 			Grid.ColumnSpan="3"
 			HorizontalAlignment="Center"
-			Margin="2">
+			Margin="4">
 			Добавить стратегию
 		</TextBlock>
 		<TextBox
+			Text="{Binding Name}"
 			Watermark="Название стратегии"
 			Grid.Row="1"
 			Grid.Column="0"
 			Margin="2"/>
-		<TextBlock
+		<TextBlock			
 			Grid.Row="1"
 			Grid.Column="2"
 			Margin="2"
@@ -36,6 +39,13 @@
 			Grid.Row="2"
 			Grid.Column="0"
 			Margin="2">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock
+					Text="{Binding name}">
+					</TextBlock>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
 		</ListBox>
 		<StackPanel
 			Orientation="Vertical"
@@ -43,6 +53,7 @@
 			Grid.Column="1"
 			VerticalAlignment="Center">
 			<Button
+				Command="{Binding addCmd}"
 				Background="Transparent"
 				HorizontalAlignment="Center">
 				<Svg					
@@ -52,6 +63,7 @@
 				</Svg>
 			</Button>
 			<Button
+				Command="{Binding removeCmd}"
 				Background="Transparent"
 				HorizontalAlignment="Center">
 				<Svg
@@ -66,6 +78,13 @@
 			SelectedItem="{Binding SourceStage}"
 			Grid.Row="2"
 			Grid.Column="2">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<TextBlock
+					Text="{Binding name}">
+					</TextBlock>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
 		</ListBox>
 		<Grid.Styles>
 			<Style Selector="Grid ListBox">
@@ -78,11 +97,13 @@
 			Grid.Column="2"
 			HorizontalAlignment="Right">
 			<Button
+				Command="{Binding okCmd}"
 				Grid.Column="0"
 				HorizontalAlignment="Stretch">
 				ОК
 			</Button>
 			<Button
+				Command="{Binding cancelCmd}"
 				Grid.Column="1"
 				HorizontalAlignment="Stretch">
 				Отмена

@@ -86,6 +86,7 @@
 			Margin="10">
 			<Button
 				IsVisible="{Binding AllowButtons}"
+				IsEnabled="{Binding AllowButtons}"
 				Command="{Binding completeOrderCmd}"
 				Grid.Column="0"	
 				HorizontalAlignment="Center"

@@ -21,6 +21,7 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <None Remove=".gitignore" />
+    <None Remove="Assets\svg\arrow_down.svg" />
     <None Remove="Assets\svg\cancel.svg" />
     <None Remove="Assets\svg\cancel_dec.svg" />
     <None Remove="Assets\svg\left_arrow.svg" />

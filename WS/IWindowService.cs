@@ -10,7 +10,7 @@ namespace mes_center.WS {
     public interface IWindowServeice
     {
         void ShowWindow(LifeCycleViewModelBase vm);
-        void ShowDialog(LifeCycleViewModelBase vm);
+        void ShowDialog(DialogViewModelBase vm);
     }
 
 }

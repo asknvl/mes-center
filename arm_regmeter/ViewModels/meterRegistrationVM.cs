@@ -94,26 +94,51 @@ namespace mes_center.arm_regmeter.ViewModels
             #region commands
             completeOrderCmd = ReactiveCommand.CreateFromTask(async () => {
 
-                await markMeterAssembled(true);
+                try
+                {
 
-                if (CurrentAmount == TotalAmount)
-                    Close();
+                    await markMeterAssembled(true);
 
-                AllowButtons = false;
+                    if (CurrentAmount == TotalAmount)
+                        Close();
+
+                    AllowButtons = false;
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
 
             });
             trashOrderCmd = ReactiveCommand.CreateFromTask(async () => {
 
-                await markMeterAssembled(false);
+                try
+                {
 
-                if (CurrentAmount == TotalAmount)
-                    Close();
+                    await markMeterAssembled(false);
 
-                AllowButtons = false;
+                    if (CurrentAmount == TotalAmount)
+                        Close();
+
+                    AllowButtons = false;
+
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
 
             });
             cancelOrderCmd = ReactiveCommand.CreateFromTask(async () => {
-                Close();
+
+                try
+                {
+
+                    await serverApi.CloseSession(SessionID);
+
+                    Close();
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
 
                 //kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID, "1", true, regStartTime, DateTime.Now, "123", new List<(string, string)>());
                 //await meter_created.produceAsync("meter_created", meterDTO.ToString());
@@ -131,7 +156,16 @@ namespace mes_center.arm_regmeter.ViewModels
 
             if (res.error == 0)
             {
-                await startRegistration();
+                if (res.meters_amount - 1 > 0)
+                {
+                    TotalAmount = res.meters_amount;
+                    await startRegistration();
+                }
+                else
+                {
+                    await serverApi.CloseSession(SessionID);
+                    Close();
+                }
             }
             else
             {
@@ -150,7 +184,7 @@ namespace mes_center.arm_regmeter.ViewModels
             }
 
             string SerialNumber = componentsList[componentsList.Count - 1].SerialNumber;
-            kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID, "1", isOk, regStartTime, DateTime.Now, SerialNumber, components);
+            kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID, 1, isOk, regStartTime, DateTime.UtcNow, SerialNumber, components);
 
             await meter_created.produceAsync("meter_created", meterDTO.ToString());
         }
@@ -207,15 +241,13 @@ namespace mes_center.arm_regmeter.ViewModels
             {
                 var order = serverApi.GetOrder(Order.order_num);
                 components = await serverApi.GetComponents(order.model);
-
                 componentsList = new();
                 foreach (var dto in components)
                     componentsList.Add(new componentItemVM(dto) { ActionName = "Отсканируйте штрих код компонента:", Id = dto.id});
                 componentsList.Add(new componentItemVM("Прибор учета") { ActionName = "Отсканируйте штрих код изделия:" });
-
+                //TotalAmount = await serverApi.GetMetersAmount(order.order_num, 1);
                 Content = componentsList[0];
-                counter = 0;
-                TotalAmount = await serverApi.GetMetersAmount(order.order_num, 1);
+                counter = 0;                
                 CurrentAmount++;
                 OrderComponentsList.Clear();
                 regStartTime = DateTime.UtcNow;
@@ -232,9 +264,13 @@ namespace mes_center.arm_regmeter.ViewModels
 
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 0);                
+                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 0);
+                logger.dbg($"SessionID = {SessionID}");
                 meter_created_response.start("meter_created_response");
-                await startRegistration();                
+
+                TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);
+
+                await startRegistration();               
 
             } catch (Exception ex)
             {

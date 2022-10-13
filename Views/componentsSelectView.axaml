@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
+             x:Class="mes_center.Views.componentsSelectView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	
+	<Grid
+		RowDefinitions="Auto, *, Auto">
+		<TextBlock
+			Grid.Row="0"
+			Classes="TextBlock Title"
+			Grid.ColumnSpan="3"
+			HorizontalAlignment="Center"
+			Margin="4">
+			Бракованные компоненты
+		</TextBlock>
+		<Grid
+			Grid.Row="1"
+			RowDefinitions="Auto, *"
+			ColumnDefinitions="*, *">
+			<TextBlock
+				Grid.Row="0"
+				Grid.Column="0">
+				Выберите компоненты:
+			</TextBlock>
+			<TextBlock
+				Grid.Row="0"
+				Grid.Column="1">
+				Комментарий:
+			</TextBlock>
+			<ListBox
+				Grid.Row="1"
+				SelectionMode="Multiple">
+				<ListBoxItem>
+					Компонент 1
+				</ListBoxItem>
+				<ListBoxItem>
+					Компонент 2
+				</ListBoxItem>
+			</ListBox>
+			<TextBox
+				Grid.Row="1"
+				Grid.Column="1"				
+				VerticalAlignment="Stretch"
+				AcceptsReturn="True">
+			</TextBox>
+		</Grid>
+		<Grid
+			ColumnDefinitions="100, 100"
+			Grid.Row="2"
+			Grid.Column="2"
+			HorizontalAlignment="Right">
+			<Button
+				Command="{Binding okCmd}"
+				IsEnabled="{Binding IsInputValid}"
+				Grid.Column="0"
+				HorizontalAlignment="Stretch">
+				ОК
+			</Button>
+			<Button
+				Command="{Binding cancelCmd}"
+				Grid.Column="1"
+				HorizontalAlignment="Stretch">
+				Отмена
+			</Button>
+		</Grid>
+	</Grid>
+</UserControl>

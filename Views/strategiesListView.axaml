@@ -27,16 +27,18 @@
 				MinWidth="250">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
-						<Grid							
+						<Grid						
+							Width="250"
 							RowDefinitions="Auto, *"
 							Margin="4">
 							<Grid
 								Grid.Row="0"
 								ColumnDefinitions="*, Auto">
-								<TextBlock
+								<TextBlock									
 									VerticalAlignment="Center"
 									Text="{Binding name}"
 									FontWeight="DemiBold"
+									TextWrapping="Wrap"
 									Grid.Column="0">									
 								</TextBlock>
 								<ToggleButton								
@@ -65,15 +67,20 @@
 		</ScrollViewer>
 		<StackPanel
 			Grid.Row="1"
-			Grid.Column="1"
-			MinWidth="50">
+			Grid.Column="1">
 			<Button
+				Classes="Button Flat"
 				Command="{Binding addCmd}">
-				+
+				<Svg
+					Path="/Assets/svg/plus.svg">					
+				</Svg>
 			</Button>
 			<Button
+				Classes="Button Flat"
 				Command="{Binding removeCmd}">
-				-
+				<Svg
+					Path="/Assets/svg/minus.svg">					
+				</Svg>
 			</Button>
 			<StackPanel.Styles>
 				<Style Selector="StackPanel Button">

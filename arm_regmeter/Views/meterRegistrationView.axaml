@@ -60,23 +60,35 @@
 					</DataTemplate>
 				</ContentControl.DataTemplates>
 			</ContentControl>
-			<ItemsControl
-				Items="{Binding OrderComponentsList}"
-				Background="#FFEAEAEA"
+			<Grid
+				Margin="2, 10, 2, 2"
 				Grid.Column="1"
-				Width="300">
-				<ItemsControl.DataTemplates>
-					<DataTemplate>
-						<StackPanel
-							Orientation="Vertical">
-							<TextBlock
-								Text="{Binding Name}"/>
-							<TextBlock
-								Text="{Binding SerialNumber}"/>
-						</StackPanel>
-					</DataTemplate>
-				</ItemsControl.DataTemplates>
-			</ItemsControl>
+				RowDefinitions="Auto, *">
+				<TextBlock
+					Grid.Row="0">
+					Комплект:
+				</TextBlock>
+				<ItemsControl
+					Grid.Row="1"					
+					Items="{Binding OrderComponentsList}"				
+					Width="300"
+					ScrollViewer.VerticalScrollBarVisibility="Auto">
+						<ItemsControl.DataTemplates>
+							<DataTemplate>
+								<StackPanel
+									Orientation="Vertical">
+									<TextBlock
+										Text="{Binding Name}"
+										FontWeight="DemiBold"
+										HorizontalAlignment="Left"/>
+									<TextBlock
+										Text="{Binding SerialNumber}"
+										HorizontalAlignment="Right"/>
+								</StackPanel>
+							</DataTemplate>
+						</ItemsControl.DataTemplates>
+				</ItemsControl>
+			</Grid>			
 		</Grid>
 
 		<Grid
@@ -141,7 +153,7 @@
 					</Svg>					
 				</Grid>				
 			</Button>			
-			<Grid.Styles>
+			<!--<Grid.Styles>
 				<Style Selector="Grid Button:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
 					<Setter Property="Background" Value="Transparent"/>
 				</Style>
@@ -149,7 +161,7 @@
 					<Setter Property="Background" Value="Transparent"/>
 					<Setter Property="BorderBrush" Value="Gray"/>
 				</Style>				
-			</Grid.Styles>
+			</Grid.Styles>-->
 		</Grid>
 
 	</Grid>

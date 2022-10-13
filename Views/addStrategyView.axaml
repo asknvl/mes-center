@@ -3,16 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" 
-             x:Class="mes_center.Views.addstrategyView"
-			 Width="500"
-			 Height="600">
+             x:Class="mes_center.Views.addstrategyView">
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
-	</UserControl.Styles>
-	
+	</UserControl.Styles>	
 	<Grid
 		RowDefinitions="Auto, Auto, *, Auto"
-		ColumnDefinitions="*, Auto, *">
+		ColumnDefinitions="*, Auto, *"		
+		MinHeight="300">
 		<TextBlock
 			Classes="TextBlock Title"
 			Grid.ColumnSpan="3"
@@ -38,7 +36,9 @@
 			SelectedItem="{Binding DestinationStage}"
 			Grid.Row="2"
 			Grid.Column="0"
-			Margin="2">
+			Margin="2"
+			Width="250"
+			ScrollViewer.VerticalScrollBarVisibility="Auto">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock
@@ -73,11 +73,13 @@
 				</Svg>
 			</Button>
 		</StackPanel>
-		<ListBox
+		<ListBox			
 			Items="{Binding SourceStages}"
 			SelectedItem="{Binding SourceStage}"
 			Grid.Row="2"
-			Grid.Column="2">
+			Grid.Column="2"	
+			Width="250"
+			ScrollViewer.VerticalScrollBarVisibility="Auto">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock
@@ -98,6 +100,7 @@
 			HorizontalAlignment="Right">
 			<Button
 				Command="{Binding okCmd}"
+				IsEnabled="{Binding IsInputValid}"
 				Grid.Column="0"
 				HorizontalAlignment="Stretch">
 				ОК

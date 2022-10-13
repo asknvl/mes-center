@@ -25,6 +25,8 @@
     <None Remove="Assets\svg\cancel.svg" />
     <None Remove="Assets\svg\cancel_dec.svg" />
     <None Remove="Assets\svg\left_arrow.svg" />
+    <None Remove="Assets\svg\minus.svg" />
+    <None Remove="Assets\svg\plus.svg" />
     <None Remove="Assets\svg\refresh.svg" />
     <None Remove="Assets\svg\register.svg" />
     <None Remove="Assets\svg\register_dec.svg" />

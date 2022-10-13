@@ -316,6 +316,9 @@ namespace mes_center.Models.rest
             var client = new RestClient($"{url}/productionStrategy");
             var request = new RestRequest(Method.POST);            
             string sparam = JsonConvert.SerializeObject(strategy);
+            byte[] bytes = Encoding.Default.GetBytes(sparam);
+            sparam =  Encoding.UTF8.GetString(bytes);
+
             request.AddParameter("application/json", sparam, ParameterType.RequestBody);
 
             await Task.Run(() => {

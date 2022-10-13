@@ -25,9 +25,19 @@ namespace mes_center.ViewModels
                 else
                     RemoveError(nameof(Name));
 
+                updateValidity(value);
+
                 this.RaiseAndSetIfChanged(ref name, value);
             }
         }
+
+        bool isInputValid;
+        public bool IsInputValid
+        {
+            get => isInputValid;
+            set => this.RaiseAndSetIfChanged(ref isInputValid, value);
+        }
+
         public ObservableCollection<StageDTO> DestinationStages { get; } = new();
         public ObservableCollection<StageDTO> SourceStages { get; } = new();
 
@@ -89,7 +99,8 @@ namespace mes_center.ViewModels
                 StrategyCreatedEvent?.Invoke();
             });
 
-            cancelCmd = ReactiveCommand.Create(() => { 
+            cancelCmd = ReactiveCommand.Create(() => {
+                Close();
             });
             #endregion
         }
@@ -104,6 +115,11 @@ namespace mes_center.ViewModels
                     return true;                    
             }
             return false;
+        }
+
+        void updateValidity(string name)
+        {
+            IsInputValid = !string.IsNullOrEmpty(name);
         }
         #endregion
 

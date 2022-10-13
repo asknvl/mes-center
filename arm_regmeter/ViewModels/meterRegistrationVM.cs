@@ -198,14 +198,17 @@ namespace mes_center.arm_regmeter.ViewModels
             switch (text)
             {
                 case "255012255":
+                    completeOrderCmd.Execute();
                     logger.dbg("register");
                     text = "";
                     return;
                 case "255012256":
+                    trashOrderCmd.Execute();
                     logger.dbg("trash");
                     text = "";
                     return;
                 case "255012257":
+                    cancelOrderCmd.Execute();
                     logger.dbg("cancel");
                     text = "";
                     return;

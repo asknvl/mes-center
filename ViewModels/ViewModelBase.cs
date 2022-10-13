@@ -21,8 +21,7 @@ namespace mes_center.ViewModels
         {
 
         }
-
-        #region validation
+                
         #region error validattion
         private Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
 
@@ -62,8 +61,7 @@ namespace mes_center.ViewModels
             if (ErrorsChanged != null)
                 ErrorsChanged(this, new DataErrorsChangedEventArgs(propertyName));
         }
-        #endregion
-        #endregion
+        #endregion        
 
         public virtual void showError(string message) {
             logger.err(message);

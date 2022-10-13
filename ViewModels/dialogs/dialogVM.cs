@@ -26,6 +26,9 @@ namespace mes_center.ViewModels.dialogs
         {
             base.OnStarted();
             var content = Content as LifeCycleViewModelBase;
+            content.CloseRequestEvent += () => {
+                Close();
+            };
             content?.OnStarted();
         }
 

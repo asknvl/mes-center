@@ -26,7 +26,7 @@ namespace mes_center
 #if REGMETER_DEBUG    
                 main = new mainVM();
 #elif DEBUG
-                //main = new mainVM();
+      
                 main = new regmeterVM();
 #endif
 

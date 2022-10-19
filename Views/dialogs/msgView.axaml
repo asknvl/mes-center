@@ -13,14 +13,14 @@
 		<TextBlock
 			Margin="4"
 			Classes="TextBlock Title"			
-			Text="Ошибка"
+			Text="{Binding Title}"
 			Grid.Row="0">			
 		</TextBlock>
 		<TextBlock
 			HorizontalAlignment="Center"
 			VerticalAlignment="Center"
 			TextWrapping="Wrap"
-			Text="Сообщение"			
+			Text="{Binding Message}"			
 			Grid.Row="1">			
 		</TextBlock>
 		<StackPanel
@@ -28,7 +28,8 @@
 			HorizontalAlignment="Right"
 			Margin="4"
 			Orientation="Horizontal">
-			<Button>
+			<Button
+				Command="{Binding okCmd}">
 				ОК
 			</Button>
 		</StackPanel>

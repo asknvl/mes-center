@@ -15,8 +15,7 @@
 			Height="40"
 			Background="LightGray">
 			<TextBlock
-				Classes="TextBlock Title"
-				>
+				Classes="TextBlock Title">
 				<TextBlock.Text>
 					<MultiBinding StringFormat="{}Регистрация ПУ ({0} из {1})">
 						<Binding Path="CurrentAmount" />
@@ -69,10 +68,10 @@
 					Комплект:
 				</TextBlock>
 				<ItemsControl
+					Classes="ItemsControl Bordered"
 					Grid.Row="1"					
 					Items="{Binding OrderComponentsList}"				
-					Width="300"
-					ScrollViewer.VerticalScrollBarVisibility="Auto">
+					Width="300">
 						<ItemsControl.DataTemplates>
 							<DataTemplate>
 								<StackPanel

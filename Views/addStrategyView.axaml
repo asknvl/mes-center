@@ -3,14 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" 
-             x:Class="mes_center.Views.addstrategyView">
+             x:Class="mes_center.Views.addstrategyView"
+			 Height="400">
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>	
 	<Grid
 		RowDefinitions="Auto, Auto, *, Auto"
-		ColumnDefinitions="*, Auto, *"		
-		MinHeight="300">
+		ColumnDefinitions="*, Auto, *">
 		<TextBlock
 			Classes="TextBlock Title"
 			Grid.ColumnSpan="3"
@@ -37,8 +37,7 @@
 			Grid.Row="2"
 			Grid.Column="0"
 			Margin="2"
-			Width="250"
-			ScrollViewer.VerticalScrollBarVisibility="Auto">
+			Width="250">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock
@@ -78,8 +77,7 @@
 			SelectedItem="{Binding SourceStage}"
 			Grid.Row="2"
 			Grid.Column="2"	
-			Width="250"
-			ScrollViewer.VerticalScrollBarVisibility="Auto">
+			Width="250">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<TextBlock

@@ -12,7 +12,7 @@ namespace mes_center.Models.rest.server_dto
         public enum Codes : int
         {
             assemby = 1,
-            packing = 7
+            packing = 8
         }
         #endregion
 

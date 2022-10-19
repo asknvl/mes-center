@@ -23,7 +23,7 @@ namespace mes_center.Models.rest
         Task<List<StageDTO>> GetStages();
         Task<List<StrategyDTO>> GetStrategies();
         Task CreateStrategy(StrategyDTO strategy);
-        Task DeleteStrategy(int id);
+        Task DeleteStrategy(string name);
     }
 
     public class ServerApiException : Exception

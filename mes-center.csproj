@@ -60,5 +60,8 @@
     <Compile Update="Views\addstrategyView.axaml.cs">
       <DependentUpon>addstrategyView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\trashComponentsSelectView.axaml.cs">
+      <DependentUpon>trashComponentsSelectView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

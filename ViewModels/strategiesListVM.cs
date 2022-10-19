@@ -24,6 +24,13 @@ namespace mes_center.ViewModels
             get => strategies;
             set => this.RaiseAndSetIfChanged(ref strategies, value);
         }
+
+        StrategyDTO strategy;
+        public StrategyDTO Strategy
+        {
+            get => strategy;
+            set => this.RaiseAndSetIfChanged(ref strategy, value);
+        }
         #endregion
 
         #region commands
@@ -48,7 +55,17 @@ namespace mes_center.ViewModels
                 //ws.ShowDialog(dlg);
             });
 
-            removeCmd = ReactiveCommand.CreateFromTask(async () => {             
+            removeCmd = ReactiveCommand.CreateFromTask(async () => {
+
+                try
+                {
+                    await serverApi.DeleteStrategy(Strategy.name);
+                    await Reload();
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
+
             });
             #endregion
 

@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace mes_center.Views
 {
-    public partial class componentsSelectView : UserControl
+    public partial class trashComponentsSelectView : UserControl
     {
-        public componentsSelectView()
+        public trashComponentsSelectView()
         {
             InitializeComponent();
         }

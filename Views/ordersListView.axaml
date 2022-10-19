@@ -17,8 +17,7 @@
 		<ListBox
 			Items="{Binding OrdersList}"
 			SelectedItem="{Binding Order}"
-			Margin="2"
-			ScrollViewer.VerticalScrollBarVisibility="Auto">
+			Margin="2">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<StackPanel

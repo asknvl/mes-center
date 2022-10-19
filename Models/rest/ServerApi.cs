@@ -301,8 +301,6 @@ namespace mes_center.Models.rest
                     //JObject json = JObject.Parse(response.Content);
                     //res = json.ToObject<List<StrategyDTO>>();
                     res = JsonConvert.DeserializeObject<List<StrategyDTO>>(response.Content);
-
-
                 }
                 else
                     throw new ServerApiException($"GetStrategies request fail (stasus code={response.StatusCode})");
@@ -315,10 +313,7 @@ namespace mes_center.Models.rest
             int id = 0;
             var client = new RestClient($"{url}/productionStrategy");
             var request = new RestRequest(Method.POST);            
-            string sparam = JsonConvert.SerializeObject(strategy);
-            byte[] bytes = Encoding.Default.GetBytes(sparam);
-            sparam =  Encoding.UTF8.GetString(bytes);
-
+            string sparam = JsonConvert.SerializeObject(strategy);            
             request.AddParameter("application/json", sparam, ParameterType.RequestBody);
 
             await Task.Run(() => {
@@ -332,9 +327,20 @@ namespace mes_center.Models.rest
             });            
         }
 
-        public Task DeleteStrategy(int id)
-        {
-            throw new NotImplementedException();
+        public async Task DeleteStrategy(string name)
+        {            
+            var client = new RestClient($"{url}/productionStrategy/{name}");
+            var request = new RestRequest(Method.DELETE);                        
+
+            await Task.Run(() => {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                }
+                else
+                    throw new ServerApiException($"DeleteStrategy request fail (stasus code={response.StatusCode})");
+            });
         }
         #endregion
     }

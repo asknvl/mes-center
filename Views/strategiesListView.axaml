@@ -24,6 +24,7 @@
 			Grid.Column="0">
 			<ListBox				
 				Items="{Binding Strategies}"
+				SelectedItem="{Binding Strategy}"
 				MinWidth="250">
 				<ListBox.ItemTemplate>
 					<DataTemplate>

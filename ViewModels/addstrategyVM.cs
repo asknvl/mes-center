@@ -97,6 +97,7 @@ namespace mes_center.ViewModels
                 }
 
                 StrategyCreatedEvent?.Invoke();
+                Close();
             });
 
             cancelCmd = ReactiveCommand.Create(() => {

@@ -2,35 +2,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.PreviewWith>
         <Border Padding="20">
-			<ItemsControl>
-				<TextBlock>
-					123
-				</TextBlock>
-				<TextBlock>
-					222
-				</TextBlock>
-				<Button>
-					222
-				</Button>
-			</ItemsControl>
+			<ListBox
+				MaxHeight="100">
+				<ListBoxItem>
+					1
+				</ListBoxItem>
+				<ListBoxItem>
+					2
+				</ListBoxItem>
+				<ListBoxItem>
+					3
+				</ListBoxItem>
+				<ListBoxItem>
+					4
+				</ListBoxItem>
+				<ListBoxItem>
+					5
+				</ListBoxItem>
+			</ListBox>
         </Border>
     </Design.PreviewWith>
 
 	<StyleInclude Source="/Views/Styles/DataValidationErros.axaml" />
 
 	<Styles.Resources>
-		<Color x:Key="ListBoxItemBorderSelectedColor">#FF000000</Color>
+		
+		<Color x:Key="ListBoxItemBorderPointerOverColor">#00000000</Color>
+		<Color x:Key="ListBoxItemBorderSelectedColor">#ffff7043</Color>
 		<Color x:Key="ListBoxItemBackgroundPointerOverColor">#FFF2F2F2</Color>
+		<Color x:Key="ListBoxItemBackgroundSelectedColor">#FFF2F2F2</Color>
 		<Color x:Key="ListBoxBackgroundColor">#FFFFFFFF</Color>
-		<Color x:Key="ListBoxBorderColor">#FFF2F2F2</Color>
+		<Color x:Key="ListBoxBorderColor">#ffbdbdbd</Color>
 		
 		<Color x:Key="ButtonBorderPointeroverColor">#FF000000</Color>
 		<Color x:Key="ButtonBackgroundPointerOverColor">#FFFFFFFF</Color>
 		<Color x:Key="ButtonBackgroundColor">#FFFFFFFF</Color>
-		<Color x:Key="ButtonBorderColor">#FFF2F2F2</Color>
+		<Color x:Key="ButtonBorderColor">#ffbdbdbd</Color>
 		
 		<Color x:Key="ItemsControlBackgroundColor">#FFFFFFFF</Color>
-		<Color x:Key="ItemsControlBorderColor">#FFF2F2F2</Color>
+		<Color x:Key="ItemsControlBorderColor">#ffbdbdbd</Color>
 		
 	</Styles.Resources>
 	
@@ -40,7 +50,7 @@
 		<Setter Property="FontSize" Value="12"/>
 		<Setter Property="Padding" Value="5"/>		
 		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="MinHeight" Value="0"/>
+		<Setter Property="MinHeight" Value="32"/>
 		<Setter Property="Margin" Value="2"/>
 	</Style>
 	<Style Selector="TextBox DataValidationErrors">
@@ -121,24 +131,45 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource ListBoxItemBackgroundPointerOverColor}"/>		
+		<Setter Property="BorderBrush" Value="{DynamicResource ListBoxItemBorderPointerOverColor}"/>
+		<!--<Setter Property="Background" Value="{DynamicResource ListBoxItemBackgroundPointerOverColor}"/>-->		
 	</Style>
 	<Style Selector="ListBoxItem:not(:pointerover) /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="Transparent"/>
 	</Style>
 	<Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="BorderBrush" Value="{DynamicResource ListBoxItemBorderSelectedColor}"/>
-		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Background" Value="{DynamicResource ListBoxItemBackgroundSelectedColor}"/>
+	</Style>
+	
+	<Style Selector="ItemsControl">
+		<Setter Property="Margin" Value="2"/>
+		<!--<Setter Property="Background" Value="{DynamicResource ItemsControlBackgroundColor}"/>-->
+		<Setter Property="CornerRadius" Value="3"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<!--<Setter Property="BorderBrush" Value="{DynamicResource ItemsControlBorderColor}"/>-->
+		<Setter Property="Padding" Value="4"/>				
 	</Style>
 
-	<Style Selector="ItemsControl">
+	<Style Selector="ItemsControl.Bordered">
 		<Setter Property="Margin" Value="2"/>
 		<Setter Property="Background" Value="{DynamicResource ItemsControlBackgroundColor}"/>
 		<Setter Property="CornerRadius" Value="3"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource ItemsControlBorderColor}"/>
-		<Setter Property="Padding" Value="4"/>				
+		<Setter Property="Padding" Value="4"/>
 	</Style>
-	
+
+
+	<Style Selector="ListBox:pointerover ScrollViewer">
+		<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+	</Style>
+	<Style Selector="ListBox:not(:pointerover) ScrollViewer">
+		<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+		<Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+	</Style>
+
+
 	<!-- Add Styles Here -->
 </Styles>

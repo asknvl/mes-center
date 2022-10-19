@@ -21,6 +21,6 @@ namespace mes_center.Models.rest.server_dto
         [JsonProperty]
         public string name { get; set; }
         [JsonProperty]
-        List<DefectDTO> defect { get; set; }
+        public List<DefectDTO> defects { get; set; }
     }
 }

@@ -13,6 +13,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Newtonsoft.Json;
+using mes_center.ViewModels.dialogs;
+using mes_center.WS;
+using Avalonia.Threading;
 
 namespace mes_center.arm_regmeter.ViewModels
 {
@@ -26,7 +29,7 @@ namespace mes_center.arm_regmeter.ViewModels
         Timer timer = new Timer();
         string text = "";
         int counter = 0;
-        List<ComponentDTO> components;        
+        List<ComponentDTO> meterComponents;        
         List<componentItemVM> componentsList;
         int SessionID = 0;
 
@@ -34,6 +37,8 @@ namespace mes_center.arm_regmeter.ViewModels
         kafka.consumer meter_created_response;
 
         DateTime regStartTime;
+
+        IWindowServeice ws = WindowService.getInstance();
         #endregion
 
         #region properties
@@ -135,14 +140,11 @@ namespace mes_center.arm_regmeter.ViewModels
                     await serverApi.CloseSession(SessionID);
 
                     Close();
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     showError(ex.Message);
                 }
-
-                //kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID, "1", true, regStartTime, DateTime.Now, "123", new List<(string, string)>());
-                //await meter_created.produceAsync("meter_created", meterDTO.ToString());
-
 
             });
             #endregion
@@ -154,26 +156,32 @@ namespace mes_center.arm_regmeter.ViewModels
             var res = JsonConvert.DeserializeObject<kafka.kafka_dto.MeterCreatedDTO>(message);
             logger.dbg("<" + message);
 
-            if (res.error == 0)
+            if (res.error != 0)
             {
-                if (res.meters_amount - 1 > 0)
-                {
-                    TotalAmount = res.meters_amount;
-                    await startRegistration();
-                }
-                else
-                {
-                    await serverApi.CloseSession(SessionID);
-                    Close();
-                }
+                showError(res.message);
+            }
+
+            if (res.meters_amount - 1 > 0)
+            {
+                TotalAmount = res.meters_amount;
+                await startRegistration();
             }
             else
             {
-                logger.dbg(res.message);
+                await serverApi.CloseSession(SessionID);
+
+                await Dispatcher.UIThread.InvokeAsync(() => {
+                    Close();    
+                });
+
+                
             }
         }
-        
+
         #region helpers     
+        int? deffect_component_id = null;
+        int? deffect_type_id = null;
+        string? comment = null;
         async Task markMeterAssembled(bool isOk)
         {
             List<(int, string)> components = new();
@@ -184,9 +192,54 @@ namespace mes_center.arm_regmeter.ViewModels
             }
 
             string SerialNumber = componentsList[componentsList.Count - 1].SerialNumber;
-            kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID, 1, isOk, regStartTime, DateTime.UtcNow, SerialNumber, components);
 
-            await meter_created.produceAsync("meter_created", meterDTO.ToString());
+            if (!isOk)
+            {
+                var defselect = new trashComponentsSelectVM(meterComponents);
+                defselect.DefectSelectedEvent += async (componentid, defid, cmnt) =>
+                {
+                    deffect_component_id = componentid;
+                    deffect_type_id = defid;
+                    comment = cmnt;
+
+                    kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
+                                                                                1,
+                                                                                isOk,
+                                                                                regStartTime,
+                                                                                DateTime.UtcNow,
+                                                                                SerialNumber,
+                                                                                components,
+                                                                                deffect_component_id,
+                                                                                deffect_type_id,
+                                                                                comment);
+
+                    await meter_created.produceAsync("meter_created", meterDTO.ToString());
+
+                };
+                var dlg = new dialogVM(defselect);
+
+                await Dispatcher.UIThread.InvokeAsync(() => {
+                    ws.ShowDialog(dlg);
+                });
+
+                
+            }
+            else
+            {
+
+                kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
+                                                                                 1,
+                                                                                 isOk,
+                                                                                 regStartTime,
+                                                                                 DateTime.UtcNow,
+                                                                                 SerialNumber,
+                                                                                 components,
+                                                                                 deffect_component_id,
+                                                                                 deffect_type_id,
+                                                                                 comment);
+
+                await meter_created.produceAsync("meter_created", meterDTO.ToString());
+            }
         }
         #endregion
 
@@ -243,9 +296,9 @@ namespace mes_center.arm_regmeter.ViewModels
             await Task.Run(async () =>
             {
                 var order = serverApi.GetOrder(Order.order_num);
-                components = await serverApi.GetComponents(order.model);
+                meterComponents = await serverApi.GetComponents(order.model);
                 componentsList = new();
-                foreach (var dto in components)
+                foreach (var dto in meterComponents)
                     componentsList.Add(new componentItemVM(dto) { ActionName = "Отсканируйте штрих код компонента:", Id = dto.id});
                 componentsList.Add(new componentItemVM("Прибор учета") { ActionName = "Отсканируйте штрих код изделия:" });
                 //TotalAmount = await serverApi.GetMetersAmount(order.order_num, 1);

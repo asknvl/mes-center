@@ -1,6 +1,8 @@
 using mes_center.Models.kafka;
 using mes_center.Models.logger;
 using mes_center.Models.rest;
+using mes_center.ViewModels.dialogs;
+using mes_center.WS;
 using ReactiveUI;
 using System;
 using System.Collections;
@@ -14,7 +16,8 @@ namespace mes_center.ViewModels
     {
         #region vars
         protected ILogger logger = Logger.getInstance();
-        protected IServerApi serverApi = new ServerApi("http://172.16.118.105:8080/assppu-1.0.8");        
+        protected IServerApi serverApi = new ServerApi("http://172.16.118.105:8080/assppu-1.0.8");
+        protected IWindowServeice ws = WindowService.getInstance();
         #endregion
 
         public ViewModelBase()
@@ -65,6 +68,14 @@ namespace mes_center.ViewModels
 
         public virtual void showError(string message) {
             logger.err(message);
+
+            var msg = new msgVM();
+            msg.Title = "Ошибка!";
+            msg.Message = message;
+
+            var dlg = new dialogVM(msg);
+            ws.ShowDialog(dlg);
+
         }
     }
 }

@@ -2,8 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="350"
-             x:Class="mes_center.Views.componentsSelectView">
+             mc:Ignorable="d" d:DesignWidth="750" d:DesignHeight="400"			 
+             x:Class="mes_center.Views.trashComponentsSelectView"
+			 Height="400">
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>
@@ -21,32 +22,60 @@
 		<Grid
 			Grid.Row="1"
 			RowDefinitions="Auto, *"
-			ColumnDefinitions="*, *">
+			ColumnDefinitions="*, *, *">
 			<TextBlock
 				Grid.Row="0"
 				Grid.Column="0">
-				Выберите компоненты:
+				Компонент:
 			</TextBlock>
 			<TextBlock
 				Grid.Row="0"
 				Grid.Column="1">
+				Дефект:
+			</TextBlock>
+			<TextBlock
+				Grid.Row="0"
+				Grid.Column="2">
 				Комментарий:
 			</TextBlock>
-			<ListBox
+			<ListBox				
+				Items="{Binding Components}"
+				SelectedItem ="{Binding SelectedComponent}"
 				Grid.Row="1"
-				SelectionMode="Multiple">
-				<ListBoxItem>
-					Компонент 1
-				</ListBoxItem>
-				<ListBoxItem>
-					Компонент 2
-				</ListBoxItem>
+				Grid.Column="0"
+				Width="250">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock
+							Text="{Binding name}"
+							TextWrapping="Wrap">							
+						</TextBlock>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<ListBox
+				Items="{Binding Defects}"
+				SelectedItem="{Binding SelectedDefect}"
+				Grid.Row="1"
+				Grid.Column="1"
+				Width="250">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock
+							Text="{Binding name}"
+							TextWrapping="Wrap">
+						</TextBlock>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
 			</ListBox>
 			<TextBox
-				Grid.Row="1"
-				Grid.Column="1"				
+				Text="{Binding Comment}"
+				VerticalContentAlignment="Top"
+				Grid.Row="2"
+				Grid.Column="2"				
 				VerticalAlignment="Stretch"
-				AcceptsReturn="True">
+				AcceptsReturn="True"
+				Width="250">
 			</TextBox>
 		</Grid>
 		<Grid
@@ -55,8 +84,7 @@
 			Grid.Column="2"
 			HorizontalAlignment="Right">
 			<Button
-				Command="{Binding okCmd}"
-				IsEnabled="{Binding IsInputValid}"
+				Command="{Binding okCmd}"				
 				Grid.Column="0"
 				HorizontalAlignment="Stretch">
 				ОК

@@ -6,6 +6,8 @@
         x:Class="mes_center.Views.dialogs.containerDlg"
 		xmlns:comvms="using:mes_center.ViewModels"
 		xmlns:comviews="using:mes_center.Views"
+		xmlns:dlgvms="using:mes_center.ViewModels.dialogs"
+		xmlns:dlgviews="using:mes_center.Views.dialogs"
 		SizeToContent="WidthAndHeight"
 		CanResize="False"		
         Title="containerDlg">	
@@ -14,6 +16,12 @@
 			<ContentControl.DataTemplates>
 				<DataTemplate DataType="{x:Type comvms:addstrategyVM}">
 					<comviews:addstrategyView/>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type comvms:trashComponentsSelectVM}">
+					<comviews:trashComponentsSelectView/>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type dlgvms:msgVM}">
+					<dlgviews:msgView/>
 				</DataTemplate>
 			</ContentControl.DataTemplates>
 		</ContentControl>

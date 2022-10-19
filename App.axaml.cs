@@ -23,11 +23,11 @@ namespace mes_center
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 LifeCycleViewModelBase main = null;
-#if REGMETER_DEBUG
-                main = new regmeterVM();
-#elif DEBUG
+#if REGMETER_DEBUG    
                 main = new mainVM();
-                //main = new regmeterVM();
+#elif DEBUG
+                //main = new mainVM();
+                main = new regmeterVM();
 #endif
 
                 ws.ShowWindow(main);

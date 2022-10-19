@@ -24,9 +24,8 @@ namespace mes_center
             {
                 LifeCycleViewModelBase main = null;
 #if REGMETER_DEBUG    
-                main = new mainVM();
-#elif DEBUG
-      
+                main = new mainVM(); //
+#elif DEBUG      
                 main = new regmeterVM();
 #endif
 

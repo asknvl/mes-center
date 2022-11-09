@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using mes_center.arm_breakdown.ViewModels;
 using mes_center.arm_regmeter.ViewModels;
 using mes_center.ViewModels;
 using mes_center.Views;
@@ -23,10 +24,13 @@ namespace mes_center
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 LifeCycleViewModelBase main = null;
-#if REGMETER_DEBUG    
-                main = new mainVM(); //
-#elif DEBUG      
+
+#if REGMETER_DEBUG
                 main = new regmeterVM();
+#elif BREAKDOWN_DEBUG
+                main = new breakdownVM();
+#elif CENTER_DEBUG
+                main = new mainVM();
 #endif
 
                 ws.ShowWindow(main);

@@ -1,4 +1,6 @@
 ﻿using Avalonia.Controls;
+using mes_center.arm_breakdown.ViewModels;
+using mes_center.arm_breakdown.Views;
 using mes_center.arm_regmeter.ViewModels;
 using mes_center.arm_regmeter.Views;
 using mes_center.ViewModels;
@@ -68,17 +70,20 @@ namespace mes_center.WS
 
             switch (vm)
             {
-                case mainVM wvm:
-                    wnd = new mainWnd();
-                    mainWindow = wnd;
+                case mainVM:
+                    wnd = new mainWnd();                    
                     break;
 
-                case regmeterVM rvm:
-                    wnd = new regmeterWnd();
-                    mainWindow = wnd;
-                    break;                
+                case regmeterVM:
+                    wnd = new regmeterWnd();                    
+                    break;
+
+                case breakdownVM:
+                    wnd = new breakdownWnd();
+                    break;
             }
 
+            mainWindow = wnd;
             vm.CloseRequestEvent += () =>
             {
                 if (wnd != null)

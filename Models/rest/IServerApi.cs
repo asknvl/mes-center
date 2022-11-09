@@ -1,4 +1,5 @@
-﻿using mes_center.Models.rest.server_dto;
+﻿using mes_center.Models.kafka.kafka_dto;
+using mes_center.Models.rest.server_dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,11 +15,12 @@ namespace mes_center.Models.rest
         Task<List<ConfigurationDTO>> GetConfigurations();
         Task<List<OrderDTO>> GetOrders(OrderDTO.OrderStatus[] statuses);
         OrderDTO GetOrder(string order_num);
-        Task<string> GenerateSerialNumber(string order_num, int amount_aux, string comment);
+        Task<OrderDTO> OrderUpdate(string order_num, int amount_aux, OrderStatus status);
         Task SetOrderStatus(string order_num, OrderStatus status, string comment);
         Task<List<ComponentDTO>> GetComponents(ModelDTO model);
         Task<int> OpenSession(string order_num, string login, int equipmentid);
         Task CloseSession(int id);
+        Task SetMeterStagePassed(int sessionid, MeterDTO meter);
         Task<int> GetMetersAmount(string order_num, int stage);
         Task<List<StageDTO>> GetStages();
         Task<List<StrategyDTO>> GetStrategies();

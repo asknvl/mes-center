@@ -1,0 +1,160 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vms="using:mes_center.arm_breakdown.ViewModels"
+			 xmlns:views="using:mes_center.arm_breakdown.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"			 
+             x:Class="mes_center.arm_breakdown.Views.meterBreakdownView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	<Grid
+		RowDefinitions="Auto, *, Auto, Auto">
+		<Grid
+			Grid.Row="0"
+			Height="40"
+			Background="LightGray">
+			<TextBlock
+				Classes="TextBlock Title">
+				<TextBlock.Text>
+					Пробой ПУ
+					<!--<MultiBinding StringFormat="{}Пробой ПУ ({0} из {1})">
+						<Binding Path="CurrentAmount" />
+						<Binding Path="TotalAmount" />
+					</MultiBinding>-->
+				</TextBlock.Text>
+			</TextBlock>
+		</Grid>
+		<Grid
+			ColumnDefinitions="*, Auto"
+			Grid.Row="1">
+			<ContentControl
+				Content="{Binding Content}"
+				Margin="10"
+				VerticalAlignment="Center"
+				Grid.Column="0">
+				<ContentControl.DataTemplates>
+					<DataTemplate DataType="{x:Type vms:userActionVM}">
+						<StackPanel
+							Orientation="Vertical">
+							<TextBlock
+								Text="123"/>
+							<TextBlock
+								Margin="10"
+								FontWeight="DemiBold"
+								FontSize="14"
+								Text="{Binding Name}">
+							</TextBlock>
+						</StackPanel>
+					</DataTemplate>
+					<!--<DataTemplate DataType="{x:Type vms:userMessageVM}">
+						<StackPanel
+							Orientation="Vertical">
+							<TextBlock
+								Margin="10"
+								FontWeight="DemiBold"
+								FontSize="14"
+								Text="{Binding Message}">
+							</TextBlock>
+						</StackPanel>
+					</DataTemplate>-->
+				</ContentControl.DataTemplates>
+			</ContentControl>
+			<!--<Grid
+				Margin="2, 10, 2, 2"
+				Grid.Column="1"
+				RowDefinitions="Auto, *">
+				<TextBlock
+					Grid.Row="0">
+					Комплект:
+				</TextBlock>
+				<ItemsControl
+					Classes="ItemsControl Bordered"
+					Grid.Row="1"
+					Items="{Binding OrderComponentsList}"
+					Width="300">
+					<ItemsControl.DataTemplates>
+						<DataTemplate>
+							<StackPanel
+								Orientation="Vertical">
+								<TextBlock
+									Text="{Binding Name}"
+									FontWeight="DemiBold"
+									HorizontalAlignment="Left"/>
+								<TextBlock
+									Text="{Binding SerialNumber}"
+									HorizontalAlignment="Right"/>
+							</StackPanel>
+						</DataTemplate>
+					</ItemsControl.DataTemplates>
+				</ItemsControl>
+			</Grid>-->
+		</Grid>
+
+		<Grid
+			Grid.Row="2"
+			Height="140"
+			ColumnDefinitions="*,*,*"
+			Margin="10">
+			<Button
+				IsVisible="{Binding AllowButtons}"
+				IsEnabled="{Binding AllowButtons}"
+				Command="{Binding completeOrderCmd}"
+				Grid.Column="0"
+				HorizontalAlignment="Center"
+				Background="White">
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Исправен
+					</TextBlock>
+					<Svg
+						Grid.Row="1"
+						Path="/Assets/svg/register_dec.svg">
+					</Svg>
+				</Grid>
+			</Button>
+			<Button
+				IsVisible="{Binding AllowButtons}"
+				Command="{Binding trashOrderCmd}"
+				Grid.Column="2"
+				HorizontalAlignment="Center"
+				VerticalContentAlignment="Center">
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Брак
+					</TextBlock>
+					<Svg
+						Grid.Row="1"
+						Path="/Assets/svg/trash_dec.svg">
+					</Svg>
+				</Grid>
+			</Button>
+			<Button
+				Command="{Binding finishCmd}"
+				Grid.Column="1"
+				HorizontalAlignment="Center"
+				VerticalContentAlignment="Center">
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Завершить
+					</TextBlock>
+					<Svg
+						Grid.Row="1"
+						Path="/Assets/svg/cancel_dec.svg">
+					</Svg>
+				</Grid>
+			</Button>			
+		</Grid>
+
+	</Grid>
+</UserControl>

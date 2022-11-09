@@ -19,9 +19,6 @@ namespace mes_center.arm_regmeter.ViewModels
 
         #region properties        
         object? content;
-
-        public event Action<string> OnScanEvent;
-
         public object? Content
         {
             get => content;
@@ -32,10 +29,8 @@ namespace mes_center.arm_regmeter.ViewModels
                     c.OnStopped();
 
                 var lcc = value as LifeCycleViewModelBase;                
-                if (lcc != null)
-                {                    
-                    lcc.OnStarted();
-                }
+                if (lcc != null)                
+                    lcc.OnStarted();               
 
                 this.RaiseAndSetIfChanged(ref content, value);
             }
@@ -86,11 +81,9 @@ namespace mes_center.arm_regmeter.ViewModels
 
         public void OnScan(string text)
         {
-            if (Content is meterRegistrationVM)
-            {
-                IScanner scanner = (IScanner)Content;
+            var scanner = Content as IScanner;
+            if (scanner != null)
                 scanner.OnScan(text);
-            }
         } 
         #endregion
     }

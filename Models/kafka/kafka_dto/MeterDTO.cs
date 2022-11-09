@@ -1,4 +1,5 @@
 ﻿using mes_center.Models.rest.server_dto;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,18 +16,32 @@ namespace mes_center.Models.kafka.kafka_dto
     }
 
     public class MeterDTO : BaseDTO
-    {
-        public int version { get; set; }
-        public int sessionid { get; set; }
-        public int stagecode { get; set; }
+    {     
+        [JsonProperty]
+        public bool is_ok { get; set; }
+        [JsonProperty]
         public string start_dt { get; set; }
+        [JsonProperty]
         public string finish_dt { get; set; }
+        [JsonProperty]
         public string? comment { get; set; }
+        [JsonProperty]
         public int? componentid { get; set; }
+        [JsonProperty]
         public int? defect_typeid { get; set; }
-        public int is_ok { get; set; }
+        [JsonProperty]
+        public string? data { get; set; }
+        [JsonProperty]
+        public int? next_stagecode { get; set; } = null;
+        [JsonProperty]
+        public List<SN_DTO> components { get; set; } = new();
+
+        [JsonIgnore]
+        public int sessionid { get; set; }
+        [JsonIgnore]
+        public int? stagecode { get; set; }
+        [JsonIgnore]
         public string sn { get; set; }
-        public List<SN_DTO> components { get; set; }
 
         public MeterDTO() { }
         public MeterDTO(int sessionID,
@@ -40,12 +55,12 @@ namespace mes_center.Models.kafka.kafka_dto
                         int? defect_type_id,
                         string? comment) 
         {
-            version = 1;
+            //version = 1;
             sessionid = sessionID;
             stagecode = stageCode;
             start_dt = beginTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
             finish_dt = endTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
-            is_ok = (isOk) ? 1 : 0;
+            is_ok = isOk;
             sn = serialNumber;
             this.components = new();
 

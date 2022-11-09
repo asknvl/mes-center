@@ -24,8 +24,8 @@
 				<DataTemplate DataType="{x:Type vmscommon:loginVM}">
 					<viewscommon:loginView/>
 				</DataTemplate>
-				<DataTemplate DataType="{x:Type vms:orderSelectionVM}">
-					<views:orderSelectionView/>
+				<DataTemplate DataType="{x:Type vmscommon:orderSelectionVM}">
+					<viewscommon:orderSelectionView/>
 				</DataTemplate>
 				<DataTemplate DataType="{x:Type vms:meterRegistrationVM}">
 					<views:meterRegistrationView/>

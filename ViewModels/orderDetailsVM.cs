@@ -68,7 +68,10 @@ namespace mes_center.ViewModels
             acceptOrderCmd = ReactiveCommand.CreateFromTask(async () => {
                 try
                 {
-                    string serialnumber = await serverApi.GenerateSerialNumber(Order.order_num, Order.amount_aux, Order.comment);
+                    //string serialnumber = await serverApi.GenerateSerialNumber(Order.order_num, Order.amount_aux, Order.comment);
+
+                    var res = await serverApi.OrderUpdate(Order.order_num, Order.amount_aux, OrderDTO.OrderStatus.READY_TO_EXECUTE);
+
                 } catch (Exception ex)
                 {                    
                     showError(ex.Message);

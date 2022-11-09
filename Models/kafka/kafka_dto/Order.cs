@@ -21,8 +21,8 @@ namespace mes_center.Models.kafka.kafka_dto
         public int configurationid { get; set; }
         [JsonProperty]
         public int amount { get; set; }
-        [JsonProperty]
-        public string? fwv { get; set; } = "0.0.0";
+        //[JsonProperty]
+        //public string? fwv { get; set; } = "0.0.0";
         [JsonProperty]
         public string? comment { get; set; }
 

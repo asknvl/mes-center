@@ -33,8 +33,7 @@ namespace mes_center.arm_regmeter.ViewModels
         List<componentItemVM> componentsList;
         int SessionID = 0;
 
-        kafka.producer meter_created;
-        kafka.consumer meter_created_response;
+        //kafka.consumer meter_created_response;
 
         DateTime regStartTime;
 
@@ -89,12 +88,9 @@ namespace mes_center.arm_regmeter.ViewModels
             CurrentAmount = 0;
             TotalAmount = 0;
 
-            meter_created = new kafka.producer();            
-
-            meter_created_response = new kafka.consumer(this.GetType().Name);
-
-            meter_created_response.TopicUpdatedEvent -= Meter_created_response_TopicUpdatedEvent;
-            meter_created_response.TopicUpdatedEvent += Meter_created_response_TopicUpdatedEvent;  
+            //meter_created_response = new kafka.consumer(this.GetType().Name);
+            //meter_created_response.TopicUpdatedEvent -= Meter_created_response_TopicUpdatedEvent;
+            //meter_created_response.TopicUpdatedEvent += Meter_created_response_TopicUpdatedEvent;  
 
             #region commands
             completeOrderCmd = ReactiveCommand.CreateFromTask(async () => {
@@ -151,32 +147,32 @@ namespace mes_center.arm_regmeter.ViewModels
 
         }
 
-        private async void Meter_created_response_TopicUpdatedEvent(string message)
-        {
-            var res = JsonConvert.DeserializeObject<kafka.kafka_dto.MeterCreatedDTO>(message);
-            logger.dbg("<" + message);
+        //private async void Meter_created_response_TopicUpdatedEvent(string message)
+        //{
+        //    var res = JsonConvert.DeserializeObject<kafka.kafka_dto.MeterCreatedDTO>(message);
+        //    logger.dbg("<" + message);
 
-            if (res.error != 0)
-            {
-                showError(res.message);
-            }
+        //    if (res.error != 0)
+        //    {
+        //        showError(res.message);
+        //    }
 
-            if (res.meters_amount - 1 > 0)
-            {
-                TotalAmount = res.meters_amount;
-                await startRegistration();
-            }
-            else
-            {
-                await serverApi.CloseSession(SessionID);
+        //    if (res.meters_amount - 1 > 0)
+        //    {
+        //        TotalAmount = res.meters_amount;
+        //        await startRegistration();
+        //    }
+        //    else
+        //    {
+        //        await serverApi.CloseSession(SessionID);
 
-                await Dispatcher.UIThread.InvokeAsync(() => {
-                    Close();    
-                });
+        //        await Dispatcher.UIThread.InvokeAsync(() => {
+        //            Close();    
+        //        });
 
                 
-            }
-        }
+        //    }
+        //}
 
         #region helpers     
         int? deffect_component_id = null;
@@ -192,6 +188,7 @@ namespace mes_center.arm_regmeter.ViewModels
             }
 
             string SerialNumber = componentsList[componentsList.Count - 1].SerialNumber;
+            kafka.kafka_dto.MeterDTO meterDTO = null;
 
             if (!isOk)
             {
@@ -202,43 +199,42 @@ namespace mes_center.arm_regmeter.ViewModels
                     deffect_type_id = defid;
                     comment = cmnt;
 
-                    kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
-                                                                                1,
-                                                                                isOk,
-                                                                                regStartTime,
-                                                                                DateTime.UtcNow,
-                                                                                SerialNumber,
-                                                                                components,
-                                                                                deffect_component_id,
-                                                                                deffect_type_id,
-                                                                                comment);
-
-                    await meter_created.produceAsync("meter_created", meterDTO.ToString());
-
+                    meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
+                                                                    1,
+                                                                    isOk,
+                                                                    regStartTime,
+                                                                    DateTime.UtcNow,
+                                                                    SerialNumber,
+                                                                    components,
+                                                                    deffect_component_id,
+                                                                    deffect_type_id,
+                                                                    comment);
+                    await serverApi.SetMeterStagePassed(SessionID, meterDTO);
+                    await startRegistration();
                 };
                 var dlg = new dialogVM(defselect);
-
-                await Dispatcher.UIThread.InvokeAsync(() => {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
                     ws.ShowDialog(dlg);
                 });
-
-                
             }
             else
             {
+                meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
+                                                                1,
+                                                                isOk,
+                                                                regStartTime,
+                                                                DateTime.UtcNow,
+                                                                SerialNumber,
+                                                                components,
+                                                                deffect_component_id,
+                                                                deffect_type_id,
+                                                                comment);
 
-                kafka.kafka_dto.MeterDTO meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
-                                                                                 1,
-                                                                                 isOk,
-                                                                                 regStartTime,
-                                                                                 DateTime.UtcNow,
-                                                                                 SerialNumber,
-                                                                                 components,
-                                                                                 deffect_component_id,
-                                                                                 deffect_type_id,
-                                                                                 comment);
+                //await meter_created.produceAsync("meter_created", meterDTO.ToString());
+                await serverApi.SetMeterStagePassed(SessionID, meterDTO);
 
-                await meter_created.produceAsync("meter_created", meterDTO.ToString());
+                await startRegistration();
             }
         }
         #endregion
@@ -295,18 +291,32 @@ namespace mes_center.arm_regmeter.ViewModels
         {
             await Task.Run(async () =>
             {
-                var order = serverApi.GetOrder(Order.order_num);
-                meterComponents = await serverApi.GetComponents(order.model);
-                componentsList = new();
-                foreach (var dto in meterComponents)
-                    componentsList.Add(new componentItemVM(dto) { ActionName = "Отсканируйте штрих код компонента:", Id = dto.id});
-                componentsList.Add(new componentItemVM("Прибор учета") { ActionName = "Отсканируйте штрих код изделия:" });
-                //TotalAmount = await serverApi.GetMetersAmount(order.order_num, 1);
-                Content = componentsList[0];
-                counter = 0;                
-                CurrentAmount++;
-                OrderComponentsList.Clear();
-                regStartTime = DateTime.UtcNow;
+
+                TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);
+                if (TotalAmount > 0)
+                {
+                    var order = serverApi.GetOrder(Order.order_num);
+                    meterComponents = await serverApi.GetComponents(order.model);
+                    componentsList = new();
+                    foreach (var dto in meterComponents)
+                        componentsList.Add(new componentItemVM(dto) { ActionName = "Отсканируйте штрих код компонента:", Id = dto.id });
+                    componentsList.Add(new componentItemVM("Прибор учета") { ActionName = "Отсканируйте штрих код изделия:" });
+                    //TotalAmount = await serverApi.GetMetersAmount(order.order_num, 1);
+                    Content = componentsList[0];
+                    counter = 0;
+                    CurrentAmount++;
+                    OrderComponentsList.Clear();
+                    regStartTime = DateTime.UtcNow;
+                } else
+                {
+                    await serverApi.CloseSession(SessionID);
+
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        Close();
+                    });
+                }
+
             });
         }
 
@@ -320,9 +330,9 @@ namespace mes_center.arm_regmeter.ViewModels
 
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 0);
+                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 1);
                 logger.dbg($"SessionID = {SessionID}");
-                meter_created_response.start("meter_created_response");
+                //meter_created_response.start("meter_created_response");
 
                 TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);
 
@@ -336,8 +346,7 @@ namespace mes_center.arm_regmeter.ViewModels
 
         public override void OnStopped()
         {
-            base.OnStopped();
-            meter_created_response?.stop();
+            base.OnStopped();            
         }
 
         public void OnScan(string text)

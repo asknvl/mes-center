@@ -34,8 +34,8 @@ namespace mes_center.Models.rest.server_dto
         };
         #endregion
 
-        [JsonProperty]
-        public int version { get; set; }
+        //[JsonProperty]
+        //public int version { get; set; }
         [JsonProperty]
         public string? order_num { get; set; }
         [JsonProperty]
@@ -98,7 +98,7 @@ namespace mes_center.Models.rest.server_dto
         {
             OrderDTO order = new OrderDTO()
             {
-                version = 1,
+                //version = 1,
                 order_num = $"Test#{counter++}",
                 model = new ModelDTO() { id = 1, code = 1 },
                 config = new ConfigurationDTO() { id = 1, name = $"Test config", comment = "Test comment", data = "Test data" },

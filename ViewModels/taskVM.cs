@@ -139,7 +139,7 @@ namespace mes_center.ViewModels
                 order.amount = Amount;
                 //order.fwv = Fwv;
                 order.comment = Comment;
-
+                
                 try
                 {
                     await kafkaProducer.produceAsync("order_new", order.ToString());
@@ -164,8 +164,7 @@ namespace mes_center.ViewModels
 
             Version = 1;
             OrderNumber = "0";
-            ZoneCode = 11;
-            Fwv = "0.0.0";
+            ZoneCode = 11;            
             Comment = "Test task";
 
             try

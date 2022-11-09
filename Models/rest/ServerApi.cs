@@ -1,10 +1,12 @@
-﻿using mes_center.Models.rest.server_dto;
+﻿using mes_center.Models.kafka.kafka_dto;
+using mes_center.Models.rest.server_dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static mes_center.Models.rest.server_dto.OrderDTO;
@@ -104,6 +106,40 @@ namespace mes_center.Models.rest
         }
 
 
+
+        class jupdate
+        {
+            public int amount_aux { get; set; }
+            public int status { get; set; }
+        }
+        public async Task<OrderDTO> OrderUpdate(string order_num, int amount_aux, OrderStatus status)
+        {
+            OrderDTO res = new();
+            var client = new RestClient($"{url}/orders/{order_num}");
+            var request = new RestRequest(Method.PATCH);
+
+            jupdate param = new jupdate()
+            {
+                amount_aux = amount_aux,
+                status = (int)status
+            };
+            var sparam = JsonConvert.SerializeObject(param);
+
+            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
+
+            await Task.Run(() => { 
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    throw new ServerApiException($"OrderUpdate request fail (stasus code={response.StatusCode})");
+                res = JsonConvert.DeserializeObject<OrderDTO>(response.Content);            
+            });
+
+            if (res == null)
+                throw new ServerApiException($"GetOrders returns null");
+
+            return res;
+        }
+
         class jorderstatus
         {
             public int status { get; set; }
@@ -167,8 +203,6 @@ namespace mes_center.Models.rest
                 } else
                     throw new ServerApiException($"SetOrderStatus request fail (stasus code={response.StatusCode})");
             });
-
-
 
             return res;
         }
@@ -285,6 +319,31 @@ namespace mes_center.Models.rest
                     throw new ServerApiException($"GetStrategies request fail (stasus code={response.StatusCode})");
             });
             return res;
+        }
+
+        public async Task SetMeterStagePassed(int sessionid, MeterDTO meter)
+        {
+            var client = new RestClient($"{url}/meter/{sessionid}/{meter.sn}/{meter.stagecode}/pass");
+            var request = new RestRequest(Method.PATCH);
+
+            string sparam = JsonConvert.SerializeObject(meter);
+            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
+
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                    case HttpStatusCode.NoContent:
+                        break;
+
+                    default:
+                        throw new ServerApiException($"SrtMeterStagePassed request fail (stasus code={response.StatusCode})");
+                }
+    
+            });
         }
 
         public async Task<List<StrategyDTO>> GetStrategies()

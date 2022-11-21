@@ -147,7 +147,7 @@ namespace mes_center.Models.rest
         }            
         public async Task SetOrderStatus(string order_num, OrderStatus status, string comment)
         {            
-            var client = new RestClient($"{url}/orders/{order_num}/status");
+            var client = new RestClient($"{url}/orders/{order_num}");
             var request = new RestRequest(Method.PATCH);
 
             jorderstatus orderstatus = new();

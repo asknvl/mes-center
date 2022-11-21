@@ -92,6 +92,12 @@ namespace mes_center.arm_breakdown.ViewModels
             if (scanner != null)
                 scanner.OnScan(text);
         }
+
+        public override void OnStopped()
+        {
+            var c = Content as LifeCycleViewModelBase;
+            c?.OnStopped();
+        }
         #endregion
 
     }

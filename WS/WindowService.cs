@@ -84,10 +84,16 @@ namespace mes_center.WS
             }
 
             mainWindow = wnd;
+            wnd.Closing += (s, e) => {
+                vm.OnStopped();
+            };
+
             vm.CloseRequestEvent += () =>
             {
                 if (wnd != null)
+                {                  
                     wnd.Close();
+                }                
             };
 
             wnd.DataContext = vm;            

@@ -8,7 +8,7 @@ using System.Timers;
 
 namespace mes_center.ViewModels
 {
-    public class ScannerViewModelBase : LifeCycleViewModelBase, IScanner
+    public abstract class ScannerViewModelBase : LifeCycleViewModelBase, IScanner
     {
         #region vars
         int clickUpdatePeriod = 1300;
@@ -30,14 +30,19 @@ namespace mes_center.ViewModels
             {
                 case "255012255":
                     OnOk();
-                    return;
+                    break;
                 case "255012256":
                     OnTrash();
-                    return;
+                    break;
                 case "255012257":
                     OnFinish();
-                    return;
+                    break;
+                default:
+                    OnData(text);                    
+                    break;
             }
+
+            text = "";
         }
 
         protected virtual void OnOk()
@@ -54,6 +59,8 @@ namespace mes_center.ViewModels
         {
             logger.dbg("Finish");
         }
+
+        protected abstract void OnData(string data);
         #endregion
 
         #region public
@@ -64,7 +71,7 @@ namespace mes_center.ViewModels
 
             this.text += text;
 
-            logger.dbg(text);
+            //logger.dbg(text);
         }
         #endregion
     }

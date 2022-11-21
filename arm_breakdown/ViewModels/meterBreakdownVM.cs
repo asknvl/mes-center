@@ -1,4 +1,5 @@
-﻿using mes_center.Models.rest.server_dto;
+﻿using mes_center.Models.kafka.kafka_dto;
+using mes_center.Models.rest.server_dto;
 using mes_center.ViewModels;
 using ReactiveUI;
 using System;
@@ -40,18 +41,67 @@ namespace mes_center.arm_breakdown.ViewModels
         public ReactiveCommand<Unit, Unit> finishCmd { get; }
         #endregion
 
-        public meterBreakdownVM() : base() {
+        public meterBreakdownVM() : base()
+        {
             #region commands
-            okCmd = ReactiveCommand.CreateFromTask(async () => { 
+            okCmd = ReactiveCommand.CreateFromTask(async () =>
+            {
+                try
+                {
+                    await markMeterBreakdown(true);
+                }
+                catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
+                nextScanRequest();
             });
 
-            trashCmd = ReactiveCommand.CreateFromTask(async () => {
+            trashCmd = ReactiveCommand.CreateFromTask(async () =>
+            {
+                try
+                {
+                    await markMeterBreakdown(false);
+
+                } catch (Exception ex)
+                {
+
+                }
+                
+                nextScanRequest();
             });
 
-            finishCmd = ReactiveCommand.CreateFromTask(async () => {
+            finishCmd = ReactiveCommand.CreateFromTask( async () =>
+            {
+                Close();
             });
             #endregion
         }
+
+        #region heplers
+        void nextScanRequest()
+        {
+            Content = new userActionVM() { Text = "Отсканируйте серийный номер счетчика", SN = "" };
+
+            startTime = DateTime.UtcNow;
+
+            AllowButtons = false;
+        }
+
+        async Task markMeterBreakdown(bool isOk)
+        {
+            MeterDTO meterDTO = new MeterDTO(SessionID,
+                                                      1,
+                                                      isOk,
+                                                      regStartTime,
+                                                      DateTime.UtcNow,
+                                                      SerialNumber,
+                                                      components,
+                                                      deffect_component_id,
+                                                      deffect_type_id,
+                                                      comment);
+        }
+        #endregion
 
         #region override
         public override async void OnStarted()
@@ -63,30 +113,69 @@ namespace mes_center.arm_breakdown.ViewModels
             try
             {
                 SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 1);
+                nextScanRequest();
 
-                Content = new userActionVM() { Text = "Отсканируйте серийный номер счетчика" };
-
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 showError(ex.Message);
             }
 
+        }
 
+        public override async void OnStopped()
+        {
+            base.OnStopped();
+            try
+            {
+                await serverApi.CloseSession(SessionID);
+            }
+            catch (Exception ex)
+            {
+                showError(ex.Message);
+            }
         }
 
         protected override void OnOk()
         {
             base.OnOk();
+            okCmd.Execute();
+            AllowButtons = false;
         }
 
         protected override void OnTrash()
         {
             base.OnTrash();
+            trashCmd.Execute();
+            AllowButtons = false;
         }
 
         protected override void OnFinish()
         {
             base.OnFinish();
+            finishCmd.Execute();
+            AllowButtons = false;
+        }
+
+        protected override void OnData(string data)
+        {
+
+            if (AllowButtons)
+                return;
+
+            logger.dbg(data);
+
+            AllowButtons = true;
+
+            var ua = new userActionVM()
+            {
+                Text = "Прибор исправен?",
+                SN = data
+            };
+
+            Content = ua;
+
+            AllowButtons = true;
         }
         #endregion
     }

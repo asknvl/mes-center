@@ -39,12 +39,12 @@
 						<StackPanel
 							Orientation="Vertical">
 							<TextBlock
-								Text="123"/>
+								Text="{Binding Text}"/>
 							<TextBlock
 								Margin="10"
 								FontWeight="DemiBold"
 								FontSize="14"
-								Text="{Binding Name}">
+								Text="{Binding SN}">
 							</TextBlock>
 						</StackPanel>
 					</DataTemplate>
@@ -100,7 +100,7 @@
 			<Button
 				IsVisible="{Binding AllowButtons}"
 				IsEnabled="{Binding AllowButtons}"
-				Command="{Binding completeOrderCmd}"
+				Command="{Binding okCmd}"
 				Grid.Column="0"
 				HorizontalAlignment="Center"
 				Background="White">
@@ -119,7 +119,7 @@
 			</Button>
 			<Button
 				IsVisible="{Binding AllowButtons}"
-				Command="{Binding trashOrderCmd}"
+				Command="{Binding trashCmd}"
 				Grid.Column="2"
 				HorizontalAlignment="Center"
 				VerticalContentAlignment="Center">

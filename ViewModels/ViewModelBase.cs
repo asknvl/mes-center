@@ -16,7 +16,7 @@ namespace mes_center.ViewModels
     {
         #region vars
         protected ILogger logger = Logger.getInstance();
-        protected IServerApi serverApi = new ServerApi("http://172.16.118.105:8080/assppu-1.0.10");
+        protected IServerApi serverApi = new ServerApi("http://172.16.118.105:8080/assppu-1.0.11");
         protected IWindowServeice ws = WindowService.getInstance();
         #endregion
 
@@ -67,6 +67,7 @@ namespace mes_center.ViewModels
         #endregion        
 
         public virtual void showError(string message) {
+
             logger.err(message);
 
             var msg = new msgVM();

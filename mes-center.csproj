@@ -14,18 +14,18 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='center_debug|AnyCPU'">
     <DefineConstants>OFFLINE</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='regmenter_debug|AnyCPU'">
-    <DefineConstants>OFFLINE</DefineConstants>
-  </PropertyGroup>
+  </PropertyGroup>  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='breakdown_debug|AnyCPU'">
-    <DefineConstants>OFFLINE</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>OFFLINE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='regmeter_debug|AnyCPU'">
     <DefineConstants>OFFLINE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='regmenter_debug|AnyCPU'">
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />

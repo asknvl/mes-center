@@ -17,6 +17,13 @@ namespace mes_center.arm_breakdown.ViewModels
             set => this.RaiseAndSetIfChanged(ref text, value);
         }
 
+        string sn;
+        public string SN
+        {
+            get => sn;
+            set => this.RaiseAndSetIfChanged(ref sn, value);
+        }
+
         public userActionVM() { }
     }
 }

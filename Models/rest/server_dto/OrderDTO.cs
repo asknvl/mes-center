@@ -67,6 +67,7 @@ namespace mes_center.Models.rest.server_dto
                         break;
                 }
 
+                sum_amount = amount + amount_aux;
             }
         }
         int _amount_aux;
@@ -125,8 +126,24 @@ namespace mes_center.Models.rest.server_dto
                     amount_aux = aux_amount_complete;
                 else
                     amount_aux = 0;
-                
+
+                sum_amount = amount + amount_aux;
+
                 this.RaiseAndSetIfChanged(ref _need_aux_autocomplete, value);
+            }
+        }
+        [JsonIgnore]
+        int _sum_amount;
+        public int sum_amount
+        {
+            get
+            {
+                _sum_amount = amount + amount_aux;
+                return _sum_amount;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _sum_amount, value);
             }
         }
         public OrderDTO()

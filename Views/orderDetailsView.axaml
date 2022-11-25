@@ -62,14 +62,16 @@
 					OffContent="0"
 					OnContent="{Binding Order.aux_amount_complete}"
 					Grid.Row="1">					
-				</ToggleSwitch>
-				
-				<!--<TextBlock
-					Grid.Row="1"
-					Grid.Column="1"									
-					VerticalAlignment="Center"
-					Text="10"/>-->
-			</Grid>			
+				</ToggleSwitch>								
+			</Grid>
+			<TextBlock
+				Classes="TextBlock Header">
+				Всего изделий:
+			</TextBlock>
+			<TextBlock				
+				HorizontalAlignment="Left"
+				Width="150"
+				Text="{Binding Order.sum_amount}"/>
 			<TextBlock
 				Classes="TextBlock Header"
 				IsVisible="{Binding IsSerialVisible}">

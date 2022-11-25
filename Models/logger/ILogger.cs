@@ -8,7 +8,16 @@ namespace mes_center.Models.logger
 {
     public interface ILogger
     {
-        void dbg(string message);
-        void err(string message);
+        void dbg(Tags tag, string message);
+        void err(Tags tag, string message);
+        void inf(Tags tag, string message);
+    }
+
+    public enum Tags
+    {
+        INTF, //Interface actions
+        SAPI, //Api requests
+        SCAN, //Scanner
+        KAFK
     }
 }

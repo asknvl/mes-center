@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,13 +7,16 @@
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <RootNamespace>mes_center</RootNamespace>
-    <Configurations>Debug;Release;regmeter_debug;breakdown_debug;regmenter_debug;center_debug</Configurations>
+    <Configurations>Debug;Release;regmeter_debug;breakdown_debug;regmenter_debug;center_debug;repair_debug</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>OFFLINE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='center_debug|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='repair_debug|AnyCPU'">
     <DefineConstants>OFFLINE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='center_debug|AnyCPU'">
+    <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='breakdown_debug|AnyCPU'">
     <DefineConstants>DEBUG</DefineConstants>
@@ -55,6 +58,9 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.10.14" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.14" />
+    <PackageReference Include="Avalonia.Diagnostics" Condition="'$(Configuration)'=='repair_debug'">
+      <Version>0.10.14</Version>
+    </PackageReference>
     <PackageReference Include="Avalonia.Diagnostics" Condition="'$(Configuration)'=='center_debug'">
       <Version>0.10.14</Version>
     </PackageReference>
@@ -74,6 +80,7 @@
   <ItemGroup>
     <Folder Include="arm_breakdown\Models\" />
     <Folder Include="arm_regmeter\Models\" />
+    <Folder Include="arm_repair\Models\" />
     <Folder Include="Models\dto\" />
   </ItemGroup>
   <ItemGroup>

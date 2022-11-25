@@ -28,11 +28,12 @@ namespace mes_center.Models.kafka
             try
             {
                 var message = new Message<Null, string> { Value = msg };
-                var deliv = await producerBuilder.ProduceAsync(topic, message);   
-                
+                var deliv = await producerBuilder.ProduceAsync(topic, message);
+                logger.inf(Tags.KAFK, $"producer: Message={message} Topic={topic}");
+
             } catch (Exception ex)
             {
-                logger.dbg($"producer: {ex.Message}");                
+                logger.err(Tags.KAFK, $"producer: {ex.Message}");                
             }
             return res;
         }

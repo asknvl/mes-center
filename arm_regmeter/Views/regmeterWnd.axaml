@@ -11,7 +11,7 @@
 		Width="800"
 		Height="600"		
 		WindowStartupLocation="CenterScreen"
-        Title="regmeterWnd">
+        Title="АРМ Регистрация ПУ">
 	<Design.DataContext>
 		<vms:regmeterVM/>
 	</Design.DataContext>

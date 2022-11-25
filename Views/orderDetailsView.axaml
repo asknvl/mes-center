@@ -43,15 +43,33 @@
 			</TextBlock>
 			<TextBlock
 				Text="{Binding Order.amount}"/>
-			<TextBlock
-				Classes="TextBlock Header">
-				Дополнительное количество:
-			</TextBlock>
-			<TextBox
-				IsReadOnly="{Binding !IsAcceptRejectNeed}"
+			<Grid								
 				HorizontalAlignment="Left"
-				Width="100"
-				Text="{Binding Order.amount_aux}"/>
+				RowDefinitions="Auto, Auto"
+				ColumnDefinitions="Auto, 30">
+				<TextBlock
+					Grid.Row="0"
+					Grid.Column="0"
+					Classes="TextBlock Header"
+					VerticalAlignment="Center"
+					Grid.ColumnSpan="2">
+					Дополнительное количество:					
+				</TextBlock>				
+				<ToggleSwitch
+					Margin="4, 0, 0, 0"
+					IsEnabled="{Binding !IsSerialVisible}"
+					IsChecked="{Binding Order.need_aux_autocomplete}"
+					OffContent="0"
+					OnContent="{Binding Order.aux_amount_complete}"
+					Grid.Row="1">					
+				</ToggleSwitch>
+				
+				<!--<TextBlock
+					Grid.Row="1"
+					Grid.Column="1"									
+					VerticalAlignment="Center"
+					Text="10"/>-->
+			</Grid>			
 			<TextBlock
 				Classes="TextBlock Header"
 				IsVisible="{Binding IsSerialVisible}">
@@ -63,12 +81,12 @@
 				HorizontalAlignment="Left"
 				Width="150"
 				Text="{Binding Order.first_serial}"/>
-			<TextBlock
+			<!--<TextBlock
 				Classes="TextBlock Header">
 				Версия ВПО:
 			</TextBlock>
 			<TextBlock
-				Text="{Binding Order.fwv}"/>
+				Text="{Binding Order.fwv}"/>-->
 			<TextBlock
 				Classes="TextBlock Header">
 				Комментарий:

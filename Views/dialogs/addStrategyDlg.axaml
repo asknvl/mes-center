@@ -7,7 +7,7 @@
         x:Class="mes_center.Views.dialogs.addStrategyDlg"
 		Width="500"
 		Height="700"
-        Title="addStrategyDlg">
+        Title="Добавление стратегии">
 	<Grid>
 		<views:addstrategyView DataContext="{Binding addstrategy}"/>
 	</Grid>

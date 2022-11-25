@@ -25,7 +25,7 @@ namespace mes_center.Models.rest
         Task<List<StageDTO>> GetStages();
         Task<List<StrategyDTO>> GetStrategies();
         Task CreateStrategy(StrategyDTO strategy);
-        Task DeleteStrategy(string name);
+        Task DeleteStrategy(int id);
     }
 
     public class ServerApiException : Exception

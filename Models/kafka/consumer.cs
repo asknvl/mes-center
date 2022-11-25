@@ -47,12 +47,13 @@ namespace mes_center.Models.kafka
                         var cr = consumerBuilder.Consume(cts.Token);
                         //TopicUpdatedEvent?.Invoke($"consumer: Message={cr.Value} at: {cr.Topic} {cr.TopicPartitionOffset}");                        
                         TopicUpdatedEvent?.Invoke($"{cr.Value}");
-                        logger.dbg($"consumer: Message={cr.Value} at: {cr.Topic} {cr.TopicPartitionOffset}");
+
+                        logger.dbg(Tags.KAFK, $"consumer: Message={cr.Value} at: {cr.Topic} {cr.TopicPartitionOffset}");
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.dbg($"consumer: {ex.Message}");
+                    logger.err(Tags.KAFK, $"consumer: {ex.Message}");
                 }
                 finally
                 {

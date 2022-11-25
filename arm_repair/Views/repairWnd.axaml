@@ -1,20 +1,15 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
-		xmlns:vms="using:mes_center.arm_breakdown.ViewModels"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"		
 		xmlns:vmscommon="using:mes_center.ViewModels"
-		xmlns:views="using:mes_center.arm_breakdown.Views"
 		xmlns:viewscommon="using:mes_center.Views"
-        x:Class="mes_center.arm_breakdown.Views.breakdownWnd"
-		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"        
+        x:Class="mes_center.arm_repair.Views.repairWnd"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		Width="800"
-		Height="600"		
+		Height="600"
 		WindowStartupLocation="CenterScreen"
-		Title="АРМ Пробой">
-	<Design.DataContext>
-		<vms:breakdownVM/>
-	</Design.DataContext>
+        Title="АРМ Ремонт">	
 	<Grid
 		VerticalAlignment="Stretch"
 		HorizontalAlignment="Stretch">
@@ -24,12 +19,12 @@
 				<DataTemplate DataType="{x:Type vmscommon:loginVM}">
 					<viewscommon:loginView/>
 				</DataTemplate>
-				<DataTemplate DataType="{x:Type vmscommon:orderSelectionVM}">
+				<!--<DataTemplate DataType="{x:Type vmscommon:orderSelectionVM}">
 					<viewscommon:orderSelectionView/>
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type vms:meterBreakdownVM}">
+				</DataTemplate>-->
+				<!--<DataTemplate DataType="{x:Type vms:meterBreakdownVM}">
 					<views:meterBreakdownView/>
-				</DataTemplate>
+				</DataTemplate>-->
 			</ContentControl.DataTemplates>
 		</ContentControl>
 	</Grid>

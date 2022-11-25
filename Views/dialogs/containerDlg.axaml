@@ -9,8 +9,7 @@
 		xmlns:dlgvms="using:mes_center.ViewModels.dialogs"
 		xmlns:dlgviews="using:mes_center.Views.dialogs"
 		SizeToContent="WidthAndHeight"
-		CanResize="False"		
-        Title="containerDlg">	
+		CanResize="False">	
 	<Grid>		
 		<ContentControl Content="{Binding Content}">
 			<ContentControl.DataTemplates>

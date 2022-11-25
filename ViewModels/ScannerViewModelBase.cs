@@ -1,4 +1,5 @@
-﻿using mes_center.Models.scanner;
+﻿using mes_center.Models.logger;
+using mes_center.Models.scanner;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,22 +43,23 @@ namespace mes_center.ViewModels
                     break;
             }
 
+            logger.inf(Tags.SCAN, $"Input = {text}");
             text = "";
         }
 
         protected virtual void OnOk()
         {
-            logger.dbg("Ok");
+            logger.inf(Tags.SCAN, "OK pressed");
         }
 
         protected virtual void OnTrash()
         {
-            logger.dbg("Trash");
+            logger.inf(Tags.SCAN, "Trash pressed");
         }
 
         protected virtual void OnFinish()
         {
-            logger.dbg("Finish");
+            logger.inf(Tags.SCAN, "Finish pressed");
         }
 
         protected abstract void OnData(string data);

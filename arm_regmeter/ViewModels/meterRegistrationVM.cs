@@ -242,23 +242,18 @@ namespace mes_center.arm_regmeter.ViewModels
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
 
-            logger.dbg("timer");
-
             switch (text)
             {
                 case "255012255":
-                    completeOrderCmd.Execute();
-                    logger.dbg("register");
+                    completeOrderCmd.Execute();                    
                     text = "";
                     return;
                 case "255012256":
                     trashOrderCmd.Execute();
-                    logger.dbg("trash");
                     text = "";
                     return;
                 case "255012257":
-                    cancelOrderCmd.Execute();
-                    logger.dbg("cancel");
+                    cancelOrderCmd.Execute();                    
                     text = "";
                     return;
 
@@ -323,15 +318,12 @@ namespace mes_center.arm_regmeter.ViewModels
         public override async void OnStarted()
         {
 
-            logger.dbg("OnStarted");
-
             base.OnStarted();
             regStartTime = DateTime.UtcNow;
 
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 1);
-                logger.dbg($"SessionID = {SessionID}");
+                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 1);                
                 //meter_created_response.start("meter_created_response");
 
                 TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);
@@ -344,9 +336,17 @@ namespace mes_center.arm_regmeter.ViewModels
             }
         }
 
-        public override void OnStopped()
+        public override async void OnStopped()
         {
-            base.OnStopped();            
+            base.OnStopped();
+            try
+            {
+                await serverApi.CloseSession(SessionID);
+            }
+            catch (Exception ex)
+            {
+                //showError(ex.Message);
+            }
         }
 
         public void OnScan(string text)
@@ -355,8 +355,6 @@ namespace mes_center.arm_regmeter.ViewModels
                 timer.Start();
 
             this.text += text;
-
-            logger.dbg(text);
         }
 
         

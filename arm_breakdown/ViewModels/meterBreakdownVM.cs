@@ -1,4 +1,5 @@
 ﻿using mes_center.Models.kafka.kafka_dto;
+using mes_center.Models.logger;
 using mes_center.Models.rest.server_dto;
 using mes_center.ViewModels;
 using ReactiveUI;
@@ -48,7 +49,11 @@ namespace mes_center.arm_breakdown.ViewModels
             {
                 try
                 {
-                    await markMeterBreakdown(true);
+                    var c = Content as userActionVM;
+                    if (c != null)
+                    {
+                        await markMeterBreakdown(SessionID, c.SN, true);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -61,11 +66,15 @@ namespace mes_center.arm_breakdown.ViewModels
             {
                 try
                 {
-                    await markMeterBreakdown(false);
+                    var c = Content as userActionVM;
+                    if (c != null)
+                    {
+                        await markMeterBreakdown(SessionID, c.SN, false);
+                    }
 
                 } catch (Exception ex)
                 {
-
+                    showError(ex.Message);
                 }
                 
                 nextScanRequest();
@@ -88,18 +97,16 @@ namespace mes_center.arm_breakdown.ViewModels
             AllowButtons = false;
         }
 
-        async Task markMeterBreakdown(bool isOk)
+        async Task markMeterBreakdown(int sessionID, string sn, bool isOk)
         {
             MeterDTO meterDTO = new MeterDTO(SessionID,
-                                                      1,
+                                                      2, //TODO +enum
                                                       isOk,
-                                                      regStartTime,
+                                                      startTime,
                                                       DateTime.UtcNow,
-                                                      SerialNumber,
-                                                      components,
-                                                      deffect_component_id,
-                                                      deffect_type_id,
-                                                      comment);
+                                                      sn);
+
+            await serverApi.SetMeterStagePassed(sessionID, meterDTO);
         }
         #endregion
 
@@ -107,20 +114,16 @@ namespace mes_center.arm_breakdown.ViewModels
         public override async void OnStarted()
         {
             base.OnStarted();
-
             startTime = DateTime.UtcNow;
-
             try
             {
                 SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 1);
                 nextScanRequest();
-
             }
             catch (Exception ex)
             {
                 showError(ex.Message);
             }
-
         }
 
         public override async void OnStopped()
@@ -163,7 +166,7 @@ namespace mes_center.arm_breakdown.ViewModels
             if (AllowButtons)
                 return;
 
-            logger.dbg(data);
+            logger.inf(Tags.SCAN, data);
 
             AllowButtons = true;
 

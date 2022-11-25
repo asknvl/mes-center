@@ -3,6 +3,8 @@ using mes_center.arm_breakdown.ViewModels;
 using mes_center.arm_breakdown.Views;
 using mes_center.arm_regmeter.ViewModels;
 using mes_center.arm_regmeter.Views;
+using mes_center.arm_repair.ViewModels;
+using mes_center.arm_repair.Views;
 using mes_center.ViewModels;
 using mes_center.ViewModels.dialogs;
 using mes_center.Views;
@@ -80,6 +82,10 @@ namespace mes_center.WS
 
                 case breakdownVM:
                     wnd = new breakdownWnd();
+                    break;
+
+                case repairVM:
+                    wnd = new repairWnd();
                     break;
             }
 

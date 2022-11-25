@@ -17,5 +17,7 @@ namespace mes_center.Models.rest.server_dto
         public int code { get; set; }
         [JsonProperty]
         public int? lastNum { get; set; }
+        [JsonProperty]
+        public int? phases { get; set; }
     }
 }

@@ -5,7 +5,7 @@
 		xmlns:views="using:mes_center.Views"
         mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="450"
         x:Class="mes_center.Views.mainWnd"
-        Title="mainWnd">
+        Title="АСППУ ЦЕНТР">
 
 	<Window.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />

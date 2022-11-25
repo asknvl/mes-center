@@ -128,7 +128,6 @@ namespace mes_center.ViewModels
         {
             #region commands
             createTaskCmd = ReactiveCommand.CreateFromTask(async () => {
-                logger.dbg("createTaskCmd executed");
 
                 kafka_dto.Order order = new kafka_dto.Order();
                 order.version = Version;
@@ -146,7 +145,7 @@ namespace mes_center.ViewModels
                     
                 } catch (Exception ex)
                 {
-                    logger.dbg(ex.Message);
+                    showError(ex.Message);
                 }
                 
             });
@@ -176,8 +175,7 @@ namespace mes_center.ViewModels
                     IsDataReady =true;
                 });
             } catch (Exception ex)
-            {
-                logger.dbg(ex.Message);
+            {                
                 showError(ex.Message);
             }
         }

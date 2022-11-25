@@ -84,7 +84,14 @@ namespace mes_center.arm_regmeter.ViewModels
             var scanner = Content as IScanner;
             if (scanner != null)
                 scanner.OnScan(text);
-        } 
+        }
+
+        public override void OnStopped()
+        {
+            base.OnStopped();
+            var c = Content as LifeCycleViewModelBase;
+            c?.OnStopped();
+        }
         #endregion
     }
 }

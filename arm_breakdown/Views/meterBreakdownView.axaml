@@ -18,11 +18,7 @@
 			<TextBlock
 				Classes="TextBlock Title">
 				<TextBlock.Text>
-					Пробой ПУ
-					<!--<MultiBinding StringFormat="{}Пробой ПУ ({0} из {1})">
-						<Binding Path="CurrentAmount" />
-						<Binding Path="TotalAmount" />
-					</MultiBinding>-->
+					Пробой ПУ					
 				</TextBlock.Text>
 			</TextBlock>
 		</Grid>
@@ -47,49 +43,9 @@
 								Text="{Binding SN}">
 							</TextBlock>
 						</StackPanel>
-					</DataTemplate>
-					<!--<DataTemplate DataType="{x:Type vms:userMessageVM}">
-						<StackPanel
-							Orientation="Vertical">
-							<TextBlock
-								Margin="10"
-								FontWeight="DemiBold"
-								FontSize="14"
-								Text="{Binding Message}">
-							</TextBlock>
-						</StackPanel>
-					</DataTemplate>-->
+					</DataTemplate>					
 				</ContentControl.DataTemplates>
-			</ContentControl>
-			<!--<Grid
-				Margin="2, 10, 2, 2"
-				Grid.Column="1"
-				RowDefinitions="Auto, *">
-				<TextBlock
-					Grid.Row="0">
-					Комплект:
-				</TextBlock>
-				<ItemsControl
-					Classes="ItemsControl Bordered"
-					Grid.Row="1"
-					Items="{Binding OrderComponentsList}"
-					Width="300">
-					<ItemsControl.DataTemplates>
-						<DataTemplate>
-							<StackPanel
-								Orientation="Vertical">
-								<TextBlock
-									Text="{Binding Name}"
-									FontWeight="DemiBold"
-									HorizontalAlignment="Left"/>
-								<TextBlock
-									Text="{Binding SerialNumber}"
-									HorizontalAlignment="Right"/>
-							</StackPanel>
-						</DataTemplate>
-					</ItemsControl.DataTemplates>
-				</ItemsControl>
-			</Grid>-->
+			</ContentControl>		
 		</Grid>
 
 		<Grid

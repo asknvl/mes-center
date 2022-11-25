@@ -77,6 +77,22 @@ namespace mes_center.Models.kafka.kafka_dto
 
             this.comment = comment;
         }
+
+        public MeterDTO(int sessionID,
+                        int stageCode,
+                        bool isOk,
+                        DateTime beginTime,
+                        DateTime endTime,
+                        string serialNumber)
+        {
+            //version = 1;
+            sessionid = sessionID;
+            stagecode = stageCode;
+            start_dt = beginTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            finish_dt = endTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            is_ok = isOk;
+            sn = serialNumber;            
+        }
     }
 
 }

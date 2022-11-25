@@ -1,5 +1,7 @@
 ﻿using mes_center.Models.rest.server_dto;
+using mes_center.ViewModels;
 using Newtonsoft.Json;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace mes_center.Models.rest.server_dto
 {
-    public class OrderDTO 
+    public class OrderDTO : ViewModelBase
     {
         #region const
         public enum OrderStatus : int
@@ -43,11 +45,36 @@ namespace mes_center.Models.rest.server_dto
         [JsonProperty]
         public ConfigurationDTO config { get; set; }
         [JsonProperty]        
-        public string? first_serial { get; set; }        
+        public string? first_serial { get; set; }
+
+        int _amount;
         [JsonProperty]
-        public int amount { get; set; }
+        public int amount {
+            get => _amount;
+            set
+            {
+                _amount = value;
+
+                switch (model.phases)
+                {
+                    case 1:
+                        aux_amount_complete = (24 - _amount % 24);
+                        break;
+                    case 3:
+                        aux_amount_complete = (16 - _amount % 16);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+        int _amount_aux;
         [JsonProperty]
-        public int amount_aux { get; set; }
+        public int amount_aux {
+            get => _amount_aux;
+            set => this.RaiseAndSetIfChanged(ref _amount_aux, value);
+        }
         [JsonProperty]
         public string? fwv { get; set; }
         string _reg_date;
@@ -81,10 +108,27 @@ namespace mes_center.Models.rest.server_dto
         public int pz_code { get; set; }
         [JsonProperty]
         public string? comment { get; set; }
-
+        [JsonIgnore]
         public string text_status { get; set; }
-
+        [JsonIgnore]
         public string text_reg_date { get; set; }
+        [JsonIgnore]
+        public int aux_amount_complete { get; set; }
+
+        bool _need_aux_autocomplete;
+        [JsonIgnore]
+        public bool need_aux_autocomplete {
+            get => amount_aux > 0;
+            set
+            {
+                if (value)
+                    amount_aux = aux_amount_complete;
+                else
+                    amount_aux = 0;
+                
+                this.RaiseAndSetIfChanged(ref _need_aux_autocomplete, value);
+            }
+        }
         public OrderDTO()
         {
             order_num = String.Empty;
@@ -93,27 +137,7 @@ namespace mes_center.Models.rest.server_dto
         }
 
         #region public
-        static int counter = 0;
-        public static OrderDTO GetTestOrder()
-        {
-            OrderDTO order = new OrderDTO()
-            {
-                //version = 1,
-                order_num = $"Test#{counter++}",
-                model = new ModelDTO() { id = 1, code = 1 },
-                config = new ConfigurationDTO() { id = 1, name = $"Test config", comment = "Test comment", data = "Test data" },
-                amount = 123,
-                amount_aux = 0,
-                fwv = "0.0.0",
-                reg_date = DateTime.Now.ToString("o"),
-                status = 3,
-                status_cd = DateTime.Now.ToString("o"),
-                pz_code = 11,
-                comment = "Test comment"
-            };
-
-            return order;
-        }
+        
         #endregion
 
     }

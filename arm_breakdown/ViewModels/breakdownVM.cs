@@ -95,6 +95,7 @@ namespace mes_center.arm_breakdown.ViewModels
 
         public override void OnStopped()
         {
+            base.OnStopped();
             var c = Content as LifeCycleViewModelBase;
             c?.OnStopped();
         }

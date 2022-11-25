@@ -69,11 +69,11 @@
 			</TextBlock>
 			<TextBox
 				Text="{Binding Amount}"/>
-			<TextBlock>
+			<!--<TextBlock>
 				Версия ВПО:
 			</TextBlock>
 			<TextBox
-				Text="{Binding Fwv}"/>
+				Text="{Binding Fwv}"/>-->
 			<TextBlock>
 				Комментарий:
 			</TextBlock>

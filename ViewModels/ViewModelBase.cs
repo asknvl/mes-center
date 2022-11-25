@@ -68,7 +68,7 @@ namespace mes_center.ViewModels
 
         public virtual void showError(string message) {
 
-            logger.err(message);
+            //logger.err(message);
 
             var msg = new msgVM();
             msg.Title = "Ошибка!";

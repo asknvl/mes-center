@@ -1,4 +1,5 @@
 ﻿using mes_center.Models.kafka.kafka_dto;
+using mes_center.Models.logger;
 using mes_center.Models.rest.server_dto;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,6 +20,7 @@ namespace mes_center.Models.rest
 
         #region vars
         string url;
+        ILogger logger = Logger.getInstance();
         #endregion
 
         public ServerApi(string url)
@@ -29,14 +31,21 @@ namespace mes_center.Models.rest
         #region public
         public async Task<List<ConfigurationDTO>> GetConfigurations()
         {
+            logger.inf(Tags.SAPI, "GetConfigurations request");
+
             List<ConfigurationDTO> res = new();
             await Task.Run(() => {
                 var client = new RestClient($"{url}/configurations");
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new ServerApiException($"GetConfigurations request fail (stasus code={response.StatusCode})");
+                {
+                    string msg = $"GetConfigurations FAIL (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }                
                 res = JsonConvert.DeserializeObject<List<ConfigurationDTO>>(response.Content);
+                logger.inf(Tags.SAPI, "GetConfigurations OK");
 
             });
             return res;
@@ -52,14 +61,20 @@ namespace mes_center.Models.rest
 
         public async Task<List<ModelDTO>> GetModels()
         {
+            logger.inf(Tags.SAPI, "GetModels request");
             List<ModelDTO> res = new();
             await Task.Run(() => {
                 var client = new RestClient($"{url}/models");
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new ServerApiException($"GetModels request fail (stasus code={response.StatusCode})");
+                {
+                    string msg = $"GetModels request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }                
                 res = JsonConvert.DeserializeObject<List<ModelDTO>>(response.Content);
+                logger.inf(Tags.SAPI, "GetModels OK");
             });
             return res;
         }
@@ -75,6 +90,8 @@ namespace mes_center.Models.rest
             }
             statusParam = statusParam.Remove(statusParam.Length - 1);
 
+            logger.inf(Tags.SAPI, $"GetOrders request, statuses = {statusParam}");
+
             await Task.Run(() =>
             {
                 var client = new RestClient($"{url}/orders");
@@ -82,9 +99,13 @@ namespace mes_center.Models.rest
                 request.AddQueryParameter("status", statusParam);
                 IRestResponse response = client.Execute(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new ServerApiException($"GetOrders request fail (stasus code={response.StatusCode})");
-
+                {
+                    string msg = $"GetOrders request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }                
                 res = JsonConvert.DeserializeObject<List<OrderDTO>>(response.Content);
+                logger.inf(Tags.SAPI, "GetOrders OK");
             });
 
             return res;
@@ -92,20 +113,24 @@ namespace mes_center.Models.rest
 
         public OrderDTO GetOrder(string order_num)
         {
+            logger.inf(Tags.SAPI, $"GetOrder request");
             OrderDTO res = new();
 
             var client = new RestClient($"{url}/orders/{order_num}");
             var request = new RestRequest(Method.GET);
             IRestResponse response = client.Execute(request);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new ServerApiException($"GetOrders request fail (stasus code={response.StatusCode})");            
+                throw new ServerApiException($"GetOrders request fail (stasus code={response.StatusCode} response={response.Content})");            
             res = JsonConvert.DeserializeObject<OrderDTO>(response.Content);
             if (res == null)
-                throw new ServerApiException($"GetOrders returns null");
+            {
+                string msg = $"GetOrders returned null";
+                logger?.err(Tags.SAPI, msg);
+                throw new ServerApiException(msg);                
+            }
+            logger.inf(Tags.SAPI, "GetOrder OK");
             return res;
         }
-
-
 
         class jupdate
         {
@@ -114,6 +139,8 @@ namespace mes_center.Models.rest
         }
         public async Task<OrderDTO> OrderUpdate(string order_num, int amount_aux, OrderStatus status)
         {
+            logger.inf(Tags.SAPI, $"OrderUpdate request, order_num={order_num} amount_aux={amount_aux} status={status.ToString()}");
+
             OrderDTO res = new();
             var client = new RestClient($"{url}/orders/{order_num}");
             var request = new RestRequest(Method.PATCH);
@@ -130,13 +157,18 @@ namespace mes_center.Models.rest
             await Task.Run(() => { 
                 IRestResponse response = client.Execute(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new ServerApiException($"OrderUpdate request fail (stasus code={response.StatusCode})");
+                {                    
+                    string msg = $"OrderUpdate request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
                 res = JsonConvert.DeserializeObject<OrderDTO>(response.Content);            
             });
 
             if (res == null)
-                throw new ServerApiException($"GetOrders returns null");
+                throw new ServerApiException($"OrderUpdate returned null");
 
+            logger.inf(Tags.SAPI, "OrderUpdate OK");
             return res;
         }
 
@@ -146,7 +178,9 @@ namespace mes_center.Models.rest
             public string comment { get; set; }
         }            
         public async Task SetOrderStatus(string order_num, OrderStatus status, string comment)
-        {            
+        {
+            logger.inf(Tags.SAPI, $"SetOrderStatus request, order_num={order_num} status={status.ToString()} comment={comment}");
+
             var client = new RestClient($"{url}/orders/{order_num}");
             var request = new RestRequest(Method.PATCH);
 
@@ -162,9 +196,14 @@ namespace mes_center.Models.rest
               
                 IRestResponse response = client.Execute(request);
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                    throw new ServerApiException($"SetOrderStatus request fail (stasus code={response.StatusCode})");
+                {   
+                    string msg = $"SetOrderStatus request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
             });
 
+            logger.inf(Tags.SAPI, "SetOrderStatus OK");
         }
 
         class serialparam
@@ -174,37 +213,38 @@ namespace mes_center.Models.rest
         }
         public async Task<string> GenerateSerialNumber(string order_num, int amount_aux, string comment)
         {
-            string res = "";
+            
+            //string res = "";
+            //var client = new RestClient($"{url}/orders/{order_num}/first_serial");
+            //var request = new RestRequest(Method.PATCH);
 
-            var client = new RestClient($"{url}/orders/{order_num}/first_serial");
-            var request = new RestRequest(Method.PATCH);
+            //serialparam param = new serialparam()
+            //{                
+            //    amount_aux = amount_aux,
+            //    comment = Encoding.UTF8.GetString(Encoding.Default.GetBytes(comment))
+            //};
 
-            serialparam param = new serialparam()
-            {                
-                amount_aux = amount_aux,
-                comment = Encoding.UTF8.GetString(Encoding.Default.GetBytes(comment))
-            };
+            //string sparam = JsonConvert.SerializeObject(param);
 
-            string sparam = JsonConvert.SerializeObject(param);
+            //request.AddParameter("application/json", sparam, ParameterType.RequestBody);
 
-            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
+            //await Task.Run(async () => {
+            //    IRestResponse response = client.Execute(request);
 
-            await Task.Run(async () => {
-                IRestResponse response = client.Execute(request);
+            //    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            //    {
+            //        JObject json = JObject.Parse(response.Content);
+            //        string snum = json["serial_num"].ToObject<string>();
 
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    JObject json = JObject.Parse(response.Content);
-                    string snum = json["serial_num"].ToObject<string>();
-
-                    await SetOrderStatus(order_num, OrderStatus.READY_TO_EXECUTE, "");
+            //        await SetOrderStatus(order_num, OrderStatus.READY_TO_EXECUTE, "");
 
 
-                } else
-                    throw new ServerApiException($"SetOrderStatus request fail (stasus code={response.StatusCode})");
-            });
+            //    } else
+            //        throw new ServerApiException($" GenerateSerialNumber request fail (stasus code={response.StatusCode} response={response.Content})");
+            //});
 
-            return res;
+            //return res;
+            throw new NotImplementedException();
         }
 
         class sessionparam
@@ -216,6 +256,8 @@ namespace mes_center.Models.rest
 
         public async Task<List<ComponentDTO>> GetComponents(ModelDTO model)
         {
+            logger.inf(Tags.SAPI, $"GetComponents request, model.name={model.name} model.id={model.id}");
+
             List<ComponentDTO> res = new();
             var client = new RestClient($"{url}/models/{model.id}/components");
             var request = new RestRequest(Method.GET);
@@ -225,14 +267,21 @@ namespace mes_center.Models.rest
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     res = JsonConvert.DeserializeObject<List<ComponentDTO>>(response.Content);
-                } else
-                    throw new ServerApiException($"GetComponents {model.name} request fail (stasus code={response.StatusCode})");
+                }
+                else
+                {
+                    string msg = $"GetComponents {model.name} request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }
             });
+            logger.inf(Tags.SAPI, "GetComponents OK");
             return res;
         }
 
         public async Task<int> OpenSession(string order_num, string login, int equipmentid)
         {
+            logger.inf(Tags.SAPI, $"OpenSession request, order_num={order_num} login={login} equipment={equipmentid}");
             int id = 0;
             var client = new RestClient($"{url}/session");
             var request = new RestRequest(Method.POST);
@@ -254,14 +303,23 @@ namespace mes_center.Models.rest
                     JObject json = JObject.Parse(response.Content);
                     id = json["id"].ToObject<int>();
 
-                } else
-                    throw new ServerApiException($"OpenSession request fail (stasus code={response.StatusCode})");
+                }
+                else
+                {
+                    string msg = $"OpenSession request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }
+
             });
+            logger.inf(Tags.SAPI, $"OpenSession OK, id={id}");
             return id;
         }
 
         public async Task CloseSession(int id)
         {
+            logger.inf(Tags.SAPI, $"CloseSession request, id={id}");
+
             var client = new RestClient($"{url}/sessions/{id}");
             var request = new RestRequest(Method.PATCH);
 
@@ -273,14 +331,20 @@ namespace mes_center.Models.rest
                 {
                 }
                 else
-                    throw new ServerApiException($"CloseSession {id} request fail (stasus code={response.StatusCode})");
+                {
+                    string msg = $"CloseSession {id} request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }
+
             });
+            logger.inf(Tags.SAPI, $"CloseSession OK, id={id}");
         }
 
         public async Task<int> GetMetersAmount(string order_num, int stage)
         {
+            logger.inf(Tags.SAPI, $"GetMetersAmount request, order_num={order_num} stage={stage}");
             int res = 0;
-
             var client = new RestClient($"{url}/orders/{order_num}/meters_for_stage/{stage}");
             var request = new RestRequest(Method.GET);
             await Task.Run(() =>
@@ -293,13 +357,19 @@ namespace mes_center.Models.rest
                     res = json["metersAmount"].ToObject<int>();
                 }
                 else
-                    throw new ServerApiException($"GetMetersAmount {order_num} request fail (stasus code={response.StatusCode})");
+                {
+                    string msg = $"GetMetersAmount {order_num} request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }
             });
+            logger.inf(Tags.SAPI, $"GetMetersAmount OK, amount={res}");
             return res;            
         }
 
         public async Task<List<StageDTO>> GetStages()
         {
+            logger.inf(Tags.SAPI, $"GetStages request");
             List<StageDTO> res = new();
             var client = new RestClient($"{url}/productionStage");
             var request = new RestRequest(Method.GET);
@@ -316,13 +386,27 @@ namespace mes_center.Models.rest
 
                 }
                 else
-                    throw new ServerApiException($"GetStrategies request fail (stasus code={response.StatusCode})");
+                {                   
+                    string msg = $"GetStages request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
             });
+
+            string stages = "";
+            foreach (var stage in res)
+            {
+                stages += $"{stage.name} ";
+            }
+            logger.inf(Tags.SAPI, $"GetStages OK, stages={stages}");
             return res;
         }
 
         public async Task SetMeterStagePassed(int sessionid, MeterDTO meter)
         {
+
+            logger.inf(Tags.SAPI, $"SetMeterStagePassed request, sessionid={sessionid} meter.sn={meter.sn} meter.stage={meter.stagecode}");
+
             var client = new RestClient($"{url}/meter/{sessionid}/{meter.sn}/{meter.stagecode}/pass");
             var request = new RestRequest(Method.PATCH);
 
@@ -337,17 +421,23 @@ namespace mes_center.Models.rest
                 {
                     case HttpStatusCode.OK:
                     case HttpStatusCode.NoContent:
+                        logger.inf(Tags.SAPI, $"SetMeterStagePassed OK");
                         break;
 
                     default:
-                        throw new ServerApiException($"SrtMeterStagePassed request fail (stasus code={response.StatusCode})");
+                        string msg = $"SetMeterStagePassed request fail (stasus code={response.StatusCode} response={response.Content})";
+                        logger?.err(Tags.SAPI, msg);
+                        throw new ServerApiException(msg);                       
                 }
     
             });
+
         }
 
         public async Task<List<StrategyDTO>> GetStrategies()
         {
+            logger.inf(Tags.SAPI, $"GetStrategies request");
+
             List<StrategyDTO> res = new();
             var client = new RestClient($"{url}/productionStrategy");
             var request = new RestRequest(Method.GET);
@@ -362,13 +452,21 @@ namespace mes_center.Models.rest
                     res = JsonConvert.DeserializeObject<List<StrategyDTO>>(response.Content);
                 }
                 else
-                    throw new ServerApiException($"GetStrategies request fail (stasus code={response.StatusCode})");
+                {
+                    string msg = $"GetStrategies request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }
             });
+
+            logger.inf(Tags.SAPI, $"GetStrategies OK");
             return res;
         }
 
         public async Task CreateStrategy(StrategyDTO strategy)
         {
+            logger.inf(Tags.SAPI, $"CreateStrategy request");
+
             int id = 0;
             var client = new RestClient($"{url}/productionStrategy");
             var request = new RestRequest(Method.POST);            
@@ -382,13 +480,21 @@ namespace mes_center.Models.rest
                 {
                 }
                 else
-                    throw new ServerApiException($"CreateStrategy request fail (stasus code={response.StatusCode})");
-            });            
+                {
+                    string msg = $"CreateStrategy request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }
+            });
+
+            logger.inf(Tags.SAPI, $"CreateStrategy OK");
         }
 
-        public async Task DeleteStrategy(string name)
-        {            
-            var client = new RestClient($"{url}/productionStrategy/{name}");
+        public async Task DeleteStrategy(int id)
+        {
+            logger.inf(Tags.SAPI, $"DeleteStrategy request");
+
+            var client = new RestClient($"{url}/productionStrategy/{id}");
             var request = new RestRequest(Method.DELETE);                        
 
             await Task.Run(() => {
@@ -398,8 +504,14 @@ namespace mes_center.Models.rest
                 {
                 }
                 else
-                    throw new ServerApiException($"DeleteStrategy request fail (stasus code={response.StatusCode})");
+                {
+                    string msg = $"DeleteStrategy request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);                    
+                }
             });
+
+            logger.inf(Tags.SAPI, $"DeleteStrategy OK");
         }
         #endregion
     }

@@ -20,12 +20,12 @@ namespace mes_center.ViewModels
         }
         #region public
         public virtual void OnStarted() {
-            logger.dbg($"{this.GetType().Name} started");
+            logger.dbg(Tags.INTF, $"{this.GetType().Name} started");
         }
 
         public virtual void OnStopped()
         {
-            logger.dbg($"{this.GetType().Name} close");
+            logger.dbg(Tags.INTF, $"{this.GetType().Name} close");
         }
 
         public void Close()

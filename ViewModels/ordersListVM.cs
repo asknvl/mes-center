@@ -87,8 +87,7 @@ namespace mes_center.ViewModels
 
             }
             catch (Exception ex)
-            {
-                logger.dbg(ex.Message);
+            {                
                 showError(ex.Message);
             }
 

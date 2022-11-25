@@ -59,7 +59,7 @@ namespace mes_center.ViewModels
 
                 try
                 {
-                    await serverApi.DeleteStrategy(Strategy.name);
+                    await serverApi.DeleteStrategy(Strategy.id);
                     await Reload();
                 } catch (Exception ex)
                 {

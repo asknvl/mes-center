@@ -172,6 +172,44 @@ namespace mes_center.Models.rest
             return res;
         }
 
+        class jcommentupdate
+        {
+            public string comment { get; set; }
+        }
+        public async Task<OrderDTO> OrderUpdate(string order_num, string comment)
+        {
+            logger.inf(Tags.SAPI, $"OrderUpdate request, order_num={order_num} comment={comment}");
+
+            OrderDTO res = new();
+            var client = new RestClient($"{url}/orders/{order_num}");
+            var request = new RestRequest(Method.PATCH);
+
+            jcommentupdate param = new jcommentupdate()
+            {
+                comment = comment
+            };
+            var sparam = JsonConvert.SerializeObject(param);
+
+            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
+
+            await Task.Run(() => {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    string msg = $"OrderUpdate request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+                res = JsonConvert.DeserializeObject<OrderDTO>(response.Content);
+            });
+
+            if (res == null)
+                throw new ServerApiException($"OrderUpdate returned null");
+
+            logger.inf(Tags.SAPI, "OrderUpdate OK");
+            return res;
+        }
+
         class jorderstatus
         {
             public int status { get; set; }
@@ -211,42 +249,7 @@ namespace mes_center.Models.rest
             public int amount_aux { get; set; }
             public string comment { get; set; }
         }
-        public async Task<string> GenerateSerialNumber(string order_num, int amount_aux, string comment)
-        {
-            
-            //string res = "";
-            //var client = new RestClient($"{url}/orders/{order_num}/first_serial");
-            //var request = new RestRequest(Method.PATCH);
-
-            //serialparam param = new serialparam()
-            //{                
-            //    amount_aux = amount_aux,
-            //    comment = Encoding.UTF8.GetString(Encoding.Default.GetBytes(comment))
-            //};
-
-            //string sparam = JsonConvert.SerializeObject(param);
-
-            //request.AddParameter("application/json", sparam, ParameterType.RequestBody);
-
-            //await Task.Run(async () => {
-            //    IRestResponse response = client.Execute(request);
-
-            //    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            //    {
-            //        JObject json = JObject.Parse(response.Content);
-            //        string snum = json["serial_num"].ToObject<string>();
-
-            //        await SetOrderStatus(order_num, OrderStatus.READY_TO_EXECUTE, "");
-
-
-            //    } else
-            //        throw new ServerApiException($" GenerateSerialNumber request fail (stasus code={response.StatusCode} response={response.Content})");
-            //});
-
-            //return res;
-            throw new NotImplementedException();
-        }
-
+       
         class sessionparam
         {
             public string order_num { get; set; }

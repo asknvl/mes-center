@@ -93,13 +93,26 @@
 				Classes="TextBlock Header">
 				Комментарий:
 			</TextBlock>
-			<TextBox
-				IsReadOnly="{Binding !IsAcceptRejectNeed}"
-				Height="100"
-				VerticalContentAlignment="Top"
-				AcceptsReturn="True"
-				Text="{Binding Order.comment}">
-			</TextBox>
+			<Grid
+				RowDefinitions="Auto, Auto">
+				<TextBox
+					Grid.Row="0"
+					TextWrapping="Wrap"
+					Height="100"
+					VerticalContentAlignment="Top"
+					AcceptsReturn="True"
+					Text="{Binding Order.comment}">
+				</TextBox>
+				<Button	
+					Command="{Binding saveCommentCmd}"
+					IsVisible="{Binding Order.IsSaveCommentVisible}"
+					Margin="0, 0, 4, 0"
+					Grid.Row="1"										
+					HorizontalAlignment="Right"
+					VerticalAlignment="Top">					
+					Сохранить
+				</Button>
+			</Grid>
 
 			<Grid
 				IsVisible="{Binding IsAcceptRejectNeed}"

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -107,8 +108,17 @@ namespace mes_center.Models.rest.server_dto
         public string? status_cd { get; set; }
         [JsonProperty]
         public int pz_code { get; set; }
+
+        string _comment = null;
         [JsonProperty]
-        public string? comment { get; set; }
+        public string? comment {
+            get => _comment;
+            set
+            {
+                IsSaveCommentVisible = !(_comment == null || _comment == "") && status == (int)OrderStatus.READY_TO_EXECUTE;
+                _comment = value;
+            }
+        }
         [JsonIgnore]
         public string text_status { get; set; }
         [JsonIgnore]
@@ -146,6 +156,13 @@ namespace mes_center.Models.rest.server_dto
                 this.RaiseAndSetIfChanged(ref _sum_amount, value);
             }
         }
+
+        bool isSaveCommentVisible = false;
+        public bool IsSaveCommentVisible
+        {
+            get => isSaveCommentVisible;
+            set => this.RaiseAndSetIfChanged(ref isSaveCommentVisible, value);
+        }
         public OrderDTO()
         {
             order_num = String.Empty;
@@ -154,7 +171,7 @@ namespace mes_center.Models.rest.server_dto
         }
 
         #region public
-        
+        public event Action<string> CommentChangedEvent;
         #endregion
 
     }

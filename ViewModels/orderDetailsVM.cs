@@ -17,9 +17,10 @@ namespace mes_center.ViewModels
         public OrderDTO Order
         {
             get => order;
-            set => this.RaiseAndSetIfChanged(ref order, value);
+            set {             
+                this.RaiseAndSetIfChanged(ref order, value);         
+            }
         }
-
         bool isAcceptRejectNeed;
         public bool IsAcceptRejectNeed
         {
@@ -38,6 +39,8 @@ namespace mes_center.ViewModels
         #region commands
         public ReactiveCommand<Unit, Unit> acceptOrderCmd { get; }
         public ReactiveCommand<Unit,Unit> rejectOrderCmd { get; }
+        public ReactiveCommand<Unit, Unit> saveCommentCmd { get; }
+          
         #endregion
 
         public orderDetailsVM() { }
@@ -77,6 +80,7 @@ namespace mes_center.ViewModels
                     showError(ex.Message);
                 }
             });
+
             rejectOrderCmd = ReactiveCommand.CreateFromTask(async () => {
                 try
                 {
@@ -85,6 +89,17 @@ namespace mes_center.ViewModels
                 {
                     showError(ex.Message);
                 }
+            });
+
+            saveCommentCmd = ReactiveCommand.CreateFromTask(async () => {
+                try
+                {
+                    await serverApi.OrderUpdate(Order.order_num, Order.comment);
+
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }         
             });
             #endregion
 

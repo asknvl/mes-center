@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vms="using:mes_center.arm_repair.ViewModels"
+			 xmlns:views="using:mes_center.arm_repair.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="mes_center.arm_repair.Views.meterRepairView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	<Grid
+		RowDefinitions="Auto, *, Auto, Auto">
+		<Grid
+			Grid.Row="0"
+			Height="40"
+			Background="LightGray">
+			<TextBlock
+				Classes="TextBlock Title">
+				<TextBlock.Text>
+					Ремонт ПУ
+				</TextBlock.Text>
+			</TextBlock>
+		</Grid>
+		<Grid
+			ColumnDefinitions="*, Auto"
+			Grid.Row="1">
+			<ContentControl
+				Content="{Binding Content}"
+				Margin="10"
+				VerticalAlignment="Center"
+				Grid.Column="0">
+				<ContentControl.DataTemplates>
+					<DataTemplate DataType="{x:Type vms:userMessageVM}">
+						<TextBlock
+							Text="{Binding Message}">							
+						</TextBlock>						
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type vms:meterRepairInterfaceVM}">
+						<views:meterRepairInterfaceView/>
+					</DataTemplate>
+				</ContentControl.DataTemplates>
+			</ContentControl>
+		</Grid>
+
+		<Grid
+			Grid.Row="2"
+			Height="140"
+			ColumnDefinitions="*,*,*"
+			Margin="10">			
+			<Button
+				Command="{Binding cancelCmd}"
+				Grid.Column="1"
+				HorizontalAlignment="Center"
+				VerticalContentAlignment="Center">
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Отмена
+					</TextBlock>
+					<Svg
+						Grid.Row="1"
+						Path="/Assets/svg/cancel_dec.svg">
+					</Svg>
+				</Grid>
+			</Button>
+		</Grid>
+
+	</Grid>
+</UserControl>

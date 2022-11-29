@@ -39,17 +39,30 @@ namespace mes_center.arm_repair.ViewModels
         public repairVM()
         {
             login = new loginVM();
-            login.LoginSucceededEvent += () => {                
+            login.LoginSucceededEvent += () => {
+                showMeterRepair();
             };
 
             Content = login;
         }
 
-        #region public
+        #region helpers
+        void showMeterRepair()
+        {
+            var vm = new meterRepairVM();
+            vm.CloseRequestEvent += () => {
+                Content = login;
+            };            
+            Content = vm;
+        }
+        #endregion
 
+        #region public
         public void OnScan(string text)
         {
-            throw new NotImplementedException();
+            var c = Content as IScanner;
+            if (c != null)
+                c.OnScan(text);
         }
         #endregion
     }

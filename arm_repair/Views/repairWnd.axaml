@@ -4,6 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"		
 		xmlns:vmscommon="using:mes_center.ViewModels"
 		xmlns:viewscommon="using:mes_center.Views"
+		xmlns:vms="using:mes_center.arm_repair.ViewModels"
+		xmlns:views="using:mes_center.arm_repair.Views"
         x:Class="mes_center.arm_repair.Views.repairWnd"
 		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		Width="800"
@@ -18,6 +20,9 @@
 			<ContentControl.DataTemplates>
 				<DataTemplate DataType="{x:Type vmscommon:loginVM}">
 					<viewscommon:loginView/>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type vms:meterRepairVM}">
+					<views:meterRepairView/>
 				</DataTemplate>
 				<!--<DataTemplate DataType="{x:Type vmscommon:orderSelectionVM}">
 					<viewscommon:orderSelectionView/>

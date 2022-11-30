@@ -19,6 +19,7 @@ namespace mes_center.Models.rest
         Task<OrderDTO> OrderUpdate(string order_num, string comment);
         Task SetOrderStatus(string order_num, OrderStatus status, string comment);
         Task<List<ComponentDTO>> GetComponents(ModelDTO model);
+        Task<List<MeterComponentDTO>> GetComponents(string sn);
         Task<int> OpenSession(string order_num, string login, int equipmentid);
         Task CloseSession(int id);
         Task SetMeterStagePassed(int sessionid, MeterDTO meter);

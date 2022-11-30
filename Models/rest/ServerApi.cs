@@ -282,6 +282,31 @@ namespace mes_center.Models.rest
             return res;
         }
 
+        public async Task<List<MeterComponentDTO>> GetComponents(string sn)
+        {
+            logger.inf(Tags.SAPI, $"GetMeterComponents request, sn={sn}");
+
+            List<MeterComponentDTO> res = new();
+            var client = new RestClient($"{url}/meter/{sn}/components");
+            var request = new RestRequest(Method.GET);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    res = JsonConvert.DeserializeObject<List<MeterComponentDTO>>(response.Content);
+                }
+                else
+                {
+                    string msg = $"GetMeterComponents sn={sn} request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+            });
+            logger.inf(Tags.SAPI, "GetMeterComponents OK");
+            return res;
+        }
+
         public async Task<int> OpenSession(string order_num, string login, int equipmentid)
         {
             logger.inf(Tags.SAPI, $"OpenSession request, order_num={order_num} login={login} equipment={equipmentid}");

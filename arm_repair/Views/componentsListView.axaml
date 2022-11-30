@@ -2,18 +2,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vms="using:mes_center.arm_repair.ViewModels"
+			 xmlns:views="using:mes_center.arm_repair.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="mes_center.arm_repair.Views.componentsListView">
+	<Design.DataContext>
+		<vms:componentsListVM/>
+	</Design.DataContext>
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>
 	<Grid
 		MinWidth="250">
-		<ListBox
+		<ListBox			
 			Items="{Binding Components}"
 			SelectedItem="{Binding Component}">
 			<ListBox.ItemTemplate>
-				
+				<DataTemplate>
+					<Grid
+						ColumnDefinitions="*, Auto">
+						<StackPanel
+							Grid.Column="0"
+							Orientation="Vertical">
+							<TextBlock
+								Text="{Binding name}"/>
+							<TextBlock
+								Text="{Binding sn}"/>							
+						</StackPanel>
+						<Button
+							Classes="Button Flat"
+							Grid.Column="1"
+							ToolTip.Tip="Отбраковать">
+							<Svg
+								VerticalAlignment="Center"								
+								Height="15"
+								Width="15"
+								Path="/Assets/svg/minus-circle.svg">
+							</Svg>
+						</Button>
+					</Grid>
+				</DataTemplate>				
 			</ListBox.ItemTemplate>
 		</ListBox>
 	</Grid>		

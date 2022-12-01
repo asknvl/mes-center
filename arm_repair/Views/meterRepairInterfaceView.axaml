@@ -6,9 +6,10 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 			 xmlns:vms="using:mes_center.arm_repair.ViewModels"
              x:Class="mes_center.arm_repair.Views.meterRepairInterfaceView">	
-	<Grid		
+	<Grid				
 		ColumnDefinitions="*, *">
 		<views:componentsListView
+			VerticalAlignment="Stretch"
 			DataContext="{Binding MeterComponents}"
 			Grid.Column="0"/>
 	</Grid>

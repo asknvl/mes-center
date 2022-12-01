@@ -47,6 +47,9 @@ namespace mes_center.WS
                     wnd = new addStrategyDlg();
                     break;
 
+                
+
+
                 case dialogVM:
                     wnd = new containerDlg();
                     break;

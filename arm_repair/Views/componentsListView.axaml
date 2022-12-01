@@ -6,15 +6,19 @@
 			 xmlns:views="using:mes_center.arm_repair.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="mes_center.arm_repair.Views.componentsListView">
-	<Design.DataContext>
-		<vms:componentsListVM/>
-	</Design.DataContext>
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>
 	<Grid
-		MinWidth="250">
-		<ListBox			
+		MinWidth="250"
+		RowDefinitions="Auto, *"
+		ColumnDefinitions="*, Auto">
+		<TextBlock
+			Grid.Row="0">
+			Компоненты ПУ:
+		</TextBlock>
+		<ListBox
+			Grid.Row="1"
 			Items="{Binding Components}"
 			SelectedItem="{Binding Component}">
 			<ListBox.ItemTemplate>
@@ -29,7 +33,7 @@
 							<TextBlock
 								Text="{Binding sn}"/>							
 						</StackPanel>
-						<Button
+						<!--<Button
 							Classes="Button Flat"
 							Grid.Column="1"
 							ToolTip.Tip="Отбраковать">
@@ -39,10 +43,34 @@
 								Width="15"
 								Path="/Assets/svg/minus-circle.svg">
 							</Svg>
-						</Button>
+						</Button>-->
 					</Grid>
 				</DataTemplate>				
 			</ListBox.ItemTemplate>
 		</ListBox>
+		<StackPanel
+			Grid.Row="1"
+			Grid.Column="1">
+			<Button
+				Classes="Button Flat"
+				Command="{Binding addCmd}">
+				<Svg
+					Path="/Assets/svg/plus.svg">
+				</Svg>
+			</Button>
+			<Button
+				Classes="Button Flat"
+				Command="{Binding removeCmd}">
+				<Svg
+					Path="/Assets/svg/minus.svg">
+				</Svg>
+			</Button>
+			<StackPanel.Styles>
+				<Style Selector="StackPanel Button">
+					<Setter Property="HorizontalAlignment" Value="Stretch"/>
+					<Setter Property="Margin" Value="2"/>
+				</Style>
+			</StackPanel.Styles>
+		</StackPanel>
 	</Grid>		
 </UserControl>

@@ -12,10 +12,10 @@
 		Height="600"
 		WindowStartupLocation="CenterScreen"
         Title="АРМ Ремонт">	
-	<Grid
+	<Grid		
 		VerticalAlignment="Stretch"
 		HorizontalAlignment="Stretch">
-		<ContentControl
+		<ContentControl			
 			Content="{Binding Content}">
 			<ContentControl.DataTemplates>
 				<DataTemplate DataType="{x:Type vmscommon:loginVM}">

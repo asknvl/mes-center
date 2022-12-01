@@ -5,10 +5,7 @@
 			 xmlns:views="using:mes_center.Views"
 			 xmlns:vm="using:mes_center.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="mes_center.Views.ordersListView">
-	<Design.DataContext>
-		<vm:ordersListVM/>
-	</Design.DataContext>
+             x:Class="mes_center.Views.ordersListView">	
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>

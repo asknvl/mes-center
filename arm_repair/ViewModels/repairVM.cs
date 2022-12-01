@@ -14,6 +14,7 @@ namespace mes_center.arm_repair.ViewModels
 
         #region vars
         loginVM login;
+        int SessionID;
         #endregion
 
         #region properties
@@ -39,17 +40,18 @@ namespace mes_center.arm_repair.ViewModels
         public repairVM()
         {
             login = new loginVM();
-            login.LoginSucceededEvent += () => {
-                showMeterRepair();
+            login.LoginSucceededEvent += async () => {
+                SessionID = await serverApi.OpenSession(null, login.Login, null) //TODO
+                showMeterRepair(SessionID);
             };
 
             Content = login;
         }
 
         #region helpers
-        void showMeterRepair()
+        void showMeterRepair(int sessionid)
         {
-            var vm = new meterRepairVM();
+            var vm = new meterRepairVM(sessionid);
             vm.CloseRequestEvent += () => {
                 Content = login;
             };            
@@ -63,6 +65,11 @@ namespace mes_center.arm_repair.ViewModels
             var c = Content as IScanner;
             if (c != null)
                 c.OnScan(text);
+        }
+
+        public override void OnStopped()
+        {
+            base.OnStopped();
         }
         #endregion
     }

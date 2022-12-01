@@ -111,24 +111,27 @@ namespace mes_center.Models.rest
             return res;
         }
 
-        public OrderDTO GetOrder(string order_num)
+        public async Task<OrderDTO> GetOrder(string order_num)
         {
             logger.inf(Tags.SAPI, $"GetOrder request");
             OrderDTO res = new();
 
-            var client = new RestClient($"{url}/orders/{order_num}");
-            var request = new RestRequest(Method.GET);
-            IRestResponse response = client.Execute(request);
-            if (response.StatusCode != System.Net.HttpStatusCode.OK)
-                throw new ServerApiException($"GetOrders request fail (stasus code={response.StatusCode} response={response.Content})");            
-            res = JsonConvert.DeserializeObject<OrderDTO>(response.Content);
-            if (res == null)
+            await Task.Run(() =>
             {
-                string msg = $"GetOrders returned null";
-                logger?.err(Tags.SAPI, msg);
-                throw new ServerApiException(msg);                
-            }
-            logger.inf(Tags.SAPI, "GetOrder OK");
+                var client = new RestClient($"{url}/orders/{order_num}");
+                var request = new RestRequest(Method.GET);
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                    throw new ServerApiException($"GetOrders request fail (stasus code={response.StatusCode} response={response.Content})");
+                res = JsonConvert.DeserializeObject<OrderDTO>(response.Content);
+                if (res == null)
+                {
+                    string msg = $"GetOrders returned null";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+                logger.inf(Tags.SAPI, "GetOrder OK");
+            });
             return res;
         }
 
@@ -254,7 +257,7 @@ namespace mes_center.Models.rest
         {
             public string order_num { get; set; }
             public string operatorlogin { get; set; }
-            public int equipmentid { get; set; }
+            public int? equipmentid { get; set; }
         }
 
         public async Task<List<ComponentDTO>> GetComponents(ModelDTO model)
@@ -307,7 +310,7 @@ namespace mes_center.Models.rest
             return res;
         }
 
-        public async Task<int> OpenSession(string order_num, string login, int equipmentid)
+        public async Task<int> OpenSession(string order_num, string login, int? equipmentid)
         {
             logger.inf(Tags.SAPI, $"OpenSession request, order_num={order_num} login={login} equipment={equipmentid}");
             int id = 0;
@@ -410,8 +413,6 @@ namespace mes_center.Models.rest
                     //JObject json = JObject.Parse(response.Content);
                     //res = json.ToObject<List<StrategyDTO>>();
                     res = JsonConvert.DeserializeObject<List<StageDTO>>(response.Content);
-
-
                 }
                 else
                 {                   
@@ -540,6 +541,30 @@ namespace mes_center.Models.rest
             });
 
             logger.inf(Tags.SAPI, $"DeleteStrategy OK");
+        }
+
+        public async Task<MeterInfoDTO> GetMeterInfo(string sn, int stage)
+        {
+            logger.inf(Tags.SAPI, $"GetMeterInfo request, sn={sn} stage={stage}");
+            MeterInfoDTO res = null;
+            var client = new RestClient($"{url}/meter/{sn}/{stage}/info");
+            var request = new RestRequest(Method.GET);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    res = JsonConvert.DeserializeObject<MeterInfoDTO>(response.Content);
+                }
+                else
+                {
+                    string msg = $"GetMeterInfo sn={sn} request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+            });
+            logger.inf(Tags.SAPI, $"GetMeterInfo OK, amount={res}");
+            return res;
         }
         #endregion
     }

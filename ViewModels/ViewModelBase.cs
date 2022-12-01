@@ -1,3 +1,4 @@
+using Avalonia.Threading;
 using mes_center.Models.kafka;
 using mes_center.Models.logger;
 using mes_center.Models.rest;
@@ -66,16 +67,19 @@ namespace mes_center.ViewModels
         }
         #endregion        
 
-        public virtual void showError(string message) {
+        public virtual async void showError(string message) {
 
             //logger.err(message);
 
             var msg = new msgVM();
             msg.Title = "Îøèáêà!";
             msg.Message = message;
-
             var dlg = new dialogVM(msg);
-            ws.ShowDialog(dlg);
+
+            await Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                ws.ShowDialog(dlg);
+            });
 
         }
     }

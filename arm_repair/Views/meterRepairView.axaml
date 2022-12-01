@@ -10,7 +10,7 @@
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>
 	<Grid
-		RowDefinitions="Auto, *, Auto, Auto">
+		RowDefinitions="Auto, *, Auto">
 		<Grid
 			Grid.Row="0"
 			Height="40"
@@ -21,6 +21,12 @@
 					Ремонт ПУ
 				</TextBlock.Text>
 			</TextBlock>
+			<TextBlock
+				Text="{Binding SN}"
+				Margin="4"
+				HorizontalAlignment="Right"
+				Classes="TextBlock Title">				
+			</TextBlock>
 		</Grid>
 		<Grid
 			ColumnDefinitions="*, Auto"
@@ -28,12 +34,13 @@
 			<ContentControl
 				Content="{Binding Content}"
 				Margin="10"
-				VerticalAlignment="Center"
+				VerticalAlignment="Stretch"
 				Grid.Column="0">
 				<ContentControl.DataTemplates>
 					<DataTemplate DataType="{x:Type vms:userMessageVM}">
 						<TextBlock
-							Text="{Binding Message}">							
+							Text="{Binding Message}"
+							VerticalAlignment="Center">							
 						</TextBlock>						
 					</DataTemplate>
 					<DataTemplate DataType="{x:Type vms:meterRepairInterfaceVM}">

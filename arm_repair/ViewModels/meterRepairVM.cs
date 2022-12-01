@@ -1,4 +1,5 @@
-﻿using mes_center.ViewModels;
+﻿using mes_center.Models.rest.server_dto;
+using mes_center.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace mes_center.arm_repair.ViewModels
     {
         #region vars
         State state = State.waitingMeterSN;
+        int SessionID = 0;
         #endregion
 
         #region properties
@@ -29,16 +31,43 @@ namespace mes_center.arm_repair.ViewModels
             get => content;
             set => this.RaiseAndSetIfChanged(ref content, value);
         }
+
+        string sn;
+        public string SN
+        {
+            get => sn;
+            set => this.RaiseAndSetIfChanged(ref sn, value);
+        }
         #endregion
 
         #region commands
         public ReactiveCommand<Unit, Unit> cancelCmd { get; }
         #endregion
 
-        public meterRepairVM()
+        public meterRepairVM(int session)
         {
-            cancelCmd = ReactiveCommand.Create(() => {
-                Close();
+            SessionID = session;
+
+            cancelCmd = ReactiveCommand.CreateFromTask(async () => {
+                switch (state)
+                {
+                    case State.waitingMeterSN:
+
+                        try
+                        {
+                            await serverApi.CloseSession(SessionID);
+
+                        } catch (Exception ex)
+                        {
+                            showError(ex.Message);
+                        }
+
+                        Close();
+                        break;
+                    case State.meterRepairing:
+                        showGetNextSN();
+                        break;
+                }
             });
 
             showGetNextSN(); 
@@ -47,6 +76,7 @@ namespace mes_center.arm_repair.ViewModels
         #region helpers
         void showGetNextSN()
         {
+            SN = "";
             state = State.waitingMeterSN;
 
             Content = new userMessageVM()
@@ -55,27 +85,36 @@ namespace mes_center.arm_repair.ViewModels
             };
         }
 
-        void startMeterRepair(string sn)
+        async Task startMeterRepair(int session, string sn, string order_num)
         {
-            meterRepairInterfaceVM vm = new meterRepairInterfaceVM(sn);
+            meterRepairInterfaceVM vm = new meterRepairInterfaceVM(session, sn, order_num);
             Content = vm;
-
-            vm.OnStarted();
-
+            await vm.OnStarted();
+            SN = sn;
             state = State.meterRepairing;
         }
         #endregion
 
         #region public
-        protected override void OnData(string sn)
+        protected async override void OnData(string sn)
         {
             switch (state)
             {
                 case State.waitingMeterSN:
-                    startMeterRepair(sn);
-                    break;
 
-                case State.waitingComponentSN:
+                    MeterInfoDTO info = null;
+
+                    try
+                    {
+                        info = await serverApi.GetMeterInfo(sn, 255);
+                    }
+                    catch (Exception ex)
+                    {
+                        showError("Прибор не может быть отремонтирован");
+                        return;
+                    }
+
+                    await startMeterRepair(SessionID, sn, info.order_num);
                     break;
 
                 default:

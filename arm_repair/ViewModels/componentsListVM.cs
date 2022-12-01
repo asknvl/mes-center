@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,6 +13,10 @@ namespace mes_center.arm_repair.ViewModels
 {
     public class componentsListVM : ViewModelBase
     {
+        #region vars
+        string SN, order_num;
+        #endregion
+
         #region properties
         public ObservableCollection<componentListItem> Components { get; } = new();
 
@@ -22,6 +27,36 @@ namespace mes_center.arm_repair.ViewModels
             set => this.RaiseAndSetIfChanged(ref componentListItem, value);
         }
         #endregion
+
+        #region commands
+        public ReactiveCommand<Unit, Unit> addCmd { get; }
+        public ReactiveCommand<Unit, Unit> removeCmd { get; }
+        #endregion
+
+        public componentsListVM(string sn, string order_num)
+        {
+            SN = sn;
+            this.order_num = order_num;
+
+            #region commands
+            addCmd = ReactiveCommand.CreateFromTask(async () => {
+
+                try
+                {
+                    var order = await serverApi.GetOrder(order_num);
+                    var avaliable_components = await serverApi.GetComponents(order.model);
+
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
+
+            });
+
+            removeCmd = ReactiveCommand.CreateFromTask(async () => { 
+            });
+            #endregion
+        }
 
         #region public
         public void Update(List<MeterComponentDTO> dtos)
@@ -38,6 +73,10 @@ namespace mes_center.arm_repair.ViewModels
                 Components.Add(component);
             }
         }
+        #endregion
+
+        #region callbacks
+        public event Action AddComponentRequest;
         #endregion
     }
 }

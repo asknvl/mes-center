@@ -290,7 +290,7 @@ namespace mes_center.arm_regmeter.ViewModels
                 TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);
                 if (TotalAmount > 0)
                 {
-                    var order = serverApi.GetOrder(Order.order_num);
+                    var order = await serverApi.GetOrder(Order.order_num);
                     meterComponents = await serverApi.GetComponents(order.model);
                     componentsList = new();
                     foreach (var dto in meterComponents)

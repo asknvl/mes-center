@@ -14,13 +14,13 @@ namespace mes_center.Models.rest
         Task<List<ModelDTO>> GetModels();
         Task<List<ConfigurationDTO>> GetConfigurations();
         Task<List<OrderDTO>> GetOrders(OrderDTO.OrderStatus[] statuses);
-        OrderDTO GetOrder(string order_num);
+        Task<OrderDTO> GetOrder(string order_num);
         Task<OrderDTO> OrderUpdate(string order_num, int amount_aux, OrderStatus status);
         Task<OrderDTO> OrderUpdate(string order_num, string comment);
         Task SetOrderStatus(string order_num, OrderStatus status, string comment);
         Task<List<ComponentDTO>> GetComponents(ModelDTO model);
         Task<List<MeterComponentDTO>> GetComponents(string sn);
-        Task<int> OpenSession(string order_num, string login, int equipmentid);
+        Task<int> OpenSession(string order_num, string login, int? equipmentid);
         Task CloseSession(int id);
         Task SetMeterStagePassed(int sessionid, MeterDTO meter);
         Task<int> GetMetersAmount(string order_num, int stage);
@@ -28,6 +28,7 @@ namespace mes_center.Models.rest
         Task<List<StrategyDTO>> GetStrategies();
         Task CreateStrategy(StrategyDTO strategy);
         Task DeleteStrategy(int id);
+        Task<MeterInfoDTO> GetMeterInfo(string sn, int stage);
     }
 
     public class ServerApiException : Exception

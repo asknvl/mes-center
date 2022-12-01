@@ -14,30 +14,50 @@ namespace mes_center.arm_repair.ViewModels
     {
         #region vars
         string SN;
+        string order_num;        
+        int SessionID = 0;
         #endregion
 
         #region properties
-        componentsListVM meterComponents = new();
+        componentsListVM meterComponents;
         public componentsListVM MeterComponents
         {
             get => meterComponents;
             set => this.RaiseAndSetIfChanged(ref meterComponents, value);
         }
         #endregion        
-        public meterRepairInterfaceVM(string sn)
+        public meterRepairInterfaceVM(int session, string sn, string order_num)
         {
+            SessionID = session;
             SN = sn;
+            this.order_num = order_num;
+            MeterComponents = new componentsListVM(sn, order_num);
         }
+
+        #region private      
+        #endregion
+
         #region public
         public async Task OnStarted()
         {
             base.OnStarted();
-            logger.inf(Tags.INTF, $"Meter SN={SN} repairing started");
+            logger.inf(Tags.INTF, $"Meter SN={SN} order_num={order_num} repairing started");
+            await Update();
+        }
 
-            var components = await serverApi.GetComponents(SN);
-            MeterComponents.Update(components);
 
+        public async Task Update()
+        {
+            try
+            {
+                var components = await serverApi.GetComponents(SN);
+                MeterComponents.Update(components);
+            } catch (Exception ex)
+            {
+                showError(ex.Message);
+            }
         }
         #endregion
+
     }
 }

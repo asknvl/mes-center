@@ -1,5 +1,6 @@
 ﻿using mes_center.Models.rest.server_dto;
 using mes_center.ViewModels;
+using mes_center.ViewModels.dialogs;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace mes_center.arm_repair.ViewModels
     {
         #region vars
         string SN, order_num;
+        List<MeterComponentDTO> componentDTOs = new();
         #endregion
 
         #region properties
@@ -40,20 +42,51 @@ namespace mes_center.arm_repair.ViewModels
 
             #region commands
             addCmd = ReactiveCommand.CreateFromTask(async () => {
-
                 try
                 {
-                    var order = await serverApi.GetOrder(order_num);
+                    var order = serverApi.GetOrder(order_num);
                     var avaliable_components = await serverApi.GetComponents(order.model);
+
+                    var dlg = new addComponentDlgVM(componentDTOs, avaliable_components);
+                    dlg.ComponentAddedEvent += (component) => {
+
+                        var found = Components.Any(c => c.id == component.componentInfo.id);
+
+                        if (!found)
+                        {
+                            var newComponentListItem = new componentListItem()
+                            {
+                                id = component.componentInfo.id,
+                                sn = component.sn,
+                                name = component.componentInfo.name,
+                                status = component.status
+                            };
+                            Components.Add(newComponentListItem);
+                        } else
+                        {
+                            showError("Такой компонент уже установлен в прибор");
+                        }
+                    };
+                    ws.ShowDialog(dlg);
 
                 } catch (Exception ex)
                 {
                     showError(ex.Message);
                 }
-
             });
 
             removeCmd = ReactiveCommand.CreateFromTask(async () => { 
+
+                try
+                {
+                    var order = serverApi.GetOrder(order_num);
+                    var avaliable_components = await serverApi.GetComponents(order.model);
+
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                } 
+
             });
             #endregion
         }
@@ -61,22 +94,20 @@ namespace mes_center.arm_repair.ViewModels
         #region public
         public void Update(List<MeterComponentDTO> dtos)
         {
+            componentDTOs = dtos;
             Components.Clear();
             foreach (var dto in dtos)
             {
                 var component = new componentListItem()
                 {
-                    name = dto.name,
+                    id = dto.componentInfo.id,
+                    name = dto.componentInfo.name,
                     sn = dto.sn,
                     status = dto.status
                 };
                 Components.Add(component);
             }
         }
-        #endregion
-
-        #region callbacks
-        public event Action AddComponentRequest;
         #endregion
     }
 }

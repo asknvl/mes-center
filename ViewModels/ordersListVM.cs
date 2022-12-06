@@ -35,7 +35,7 @@ namespace mes_center.ViewModels
 
                 if (order != null)
                 {
-                    OrderDTO rdOrder = serverApi.GetOrder(order.order_num).Result;
+                    OrderDTO rdOrder = serverApi.GetOrder(order.order_num);
                     OrderCheckedAction?.Invoke(rdOrder);
                     lastCheckedOrder = rdOrder.order_num;
                 }

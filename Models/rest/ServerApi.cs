@@ -111,13 +111,13 @@ namespace mes_center.Models.rest
             return res;
         }
 
-        public async Task<OrderDTO> GetOrder(string order_num)
+        public OrderDTO GetOrder(string order_num)
         {
             logger.inf(Tags.SAPI, $"GetOrder request");
             OrderDTO res = new();
 
-            await Task.Run(() =>
-            {
+            //await Task.Run(() =>
+            //{
                 var client = new RestClient($"{url}/orders/{order_num}");
                 var request = new RestRequest(Method.GET);
                 IRestResponse response = client.Execute(request);
@@ -131,7 +131,7 @@ namespace mes_center.Models.rest
                     throw new ServerApiException(msg);
                 }
                 logger.inf(Tags.SAPI, "GetOrder OK");
-            });
+            //});
             return res;
         }
 

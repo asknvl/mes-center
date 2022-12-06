@@ -11,6 +11,20 @@ namespace mes_center.arm_repair.ViewModels
     public class componentListItem : ViewModelBase
     {
         #region properies
+        int _id;
+        public int id
+        {
+            get => _id;
+            set => this.RaiseAndSetIfChanged(ref _id, value);
+        }
+
+        string _uuid;
+        public string uuid
+        {
+            get => _uuid;
+            set => this.RaiseAndSetIfChanged(ref _uuid, value);
+        }
+
         string _name;
         public string name
         {

@@ -3,6 +3,7 @@
     <Design.PreviewWith>
         <Border Padding="20">
 			<ListBox
+				Width="200"
 				MaxHeight="100">
 				<ListBoxItem>
 					1
@@ -126,6 +127,7 @@
 		<Setter Property="CornerRadius" Value="3"/>		
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Margin" Value="2"/>		
+		<Setter Property="Padding" Value="0"/>		
 	</Style>
 	<Style Selector="ListBoxItem TextBlock">
 		<Setter Property="TextWrapping" Value="Wrap"/>

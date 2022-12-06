@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mes_center.ViewModels.dialogs
 {
-    public class addStrategyDlgVM : DialogViewModelBase
+    public class addStrategyDlgVM : LifeCycleViewModelBase
     {
         #region properties
         public addstrategyVM addstrategy { get; set; }

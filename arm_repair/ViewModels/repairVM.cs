@@ -41,8 +41,15 @@ namespace mes_center.arm_repair.ViewModels
         {
             login = new loginVM();
             login.LoginSucceededEvent += async () => {
-                SessionID = await serverApi.OpenSession(null, login.Login, null) //TODO
-                showMeterRepair(SessionID);
+
+                try
+                {
+                    SessionID = await serverApi.OpenSession(null, login.Login, null); //TODO
+                    showMeterRepair(SessionID);
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
             };
 
             Content = login;

@@ -3,6 +3,7 @@ using Avalonia.Input;
 using mes_center.Models.scanner;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,11 @@ namespace mes_center.Views
             IScanner scanner = (IScanner)DataContext;
             scanner.OnScan(e.Text);
             base.OnTextInput(e);
+        }
+
+        protected override void OnPointerMoved(PointerEventArgs e)
+        {
+            Focus();
         }
     }
 }

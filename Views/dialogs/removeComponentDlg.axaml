@@ -2,40 +2,52 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" 		
-        x:Class="mes_center.Views.dialogs.addComponentDlg"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="mes_center.Views.dialogs.removeComponentDlg"
 		SizeToContent="WidthAndHeight"
 		CanResize="False"
-        Title="Добавление компонента">
+        Title="Удаление компонента">
 	<Window.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</Window.Styles>
 	<Grid
 		Margin="4">
-		<StackPanel			
+		<StackPanel
 			VerticalAlignment="Center"
 			HorizontalAlignment="Center"
 			Orientation="Vertical">
 			<TextBlock
-				TextAlignment="Center"
+				TextAlignment="Left"
 				TextWrapping="Wrap"
-				Margin="8"
-				MaxWidth="300">
-				Выберите тип компонента и отсканируйте его серийный номер:
-			</TextBlock>
-			<ComboBox		
+				Margin="4">
+				Выберите тип дефекта компонента:
+			</TextBlock>			
+			<ComboBox				
 				Name="cbSelectType"
-				Items="{Binding Components}"
-				SelectedItem="{Binding Component}"				
-				HorizontalAlignment="Center"
-				Width="200"
-				Margin="8">
+				Items="{Binding Defects}"
+				SelectedItem="{Binding Defect}"
+				HorizontalAlignment="Stretch"				
+				Margin="4">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding name}"/>
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
+			<TextBlock
+				TextAlignment="Left"
+				TextWrapping="Wrap"
+				Margin="4">
+				Комментарий:
+			</TextBlock>
+			<TextBox
+				Text="{Binding Comment}"
+				VerticalContentAlignment="Top"
+				AcceptsReturn="True"
+				MaxLength="1024"
+				Margin="4"
+				MinHeight="200">
+			</TextBox>
 			<Button
 				Command="{Binding closeCmd}"
 				HorizontalAlignment="Right"

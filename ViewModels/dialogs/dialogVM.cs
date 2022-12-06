@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace mes_center.ViewModels.dialogs
 {
-    public class dialogVM : DialogViewModelBase
+    public class dialogVM : LifeCycleViewModelBase
     {
         #region properties
         object? content;

@@ -14,7 +14,7 @@ namespace mes_center.Models.rest
         Task<List<ModelDTO>> GetModels();
         Task<List<ConfigurationDTO>> GetConfigurations();
         Task<List<OrderDTO>> GetOrders(OrderDTO.OrderStatus[] statuses);
-        Task<OrderDTO> GetOrder(string order_num);
+        OrderDTO GetOrder(string order_num);
         Task<OrderDTO> OrderUpdate(string order_num, int amount_aux, OrderStatus status);
         Task<OrderDTO> OrderUpdate(string order_num, string comment);
         Task SetOrderStatus(string order_num, OrderStatus status, string comment);

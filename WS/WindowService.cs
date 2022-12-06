@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Threading;
 using mes_center.arm_breakdown.ViewModels;
 using mes_center.arm_breakdown.Views;
 using mes_center.arm_regmeter.ViewModels;
@@ -37,7 +38,7 @@ namespace mes_center.WS
             return instance;
         }
 
-        public void ShowDialog(DialogViewModelBase vm)
+        public void ShowDialog(LifeCycleViewModelBase vm)
         {
             Window wnd = null;
 
@@ -47,18 +48,27 @@ namespace mes_center.WS
                     wnd = new addStrategyDlg();
                     break;
 
-                
+                case addComponentDlgVM:
+                    wnd = new addComponentDlg();
+                    break;
 
+                case removeComponentDlgVM:
+                    break;
 
                 case dialogVM:
                     wnd = new containerDlg();
                     break;
             }
 
-            vm.CloseRequestEvent += () =>
+            vm.CloseRequestEvent += async () =>
             {
                 if (wnd != null)
-                    wnd.Close();
+                {
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        wnd.Close();
+                    });
+                }
             };
 
             wnd.DataContext = vm;

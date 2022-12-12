@@ -1,0 +1,136 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="mes_center.arm_repair.Views.eventsListView">
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	<Grid
+		MinWidth="250"
+		RowDefinitions="Auto, *">
+		<TextBlock
+			Grid.Row="0">
+			События:
+		</TextBlock>
+		<ListBox
+			Grid.Row="1"
+			Items="{Binding Events}">
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid
+						RowDefinitions="Auto, *"
+						Margin="4">
+						<Grid
+							Grid.Row="0"
+							ColumnDefinitions="*, 40">
+							<TextBlock
+								Grid.Column="0"
+								Text="{Binding date}"
+								VerticalAlignment="Center"
+								FontWeight="DemiBold"
+								TextWrapping="Wrap"/>
+							<ToggleButton
+								Name="TBExpand"
+								Grid.Column="1"
+								VerticalAlignment="Center">
+								<Svg
+									Path="/Assets/svg/arrow_down.svg">
+								</Svg>
+							</ToggleButton>
+						</Grid>
+						<StackPanel
+							Orientation="Vertical"
+							IsVisible="{Binding #TBExpand.IsChecked}"
+							Grid.Row="1">
+							<Grid
+								ColumnDefinitions="120, *">
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="0">
+									Этап:
+								</TextBlock>
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="1"
+									Text="{Binding stage}"/>
+							</Grid>
+
+							<Grid
+								ColumnDefinitions="120, *">
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="0">
+									Данные:
+								</TextBlock>
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="1"
+									Text="{Binding data}"/>
+							</Grid>
+
+							<Grid
+								ColumnDefinitions="120, *">
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="0">
+									Комментарий:
+								</TextBlock>
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="1"
+									Text="{Binding comment}"/>
+							</Grid>
+
+							<Grid
+								ColumnDefinitions="120, *">
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="0">
+									Обородуование:
+								</TextBlock>
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="1"
+									Text="{Binding equipmentName}"/>
+							</Grid>
+
+							<Grid
+								ColumnDefinitions="120, *">
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="0">
+									Оператор:
+								</TextBlock>
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="1"
+									Text="{Binding operatorName}"/>
+							</Grid>
+
+							<Grid
+								ColumnDefinitions="120, *">
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="0">
+									Телефон:
+								</TextBlock>
+								<TextBlock
+									Classes="TextBlock Right"
+									Grid.Column="1"
+									Text="{Binding operatorPhone}"/>
+							</Grid>
+
+							<StackPanel.Styles>
+								<Style Selector="TextBlock.Right">
+									<Setter Property="HorizontalAlignment" Value="Right"/>
+								</Style>
+							</StackPanel.Styles>
+						</StackPanel>
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</UserControl>

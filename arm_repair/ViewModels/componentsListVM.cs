@@ -1,4 +1,5 @@
-﻿using mes_center.Models.rest.server_dto;
+﻿using Avalonia.Threading;
+using mes_center.Models.rest.server_dto;
 using mes_center.ViewModels;
 using mes_center.ViewModels.dialogs;
 using ReactiveUI;
@@ -35,7 +36,7 @@ namespace mes_center.arm_repair.ViewModels
         public ReactiveCommand<Unit, Unit> removeCmd { get; }
         #endregion
 
-        public componentsListVM(string sn, string order_num)
+        public componentsListVM(int session, string sn, string order_num)
         {
             SN = sn;
             this.order_num = order_num;
@@ -48,20 +49,37 @@ namespace mes_center.arm_repair.ViewModels
                     var avaliable_components = await serverApi.GetComponents(order.model);
 
                     var dlg = new addComponentDlgVM(componentDTOs, avaliable_components);
-                    dlg.ComponentAddedEvent += (component) => {
+                    dlg.ComponentAddedEvent += async (component) => {
 
                         var found = Components.Any(c => c.id == component.componentInfo.id);
+                        found = false;
 
                         if (!found)
                         {
-                            var newComponentListItem = new componentListItem()
+                            try
                             {
-                                id = component.componentInfo.id,
-                                sn = component.sn,
-                                name = component.componentInfo.name,
-                                status = component.status
-                            };
-                            Components.Add(newComponentListItem);
+                                await serverApi.AddComponent(session, sn, 255, component.componentInfo.id, component.sn);
+                                await Update();
+                            } catch (Exception ex)
+                            {
+                                await Dispatcher.UIThread.InvokeAsync(() =>
+                                {
+                                    ws.ShowDialog(dlg);
+                                });
+                                
+                            }
+
+                            //var newComponentListItem = new componentListItem()
+                            //{
+                            //    id = component.componentInfo.id,
+                            //    sn = component.sn,
+                            //    name = component.componentInfo.name,
+                            //    status = component.status
+                            //};
+                            //Components.Add(newComponentListItem);
+
+                         
+
                         } else
                         {
                             showError("Такой компонент уже установлен в прибор");
@@ -82,6 +100,26 @@ namespace mes_center.arm_repair.ViewModels
                     var order = serverApi.GetOrder(order_num);
                     var avaliable_components = await serverApi.GetComponents(order.model);
 
+                    var defectComponentAvailable = avaliable_components.FirstOrDefault(c => c.id == Component.id);
+
+                    var componentToUpdate = componentDTOs.FirstOrDefault(c => c.uuid == Component.uuid);
+                    
+                    if (defectComponentAvailable != null && componentToUpdate != null)
+                    {
+                        var dlg = new removeComponentDialogVM(defectComponentAvailable.defects);
+                        dlg.ComponentUpdateEvent += async (defect, comment) => {
+
+                            await serverApi.DeleteComponent(session, componentToUpdate.uuid, defect.id, comment);
+                            await Update();
+
+                        };
+                        ws.ShowDialog(dlg);
+                    }
+                    else
+                    {
+                        //TODO
+                    }
+                    
                 } catch (Exception ex)
                 {
                     showError(ex.Message);
@@ -92,22 +130,31 @@ namespace mes_center.arm_repair.ViewModels
         }
 
         #region public
-        public void Update(List<MeterComponentDTO> dtos)
+        public async Task Update()
         {
-            componentDTOs = dtos;
+            componentDTOs = await serverApi.GetComponents(SN);
             Components.Clear();
-            foreach (var dto in dtos)
+
+            foreach (var dto in componentDTOs)
             {
                 var component = new componentListItem()
                 {
                     id = dto.componentInfo.id,
+                    uuid = dto.uuid,
                     name = dto.componentInfo.name,
                     sn = dto.sn,
                     status = dto.status
                 };
                 Components.Add(component);
             }
+
+            var defectComponent = Components.FirstOrDefault(c => c.status == false);
+            Component = (defectComponent != null) ? defectComponent : Components[0];
         }
+        #endregion
+
+        #region events
+        public event Action UpdatedEvent;
         #endregion
     }
 }

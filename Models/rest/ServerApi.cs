@@ -17,7 +17,6 @@ namespace mes_center.Models.rest
     public class ServerApi : IServerApi
     {
 
-
         #region vars
         string url;
         ILogger logger = Logger.getInstance();
@@ -310,6 +309,112 @@ namespace mes_center.Models.rest
             return res;
         }
 
+
+        class meteraddcomponentinfo
+        {
+            public int componentid { get; set; }
+            public string sn { get; set; }
+        }
+
+        public async Task AddComponent(int session_id, string meter_sn, int stage, int componentid, string component_sn)
+        {
+            logger.inf(Tags.SAPI, $"AddComponent request, session={session_id} sn={meter_sn} stage={stage} componentid={componentid} component_sn={component_sn}");
+            var client = new RestClient($"{url}/meter/{session_id}/{meter_sn}/{stage}/component");
+            var request = new RestRequest(Method.POST);
+
+            meteraddcomponentinfo inf = new meteraddcomponentinfo()
+            {
+                componentid = componentid,
+                sn = component_sn
+            };
+
+            string sparam = JsonConvert.SerializeObject(inf);
+            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
+
+            await Task.Run(() => {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                } else
+                {
+                    string msg = $"AddComponent request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+
+            });
+
+            logger.inf(Tags.SAPI, $"AddComponent OK");
+        }
+
+        public async Task<List<MeterEventDTO>> GetMeterEvents(string sn)
+        {
+            logger.inf(Tags.SAPI, $"GetMeterEvents request, sn={sn}");
+
+            List<MeterEventDTO> res = new();
+            var client = new RestClient($"{url}/meter/{sn}/events");
+            var request = new RestRequest(Method.GET);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    res = JsonConvert.DeserializeObject<List<MeterEventDTO>>(response.Content);
+                }
+                else
+                {
+                    string msg = $"GetMeterEvents sn={sn} request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+            });
+            logger.inf(Tags.SAPI, "GetMeterEvents OK");
+            return res;
+        }
+
+        class meterdeletecomponentinfo
+        {
+            public bool status { get; set; }
+            public int defect_typeid { get; set; }
+            public string comment { get; set; }
+        }
+        public async Task DeleteComponent(int session_id, string uuid, int defect_typeid, string comment)
+        {
+            logger.inf(Tags.SAPI, $"UpdateComponent request, session={session_id} uuid={uuid} defect_typeid={defect_typeid} comment={comment}");
+            var client = new RestClient($"{url}/meterComponent/{session_id}/{uuid}");
+            var request = new RestRequest(Method.PATCH);
+
+            meterdeletecomponentinfo inf = new meterdeletecomponentinfo()
+            {
+                status = false,
+                defect_typeid = defect_typeid,
+                comment = comment
+            };
+
+            string sparam = JsonConvert.SerializeObject(inf);
+            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
+
+            await Task.Run(() => {
+                IRestResponse response = client.Execute(request);
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                }
+                else
+                {
+                    string msg = $"DeleteComponent request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+
+            });
+
+            logger.inf(Tags.SAPI, $"DeleteComponent OK");
+        }
+
+        
+        
         public async Task<int> OpenSession(string order_num, string login, int? equipmentid)
         {
             logger.inf(Tags.SAPI, $"OpenSession request, order_num={order_num} login={login} equipment={equipmentid}");
@@ -459,6 +564,54 @@ namespace mes_center.Models.rest
                         throw new ServerApiException(msg);                       
                 }
     
+            });
+
+        }
+
+        class repairfinish
+        {
+            public string start_dt { get; set; }
+            public string finish_dt { get; set; }
+            public int? next_stagecode { get; set; }
+            public string comment { get; set; }
+        }
+
+        public async Task SetMeterStagePassed(int sessionid, string sn, DateTime start_dt, int next_stage, string comment) 
+        {
+
+            logger.inf(Tags.SAPI, $"SetMeterStagePassed request, sessionid={sessionid} sn={sn} next_stage={next_stage} comment={comment}");
+
+            var client = new RestClient($"{url}/meter/{sessionid}/{sn}/{255}/pass");
+            var request = new RestRequest(Method.PATCH);
+
+            repairfinish param = new repairfinish()
+            {
+                start_dt = start_dt.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'"),
+                finish_dt = DateTime.UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'"),
+                next_stagecode = next_stage,
+                comment = comment
+            };
+
+            string sparam = JsonConvert.SerializeObject(param);
+            request.AddParameter("application/json", sparam, ParameterType.RequestBody);
+
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.OK:
+                    case HttpStatusCode.NoContent:
+                        logger.inf(Tags.SAPI, $"SetMeterStagePassed OK");
+                        break;
+
+                    default:
+                        string msg = $"SetMeterStagePassed request fail (stasus code={response.StatusCode} response={response.Content})";
+                        logger?.err(Tags.SAPI, msg);
+                        throw new ServerApiException(msg);
+                }
+
             });
 
         }

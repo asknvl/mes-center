@@ -40,7 +40,9 @@
 									FontWeight="SemiBold"
 									Text="{Binding name}"/>
 								<TextBlock
-									Text="{Binding sn}"/>							
+									Text="{Binding sn}"/>
+								<!--<TextBlock
+									Text="{Binding uuid}"/>-->
 							</StackPanel>							
 						</Grid>
 					</Border>

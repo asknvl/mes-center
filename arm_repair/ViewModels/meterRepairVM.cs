@@ -1,5 +1,6 @@
 ﻿using mes_center.Models.rest.server_dto;
 using mes_center.ViewModels;
+using mes_center.ViewModels.dialogs;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace mes_center.arm_repair.ViewModels
     {
         #region vars
         State state = State.waitingMeterSN;
+        DateTime startTime;
         int SessionID = 0;
         #endregion
 
@@ -42,11 +44,13 @@ namespace mes_center.arm_repair.ViewModels
 
         #region commands
         public ReactiveCommand<Unit, Unit> cancelCmd { get; }
+        public ReactiveCommand<Unit, Unit> finishCmd { get; }
         #endregion
 
         public meterRepairVM(int session)
         {
             SessionID = session;
+            startTime = DateTime.UtcNow;
 
             cancelCmd = ReactiveCommand.CreateFromTask(async () => {
                 switch (state)
@@ -68,6 +72,26 @@ namespace mes_center.arm_repair.ViewModels
                         showGetNextSN();
                         break;
                 }
+            });
+
+            finishCmd = ReactiveCommand.CreateFromTask(async () => {
+
+                var dlg = new repairFinishDlgVM();
+                dlg.RepairFinishedEvent += async (stage, comment) => {
+                    try
+                    {
+                        await serverApi.SetMeterStagePassed(SessionID, SN, startTime, stage.code, comment);
+                    } catch (Exception ex)
+                    {
+                        showError($"Не удалось завершить ремонт {ex.Message}");
+                    } finally
+                    {
+                        showGetNextSN();
+                    }
+                    dlg.Close();
+                };
+                ws.ShowDialog(dlg);
+            
             });
 
             showGetNextSN(); 
@@ -107,6 +131,7 @@ namespace mes_center.arm_repair.ViewModels
                     try
                     {
                         info = await serverApi.GetMeterInfo(sn, 255);
+                        state = State.meterRepairing;
                     }
                     catch (Exception ex)
                     {

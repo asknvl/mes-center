@@ -2,16 +2,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"		
-        x:Class="mes_center.Views.dialogs.removeComponentDlg"		
+        mc:Ignorable="d"
+        x:Class="mes_center.Views.dialogs.repairFinishDlg"
 		CanResize="False"
-		Width="220"	
+		Width="220"
 		Height="350"
-        Title="Удаление компонента">
+        Title="Завершение ремонта">
 	<Window.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</Window.Styles>
-	<Grid		
+	<Grid
 		Margin="4">
 		<StackPanel
 			VerticalAlignment="Stretch"
@@ -21,13 +21,13 @@
 				TextAlignment="Left"
 				TextWrapping="Wrap"
 				Margin="4">
-				Выберите тип дефекта компонента:
-			</TextBlock>			
-			<ComboBox				
+				Выберите следующий этап производства:
+			</TextBlock>
+			<ComboBox
 				Name="cbSelectType"
-				Items="{Binding Defects}"
-				SelectedItem="{Binding Defect}"
-				HorizontalAlignment="Stretch"				
+				Items="{Binding Stages}"
+				SelectedItem="{Binding Stage}"
+				HorizontalAlignment="Stretch"
 				Margin="4">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
@@ -49,7 +49,7 @@
 				Margin="4"
 				MinHeight="200">
 			</TextBox>
-			<StackPanel				
+			<StackPanel
 				Orientation="Horizontal"
 				HorizontalAlignment="Center">
 				<Button
@@ -63,7 +63,7 @@
 					HorizontalAlignment="Right"
 					VerticalAlignment="Bottom">
 					Отмена
-				</Button>				
+				</Button>
 			</StackPanel>
 		</StackPanel>
 	</Grid>

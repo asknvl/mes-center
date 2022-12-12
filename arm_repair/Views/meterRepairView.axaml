@@ -54,10 +54,28 @@
 			Grid.Row="2"
 			Height="140"
 			ColumnDefinitions="*,*,*"
-			Margin="10">			
+			Margin="10">
+			<Button
+				Command="{Binding finishCmd}"
+				Grid.Column="0"
+				HorizontalAlignment="Center"
+				VerticalContentAlignment="Center">
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="Black"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Завершить
+					</TextBlock>
+					<Svg
+						Grid.Row="1"
+						Path="/Assets/svg/cancel_dec.svg">
+					</Svg>
+				</Grid>
+			</Button>
 			<Button
 				Command="{Binding cancelCmd}"
-				Grid.Column="1"
+				Grid.Column="2"
 				HorizontalAlignment="Center"
 				VerticalContentAlignment="Center">
 				<Grid RowDefinitions="30, *">

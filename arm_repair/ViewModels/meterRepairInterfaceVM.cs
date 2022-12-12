@@ -14,8 +14,7 @@ namespace mes_center.arm_repair.ViewModels
     {
         #region vars
         string SN;
-        string order_num;        
-        int SessionID = 0;
+        string order_num;                
         #endregion
 
         #region properties
@@ -25,13 +24,25 @@ namespace mes_center.arm_repair.ViewModels
             get => meterComponents;
             set => this.RaiseAndSetIfChanged(ref meterComponents, value);
         }
+
+        eventsListVM meterEvents;
+        public eventsListVM MeterEvents
+        {
+            get => meterEvents;
+            set => this.RaiseAndSetIfChanged(ref meterEvents, value);
+        }
         #endregion        
         public meterRepairInterfaceVM(int session, string sn, string order_num)
-        {
-            SessionID = session;
+        {            
             SN = sn;
             this.order_num = order_num;
-            MeterComponents = new componentsListVM(sn, order_num);
+
+            MeterComponents = new componentsListVM(session, sn, order_num);
+            MeterComponents.UpdatedEvent += async () =>
+            {
+                await MeterEvents.Update();
+            };
+            MeterEvents = new eventsListVM(sn);
         }
 
         #region private      
@@ -49,9 +60,10 @@ namespace mes_center.arm_repair.ViewModels
         public async Task Update()
         {
             try
-            {
-                var components = await serverApi.GetComponents(SN);
-                MeterComponents.Update(components);
+            {                
+                await MeterComponents.Update();
+                await MeterEvents.Update();
+
             } catch (Exception ex)
             {
                 showError(ex.Message);

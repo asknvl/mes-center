@@ -52,7 +52,12 @@ namespace mes_center.WS
                     wnd = new addComponentDlg();
                     break;
 
-                case removeComponentDlgVM:
+                case removeComponentDialogVM:
+                    wnd = new removeComponentDlg();
+                    break;
+
+                case repairFinishDlgVM:
+                    wnd = new repairFinishDlg();
                     break;
 
                 case dialogVM:
@@ -74,6 +79,9 @@ namespace mes_center.WS
             wnd.DataContext = vm;
 
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+
+
             wnd.ShowDialog(mainWindow);
             vm.OnStarted();
         }

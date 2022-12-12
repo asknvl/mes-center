@@ -12,5 +12,9 @@
 			VerticalAlignment="Stretch"
 			DataContext="{Binding MeterComponents}"
 			Grid.Column="0"/>
+		<views:eventsListView
+			VerticalAlignment="Stretch"
+			DataContext="{Binding MeterEvents}"
+			Grid.Column="1"/>
 	</Grid>
 </UserControl>

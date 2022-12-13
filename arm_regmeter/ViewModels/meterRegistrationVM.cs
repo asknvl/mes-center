@@ -323,7 +323,7 @@ namespace mes_center.arm_regmeter.ViewModels
 
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 1);                
+                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, null);                
                 //meter_created_response.start("meter_created_response");
 
                 TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);

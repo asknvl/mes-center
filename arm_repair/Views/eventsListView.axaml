@@ -2,11 +2,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:views="using:mes_center.arm_repair.Views"
+			 xmlns:comviews="using:mes_center.Views.converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="mes_center.arm_repair.Views.eventsListView">
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>
+	<UserControl.Resources>
+		<comviews:BoolToColorConverter x:Key="boolToColorConverter"/>
+	</UserControl.Resources>
 	<Grid
 		MinWidth="250"
 		RowDefinitions="Auto, *">
@@ -28,6 +33,7 @@
 							<TextBlock
 								Grid.Column="0"
 								Text="{Binding date}"
+								Foreground="{Binding isOk, Converter={StaticResource boolToColorConverter}}"
 								VerticalAlignment="Center"
 								FontWeight="DemiBold"
 								TextWrapping="Wrap"/>
@@ -57,7 +63,7 @@
 									Text="{Binding stage}"/>
 							</Grid>
 
-							<Grid
+							<!--<Grid
 								ColumnDefinitions="120, *">
 								<TextBlock
 									Classes="TextBlock Right"
@@ -68,7 +74,7 @@
 									Classes="TextBlock Right"
 									Grid.Column="1"
 									Text="{Binding data}"/>
-							</Grid>
+							</Grid>-->
 
 							<Grid
 								ColumnDefinitions="120, *">
@@ -88,7 +94,7 @@
 								<TextBlock
 									Classes="TextBlock Right"
 									Grid.Column="0">
-									Обородуование:
+									Оборудование:
 								</TextBlock>
 								<TextBlock
 									Classes="TextBlock Right"

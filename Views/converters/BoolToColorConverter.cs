@@ -13,7 +13,7 @@ namespace mes_center.Views.converters
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            SolidColorBrush res = ((bool)value) ? new SolidColorBrush(Colors.Transparent) : new SolidColorBrush(Colors.Red);
+            SolidColorBrush res = ((bool)value) ? new SolidColorBrush(Colors.LightGreen) : new SolidColorBrush(Colors.Red);
             return res;
         }
 

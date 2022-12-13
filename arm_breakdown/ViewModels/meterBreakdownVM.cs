@@ -117,7 +117,7 @@ namespace mes_center.arm_breakdown.ViewModels
             startTime = DateTime.UtcNow;
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, 1);
+                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, null);
                 nextScanRequest();
             }
             catch (Exception ex)

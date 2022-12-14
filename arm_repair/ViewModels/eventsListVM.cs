@@ -35,6 +35,11 @@ namespace mes_center.arm_repair.ViewModels
             {
                 var eventDTOs = await serverApi.GetMeterEvents(SN);
                 var stages = await serverApi.GetStages();
+                stages.Add(new StageDTO()
+                {
+                    code = 255,
+                    name = "Ремонт"
+                });
 
                 foreach (var dto in eventDTOs)
                 {

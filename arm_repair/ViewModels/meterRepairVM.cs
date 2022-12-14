@@ -24,6 +24,7 @@ namespace mes_center.arm_repair.ViewModels
         State state = State.waitingMeterSN;
         DateTime startTime;
         int SessionID = 0;
+        int trashCntr = 0;
         #endregion
 
         #region properties
@@ -40,11 +41,26 @@ namespace mes_center.arm_repair.ViewModels
             get => sn;
             set => this.RaiseAndSetIfChanged(ref sn, value);
         }
+
+        bool allowFinish = false;
+        public bool AllowFinish
+        {
+            get => allowFinish;
+            set => this.RaiseAndSetIfChanged(ref allowFinish, value);
+        }
+
+        bool allowTrash = false;
+        public bool AllowTrash
+        {
+            get => allowTrash;
+            set => this.RaiseAndSetIfChanged(ref allowTrash, value);
+        }
         #endregion
 
         #region commands
         public ReactiveCommand<Unit, Unit> cancelCmd { get; }
         public ReactiveCommand<Unit, Unit> finishCmd { get; }
+        public ReactiveCommand<Unit, Unit> trashCmd { get; }
         #endregion
 
         public meterRepairVM(int session)
@@ -74,7 +90,7 @@ namespace mes_center.arm_repair.ViewModels
                 }
             });
 
-            finishCmd = ReactiveCommand.CreateFromTask(async () => {
+            finishCmd = ReactiveCommand.Create(() => {
 
                 var dlg = new repairFinishDlgVM();
                 dlg.RepairFinishedEvent += async (stage, comment) => {
@@ -86,12 +102,35 @@ namespace mes_center.arm_repair.ViewModels
                         showError($"Не удалось завершить ремонт {ex.Message}");
                     } finally
                     {
-                        showGetNextSN();
+                        dlg.Close();
+                        showGetNextSN();                        
                     }
-                    dlg.Close();
+                    
                 };
                 ws.ShowDialog(dlg);
             
+            });
+
+            trashCmd = ReactiveCommand.CreateFromTask(async () =>
+            {
+                trashCntr++;
+                AllowTrash = trashCntr == 1;
+
+                if (trashCntr > 1)
+                {
+                    try
+                    {
+                        await serverApi.DisposeMeter(SessionID, SN);
+                    } catch (Exception ex)
+                    {
+                        showError($"Не удалось утилизировать ПУ {ex.Message}");
+
+                    } finally
+                    {
+                        showGetNextSN();
+                    }
+                }
+
             });
 
             showGetNextSN(); 
@@ -102,6 +141,9 @@ namespace mes_center.arm_repair.ViewModels
         {
             SN = "";
             state = State.waitingMeterSN;
+
+            AllowFinish = false;
+            trashCntr = 0;
 
             Content = new userMessageVM()
             {
@@ -116,10 +158,26 @@ namespace mes_center.arm_repair.ViewModels
             await vm.OnStarted();
             SN = sn;
             state = State.meterRepairing;
+            AllowFinish = true;
         }
         #endregion
 
         #region public
+        protected override void OnFinish()
+        {
+            base.OnFinish();
+        }
+
+        protected override void OnOk()
+        {
+            base.OnOk();
+        }
+
+        protected override void OnTrash()
+        {
+            base.OnTrash();
+        }
+
         protected async override void OnData(string sn)
         {
             switch (state)

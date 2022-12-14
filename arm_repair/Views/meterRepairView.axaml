@@ -3,12 +3,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:vms="using:mes_center.arm_repair.ViewModels"
+			 xmlns:comviews="using:mes_center.Views.converters"
 			 xmlns:views="using:mes_center.arm_repair.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="mes_center.arm_repair.Views.meterRepairView">
 	<UserControl.Styles>
 		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
 	</UserControl.Styles>
+	<UserControl.Resources>
+		<comviews:BoolToAlertConverter x:Key="boolToAlertConverter"/>
+	</UserControl.Resources>
 	<Grid
 		RowDefinitions="Auto, *, Auto">
 		<Grid
@@ -56,6 +60,8 @@
 			ColumnDefinitions="*,*,*"
 			Margin="10">
 			<Button
+				IsVisible="{Binding AllowFinish}"
+				IsEnabled="{Binding AllowFinish}"
 				Command="{Binding finishCmd}"
 				Grid.Column="0"
 				HorizontalAlignment="Center"
@@ -72,10 +78,10 @@
 						Path="/Assets/svg/cancel_dec.svg">
 					</Svg>
 				</Grid>
-			</Button>
+			</Button>			
 			<Button
 				Command="{Binding cancelCmd}"
-				Grid.Column="2"
+				Grid.Column="1"
 				HorizontalAlignment="Center"
 				VerticalContentAlignment="Center">
 				<Grid RowDefinitions="30, *">
@@ -84,6 +90,26 @@
 						FontSize="14"
 						HorizontalAlignment="Center">
 						Отмена
+					</TextBlock>
+					<Svg
+						Grid.Row="1"
+						Path="/Assets/svg/cancel_dec.svg">
+					</Svg>
+				</Grid>
+			</Button>
+			<Button
+				IsVisible="{Binding AllowFinish}"
+				IsEnabled="{Binding AllowFinish}"
+				Command="{Binding trashCmd}"
+				Grid.Column="2"
+				HorizontalAlignment="Center"
+				VerticalContentAlignment="Center">
+				<Grid RowDefinitions="30, *">
+					<TextBlock
+						Foreground="{Binding AllowTrash, Converter={StaticResource boolToAlertConverter}}"
+						FontSize="14"
+						HorizontalAlignment="Center">
+						Утилизация
 					</TextBlock>
 					<Svg
 						Grid.Row="1"

@@ -613,7 +613,29 @@ namespace mes_center.Models.rest
                 }
 
             });
+        }
 
+        public async Task DisposeMeter(int session_id, string sn) 
+        {
+            logger.inf(Tags.SAPI, $"DisposeMeter request, session_id={session_id} sn={sn}");
+
+            var client = new RestClient($"{url}/meter/{session_id}/{sn}");
+            var request = new RestRequest(Method.DELETE);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                }
+                else
+                {
+                    string msg = $"DisposeMeter request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+            });
+
+            logger.inf(Tags.SAPI, $"DisposeMeter OK");
         }
 
         public async Task<List<StrategyDTO>> GetStrategies()

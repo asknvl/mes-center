@@ -33,6 +33,7 @@ namespace mes_center.Models.rest
         Task CreateStrategy(StrategyDTO strategy);
         Task DeleteStrategy(int id);
         Task<MeterInfoDTO> GetMeterInfo(string sn, int stage);
+        Task DisposeMeter(int session_id, string sn);
     }
 
     public class ServerApiException : Exception

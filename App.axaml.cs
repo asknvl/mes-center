@@ -26,6 +26,8 @@ namespace mes_center
             {
                 LifeCycleViewModelBase main = null;
 
+
+
 #if REGMETER_DEBUG
                 main = new regmeterVM();
 #elif BREAKDOWN_DEBUG
@@ -35,6 +37,8 @@ namespace mes_center
 #elif REPAIR_DEBUG
                 main = new repairVM();
 #endif
+
+                main = new repairVM();
 
                 ws.ShowWindow(main);
             }

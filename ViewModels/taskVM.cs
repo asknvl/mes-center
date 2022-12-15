@@ -162,7 +162,10 @@ namespace mes_center.ViewModels
             kafkaConsumer.start("order_new");
 
             Version = 1;
-            OrderNumber = "11_YYYY.MM.DD_HH.MM";
+
+            DateTime dt = DateTime.Now;
+            OrderNumber = $"{11}_{dt.Year}.{dt.Month}.{dt.Day}_{dt.Hour}.{dt.Minute}"; //"11_YYYY.MM.DD_HH.MM"
+
             ZoneCode = 11;            
             Comment = "Test task";
 

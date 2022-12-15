@@ -71,7 +71,7 @@ namespace mes_center.ViewModels
 
             #region commands
             okCmd = ReactiveCommand.CreateFromTask(async () => {
-                DefectSelectedEvent?.Invoke(SelectedComponent.id, SelectedDefect.id, Comment);
+                DefectSelectedEvent?.Invoke(SelectedComponent?.id, SelectedDefect?.id, Comment);
                 Close();
             });
             cancelCmd = ReactiveCommand.Create(() => {

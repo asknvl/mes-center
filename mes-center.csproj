@@ -7,7 +7,7 @@
     <TrimMode>copyused</TrimMode>
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <RootNamespace>mes_center</RootNamespace>
-    <Configurations>Debug;Release;regmeter_debug;breakdown_debug;regmenter_debug;center_debug;repair_debug</Configurations>
+    <Configurations>Debug;Release;regmeter_debug;breakdown_debug;regmenter_debug;center_debug;repair_debug;breakdown_release;regmeter_release;center_release;repair_release</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>OFFLINE</DefineConstants>
@@ -22,6 +22,18 @@
     <DefineConstants>DEBUG</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>OFFLINE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='repair_release|AnyCPU'">
+    <DefineConstants>OFFLINE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='center_release|AnyCPU'">
+    <DefineConstants>OFFLINE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='regmeter_release|AnyCPU'">
+    <DefineConstants>OFFLINE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='breakdown_release|AnyCPU'">
     <DefineConstants>OFFLINE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='regmeter_debug|AnyCPU'">

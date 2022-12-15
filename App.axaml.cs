@@ -28,17 +28,15 @@ namespace mes_center
 
 
 
-#if REGMETER_DEBUG
-                main = new regmeterVM();
-#elif BREAKDOWN_DEBUG
+#if (REGMETER_DEBUG || REGMETER_RELEASE)
+                main = new regmeterVM();    
+#elif (BREAKDOWN_DEBUG || BREAKDOWN_RELEASE)
                 main = new breakdownVM();
-#elif CENTER_DEBUG
+#elif (CENTER_DEBUG || CENTER_RELEASE)
                 main = new mainVM();
-#elif REPAIR_DEBUG
+#elif (REPAIR_DEBUG || REPAIR_RELEASE)
                 main = new repairVM();
 #endif
-
-                main = new repairVM();
 
                 ws.ShowWindow(main);
             }

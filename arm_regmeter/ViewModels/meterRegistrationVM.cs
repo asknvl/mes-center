@@ -209,7 +209,15 @@ namespace mes_center.arm_regmeter.ViewModels
                                                                     deffect_component_id,
                                                                     deffect_type_id,
                                                                     comment);
-                    await serverApi.SetMeterStagePassed(SessionID, meterDTO);
+
+                    try
+                    {
+                        await serverApi.SetMeterStagePassed(SessionID, meterDTO);
+                    } catch (Exception ex)
+                    {
+                        showError(ex.Message);
+                    }
+
                     await startRegistration();
                 };
                 var dlg = new dialogVM(defselect);

@@ -164,7 +164,7 @@ namespace mes_center.ViewModels
             Version = 1;
 
             DateTime dt = DateTime.Now;
-            OrderNumber = $"{11}_{dt.Year}.{dt.Month}.{dt.Day}_{dt.Hour}.{dt.Minute}"; //"11_YYYY.MM.DD_HH.MM"
+            OrderNumber = $"{11}_{dt.Year}.{dt.Month.ToString("00.##")}.{dt.Day.ToString("00.##")}_{dt.Hour.ToString("00.##")}.{dt.Minute.ToString("00.##")}"; //"11_YYYY.MM.DD_HH.MM"
 
             ZoneCode = 11;            
             Comment = "Test task";

@@ -11,8 +11,9 @@ namespace mes_center.Models.rest.server_dto
         #region const
         public enum Codes : int
         {
-            assemby = 1,
-            packing = 8
+            assembly = 1,
+            packing = 8,
+            repair = 255
         }
         #endregion
 

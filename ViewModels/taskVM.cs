@@ -162,7 +162,7 @@ namespace mes_center.ViewModels
             kafkaConsumer.start("order_new");
 
             Version = 1;
-            OrderNumber = "0";
+            OrderNumber = "11_YYYY.MM.DD_HH.MM";
             ZoneCode = 11;            
             Comment = "Test task";
 

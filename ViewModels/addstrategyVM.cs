@@ -111,8 +111,9 @@ namespace mes_center.ViewModels
         {
             switch ((StageDTO.Codes)stage.code)
             {
-                case StageDTO.Codes.assemby:
+                case StageDTO.Codes.assembly:
                 case StageDTO.Codes.packing:
+                case StageDTO.Codes.repair:
                     return true;                    
             }
             return false;
@@ -139,7 +140,7 @@ namespace mes_center.ViewModels
                     SourceStages.Add(stage);
             }
 
-            var st_0 = stages.FirstOrDefault(s => s.code == (int)StageDTO.Codes.assemby); //сборка
+            var st_0 = stages.FirstOrDefault(s => s.code == (int)StageDTO.Codes.assembly); //сборка
             if (st_0 != null)
                 DestinationStages.Add(st_0);
 

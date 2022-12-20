@@ -43,9 +43,7 @@
 			</TextBlock>
 			<TextBox
 				Text="{Binding Comment}"
-				VerticalContentAlignment="Top"
-				AcceptsReturn="True"
-				MaxLength="1024"
+				Classes="TextBox Comment"				
 				Margin="4"
 				MinHeight="200">
 			</TextBox>

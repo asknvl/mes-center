@@ -69,12 +69,11 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 			<TextBox
-				Text="{Binding Comment}"
-				VerticalContentAlignment="Top"
+				Text="{Binding Comment}"	
+				Classes="TextBox Comment"
 				Grid.Row="2"
 				Grid.Column="2"				
-				VerticalAlignment="Stretch"
-				AcceptsReturn="True"
+				VerticalAlignment="Stretch"				
 				Width="250">
 			</TextBox>
 		</Grid>

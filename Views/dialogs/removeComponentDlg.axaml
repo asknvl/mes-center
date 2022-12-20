@@ -43,13 +43,12 @@
 			</TextBlock>
 			<TextBox
 				Text="{Binding Comment}"
-				VerticalContentAlignment="Top"
-				AcceptsReturn="True"
+				Classes="TextBox Comment"
 				MaxLength="1024"
 				Margin="4"
-				MinHeight="200">
+				MinHeight="200">				
 			</TextBox>
-			<StackPanel				
+				<StackPanel				
 				Orientation="Horizontal"
 				HorizontalAlignment="Center">
 				<Button

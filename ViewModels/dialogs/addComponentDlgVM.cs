@@ -56,7 +56,8 @@ namespace mes_center.ViewModels.dialogs
         {
             try
             {
-                var found = existing.FirstOrDefault(e => e.sn.Equals(data));
+                //var found = existing.FirstOrDefault(e => e.sn.Equals(data));
+                MeterComponentDTO found = null;
                 if (found == null)
                 {
                     var newComponent = new MeterComponentDTO()

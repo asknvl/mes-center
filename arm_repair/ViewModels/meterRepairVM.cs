@@ -193,7 +193,7 @@ namespace mes_center.arm_repair.ViewModels
                     }
                     catch (Exception ex)
                     {
-                        showError("Прибор не может быть отремонтирован");
+                        showError($"Прибор с серийным номером {sn} не может быть отремонтирован");
                         return;
                     }
 

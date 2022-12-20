@@ -267,26 +267,33 @@ namespace mes_center.arm_regmeter.ViewModels
 
             }
 
-            var scanned = componentsList[counter];
-            scanned.SerialNumber = text;            
-            text = "";
 
-            OrderComponentsList.Add(componentsList[counter]);
-
-            counter++;
-            counter %= componentsList.Count + 1;
-
-            if (counter == componentsList.Count)
+            var found = componentsList.FirstOrDefault(c => !string.IsNullOrEmpty(c.SerialNumber) && c.SerialNumber.Equals(text));
+            if (found == null)
             {
-                Content = new userMessageVM()
-                {
-                    Message = "Завершите регистрацию прибора учета"                    
-                };
-                AllowButtons = true;
-            } else
-                Content = componentsList[counter];
+                var scanned = componentsList[counter];
+                scanned.SerialNumber = text;                
 
-            Debug.WriteLine(counter);
+                OrderComponentsList.Add(componentsList[counter]);
+
+                counter++;
+                counter %= componentsList.Count + 1;
+
+                if (counter == componentsList.Count)
+                {
+                    Content = new userMessageVM()
+                    {
+                        Message = "Завершите регистрацию прибора учета"
+                    };
+                    AllowButtons = true;
+                }
+                else
+                    Content = componentsList[counter];
+            }
+            else
+                showError($"Компонент с серийным номером {text} уже пристуствует в списке");
+
+            text = "";
 
         }
 

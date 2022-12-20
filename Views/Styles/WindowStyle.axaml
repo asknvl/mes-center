@@ -58,6 +58,13 @@
 		<Setter Property="Template" Value="{DynamicResource TooltipDataValidationContentTemplate}"/>
 		<Setter Property="ErrorTemplate" Value="{DynamicResource TooltipDataValidationErrorTemplate}" />
 	</Style>
+	<Style Selector="TextBox.Comment">
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="AcceptsReturn" Value="True"/>
+		<Setter Property="MaxLength" Value="1024"/>
+		<Setter Property="VerticalContentAlignment" Value="Top"/>
+				
+	</Style>
 
 	<Style Selector="TextBlock">
 		<Setter Property="FontSize" Value="12"/>		
@@ -171,7 +178,6 @@
 		<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
 		<Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
 	</Style>
-
-
+	
 	<!-- Add Styles Here -->
 </Styles>

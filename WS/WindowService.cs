@@ -2,6 +2,8 @@
 using Avalonia.Threading;
 using mes_center.arm_breakdown.ViewModels;
 using mes_center.arm_breakdown.Views;
+using mes_center.arm_packing.ViewModels;
+using mes_center.arm_packing.Views;
 using mes_center.arm_regmeter.ViewModels;
 using mes_center.arm_regmeter.Views;
 using mes_center.arm_repair.ViewModels;
@@ -107,6 +109,10 @@ namespace mes_center.WS
 
                 case repairVM:
                     wnd = new repairWnd();
+                    break;
+
+                case packingVM:
+                    wnd = new packingWnd();
                     break;
             }
 

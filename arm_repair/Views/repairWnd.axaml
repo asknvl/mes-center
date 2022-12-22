@@ -32,5 +32,8 @@
 				</DataTemplate>-->
 			</ContentControl.DataTemplates>
 		</ContentControl>
+		<TextBox >
+			
+		</TextBox>
 	</Grid>
 </Window>

@@ -106,7 +106,7 @@ namespace mes_center.arm_breakdown.ViewModels
                                                       DateTime.UtcNow,
                                                       sn);
 
-            await serverApi.SetMeterStagePassed(sessionID, meterDTO);
+            await prodApi.SetMeterStagePassed(sessionID, meterDTO);
         }
         #endregion
 
@@ -117,7 +117,7 @@ namespace mes_center.arm_breakdown.ViewModels
             startTime = DateTime.UtcNow;
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, null);
+                SessionID = await prodApi.OpenSession(Order.order_num, AppContext.User.Login, null);
                 nextScanRequest();
             }
             catch (Exception ex)
@@ -131,7 +131,7 @@ namespace mes_center.arm_breakdown.ViewModels
             base.OnStopped();
             try
             {
-                await serverApi.CloseSession(SessionID);
+                await prodApi.CloseSession(SessionID);
             }
             catch (Exception ex)
             {

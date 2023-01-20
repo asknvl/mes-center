@@ -33,8 +33,8 @@ namespace mes_center.arm_repair.ViewModels
 
             try
             {
-                var eventDTOs = await serverApi.GetMeterEvents(SN);
-                var stages = await serverApi.GetStages();
+                var eventDTOs = await prodApi.GetMeterEvents(SN);
+                var stages = await prodApi.GetStages();
                 stages.Add(new StageDTO()
                 {
                     code = 255,

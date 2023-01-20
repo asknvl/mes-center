@@ -64,7 +64,7 @@ namespace mes_center.arm_regmeter.ViewModels
 
         async void showMeterRegistration(OrderDTO order)
         {
-            var total_amount = await serverApi.GetMetersAmount(order.order_num, 1);
+            var total_amount = await prodApi.GetMetersAmount(order.order_num, 1);
             if (total_amount > 0)
             {
                 var mr = new meterRegistrationVM();
@@ -78,7 +78,9 @@ namespace mes_center.arm_regmeter.ViewModels
             else
                 showError("Данное задание уже выполнено");
         }
+        #endregion
 
+        #region override
         public void OnScan(string text)
         {
             var scanner = Content as IScanner;

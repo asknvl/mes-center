@@ -45,8 +45,8 @@ namespace mes_center.arm_repair.ViewModels
             addCmd = ReactiveCommand.CreateFromTask(async () => {
                 try
                 {
-                    var order = serverApi.GetOrder(order_num);
-                    var avaliable_components = await serverApi.GetComponents(order.model);
+                    var order = prodApi.GetOrder(order_num);
+                    var avaliable_components = await prodApi.GetComponents(order.model);
 
                     var dlg = new addComponentDlgVM(componentDTOs, avaliable_components);
                     dlg.ComponentAddedEvent += async (component) => {
@@ -58,7 +58,7 @@ namespace mes_center.arm_repair.ViewModels
                         {
                             try
                             {
-                                await serverApi.AddComponent(session, sn, 255, component.componentInfo.id, component.sn);
+                                await prodApi.AddComponent(session, sn, 255, component.componentInfo.id, component.sn);
                                 await Update();
                             } catch (Exception ex)
                             {
@@ -97,8 +97,8 @@ namespace mes_center.arm_repair.ViewModels
 
                 try
                 {
-                    var order = serverApi.GetOrder(order_num);
-                    var avaliable_components = await serverApi.GetComponents(order.model);
+                    var order = prodApi.GetOrder(order_num);
+                    var avaliable_components = await prodApi.GetComponents(order.model);
 
                     var defectComponentAvailable = avaliable_components.FirstOrDefault(c => c.id == Component.id);
 
@@ -109,7 +109,7 @@ namespace mes_center.arm_repair.ViewModels
                         var dlg = new removeComponentDialogVM(defectComponentAvailable.defects);
                         dlg.ComponentUpdateEvent += async (defect, comment) => {
 
-                            await serverApi.DeleteComponent(session, componentToUpdate.uuid, defect.id, comment);
+                            await prodApi.DeleteComponent(session, componentToUpdate.uuid, defect.id, comment);
                             await Update();
 
                         };
@@ -132,7 +132,7 @@ namespace mes_center.arm_repair.ViewModels
         #region public
         public async Task Update()
         {
-            componentDTOs = await serverApi.GetComponents(SN);
+            componentDTOs = await prodApi.GetComponents(SN);
             Components.Clear();
 
             foreach (var dto in componentDTOs)

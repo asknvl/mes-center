@@ -90,7 +90,7 @@ namespace mes_center.ViewModels
 
                 try
                 {
-                    await serverApi.CreateStrategy(strategy);
+                    await prodApi.CreateStrategy(strategy);
                 } catch (Exception ex)
                 {
                     showError(ex.Message);
@@ -132,7 +132,7 @@ namespace mes_center.ViewModels
                 SourceStages.Clear();
             });
 
-            var stages = await serverApi.GetStages();            
+            var stages = await prodApi.GetStages();            
 
             foreach (var stage in stages)
             {

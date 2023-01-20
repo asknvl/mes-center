@@ -35,7 +35,7 @@ namespace mes_center.ViewModels
 
                 if (order != null)
                 {
-                    OrderDTO rdOrder = serverApi.GetOrder(order.order_num);
+                    OrderDTO rdOrder = prodApi.GetOrder(order.order_num);
                     OrderCheckedAction?.Invoke(rdOrder);
                     lastCheckedOrder = rdOrder.order_num;
                 }
@@ -76,7 +76,7 @@ namespace mes_center.ViewModels
                 await Task.Run(async () =>
                 {
 
-                    var orders = await serverApi.GetOrders(OrderStatuses);
+                    var orders = await prodApi.GetOrders(OrderStatuses);
                     orders = orders.OrderByDescending(o => DateTime.Parse(o.reg_date)).ToList();
                     OrdersList = orders;
 

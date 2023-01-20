@@ -176,8 +176,8 @@ namespace mes_center.ViewModels
             {
                 await Task.Run(async () => {
                     IsDataReady = false;
-                    Models = await serverApi.GetModels();
-                    Configurations = await serverApi.GetConfigurations();
+                    Models = await prodApi.GetModels();
+                    Configurations = await prodApi.GetConfigurations();
                     IsDataReady =true;
                 });
             } catch (Exception ex)

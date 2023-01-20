@@ -17,7 +17,10 @@ namespace mes_center.ViewModels
     {
         #region vars
         protected ILogger logger = Logger.getInstance();
-        protected IServerApi serverApi = new ServerApi("http://172.16.118.105:8080/assppu-1.0.12");
+
+        protected IServerApi centrApi = new ServerApi("http://172.16.118.105:8080/assppu-cent-1.1.0");
+        protected IServerApi prodApi = new ServerApi("http://172.16.118.105:8080/assppu-prod-1.1.0");
+
         protected IWindowServeice ws = WindowService.getInstance();
         #endregion
 

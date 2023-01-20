@@ -60,7 +60,7 @@ namespace mes_center.ViewModels.dialogs
 
             try
             {
-                var tmpStages = await serverApi.GetStages();
+                var tmpStages = await prodApi.GetStages();
                 tmpStages = tmpStages.Where(s => s.code != 1).ToList(); //убрали сборку
                 Stages = tmpStages;
                 if (Stages.Count != 0)

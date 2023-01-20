@@ -12,12 +12,12 @@
 		<StackPanel
 			Orientation="Vertical"
 			HorizontalAlignment="Left"
-			Width="250">					
+			Width="250">
 			<TextBlock
 				Classes="TextBlock Header">
 				Номер задания:
 			</TextBlock>
-			<TextBlock				
+			<TextBlock
 				Text="{Binding Order.order_num}"/>
 			<TextBlock
 				Classes="TextBlock Header">
@@ -39,11 +39,46 @@
 				Text="{Binding Order.config.name}"/>
 			<TextBlock
 				Classes="TextBlock Header">
+				Номенклатура:
+			</TextBlock>
+			<ListBox
+				Grid.Row="1"
+				Grid.Column="2"
+				Height="150"				
+				Items="{Binding Order.nomenclature}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid
+							ColumnDefinitions="*, Auto">
+							<TextBlock
+								Grid.Column="0"
+								Text="{Binding decimalNumber}"
+								VerticalAlignment="Center"/>
+							<TextBlock
+								Grid.Column="1"
+								Text="{Binding amount}"
+								HorizontalAlignment="Center"
+								VerticalAlignment="Center"
+								FontWeight="DemiBold"/>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+				<ListBox.Styles>
+					<Style Selector="TextBlock">
+						<Setter Property="Padding" Value="4"/>
+						<Setter Property="Margin" Value="0"/>
+						<Setter Property="MinHeight" Value="20"/>
+					</Style>
+				</ListBox.Styles>
+			</ListBox>
+
+			<TextBlock
+				Classes="TextBlock Header">
 				Количество изделий:
 			</TextBlock>
 			<TextBlock
 				Text="{Binding Order.amount}"/>
-			<Grid								
+			<!--<Grid								
 				HorizontalAlignment="Left"
 				RowDefinitions="Auto, Auto"
 				ColumnDefinitions="Auto, 30">
@@ -63,15 +98,15 @@
 					OnContent="{Binding Order.aux_amount_complete}"
 					Grid.Row="1">					
 				</ToggleSwitch>								
-			</Grid>
-			<TextBlock
+			</Grid>-->
+			<!--<TextBlock
 				Classes="TextBlock Header">
 				Всего изделий:
 			</TextBlock>
-			<TextBlock				
+			<TextBlock
 				HorizontalAlignment="Left"
 				Width="150"
-				Text="{Binding Order.sum_amount}"/>
+				Text="{Binding Order.sum_amount}"/>-->
 			<TextBlock
 				Classes="TextBlock Header"
 				IsVisible="{Binding IsSerialVisible}">
@@ -82,13 +117,7 @@
 				IsVisible="{Binding IsSerialVisible}"
 				HorizontalAlignment="Left"
 				Width="150"
-				Text="{Binding Order.first_serial}"/>
-			<!--<TextBlock
-				Classes="TextBlock Header">
-				Версия ВПО:
-			</TextBlock>
-			<TextBlock
-				Text="{Binding Order.fwv}"/>-->
+				Text="{Binding Order.first_serial}"/>			
 			<TextBlock
 				Classes="TextBlock Header">
 				Комментарий:
@@ -103,13 +132,13 @@
 					AcceptsReturn="True"
 					Text="{Binding Order.comment}">
 				</TextBox>
-				<Button	
+				<Button
 					Command="{Binding saveCommentCmd}"
 					IsVisible="{Binding Order.IsSaveCommentVisible}"
 					Margin="0, 0, 4, 0"
-					Grid.Row="1"										
+					Grid.Row="1"
 					HorizontalAlignment="Right"
-					VerticalAlignment="Top">					
+					VerticalAlignment="Top">
 					Сохранить
 				</Button>
 			</Grid>
@@ -117,15 +146,15 @@
 			<Grid
 				IsVisible="{Binding IsAcceptRejectNeed}"
 				Margin="2, 0, 2, 0"
-				ColumnDefinitions="*, *"				
+				ColumnDefinitions="*, *"
 				HorizontalAlignment="Right">
-				<Button										
+				<Button
 					Grid.Column="0"
 					Width="100"
 					Command="{Binding acceptOrderCmd}">
 					Подтвердить
 				</Button>
-				<Button								
+				<Button
 					Grid.Column="1"
 					Width="100"
 					Command="{Binding rejectOrderCmd}">

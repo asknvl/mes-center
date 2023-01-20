@@ -1,5 +1,4 @@
-﻿using mes_center.Models.scanner;
-using mes_center.ViewModels;
+﻿using mes_center.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -7,14 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mes_center.arm_repair.ViewModels
+namespace mes_center.arm_regorder.ViewModels
 {
-    public class repairVM : LifeCycleViewModelBase, IScanner
+    public class regorderVM : LifeCycleViewModelBase
     {
-
         #region vars
         loginVM login;
-        int SessionID;
         #endregion
 
         #region properties
@@ -37,16 +34,16 @@ namespace mes_center.arm_repair.ViewModels
         }
         #endregion
 
-        public repairVM()
+        public regorderVM()
         {
             login = new loginVM();
             login.LoginSucceededEvent += async () => {
 
                 try
                 {
-                    SessionID = await prodApi.OpenSession(null, login.Login, null); //TODO
-                    showMeterRepair(SessionID);
-                } catch (Exception ex)
+                    showRegOrder();
+                }
+                catch (Exception ex)
                 {
                     showError(ex.Message);
                 }
@@ -56,28 +53,14 @@ namespace mes_center.arm_repair.ViewModels
         }
 
         #region helpers
-        void showMeterRepair(int sessionid)
+        void showRegOrder()
         {
-            var vm = new meterRepairVM(sessionid);
-            vm.CloseRequestEvent += () => {
+            regorderInterfaceVM ro = new regorderInterfaceVM();
+            ro.CloseRequestEvent += () => {
                 Content = login;
-            };            
-            Content = vm;
+            };
+            Content = ro;
         }
-        #endregion
-
-        #region public
-        public void OnScan(string text)
-        {
-            var c = Content as IScanner;
-            if (c != null)
-                c.OnScan(text);
-        }
-
-        public override void OnStopped()
-        {
-            base.OnStopped();
-        }
-        #endregion
+        #endregion        
     }
 }

@@ -1,0 +1,233 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:vm="using:mes_center"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="550"
+             x:Class="mes_center.arm_regorder.Views.regorderInterfaceView">	
+	<UserControl.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</UserControl.Styles>
+	<Grid		
+		ColumnDefinitions="Auto, *">
+		<StackPanel
+			Width="250"
+			Grid.Column="0"			
+			Orientation="Vertical"
+			HorizontalAlignment="Left">
+			<TextBlock>
+				Производственная площадка:
+			</TextBlock>
+			<ComboBox
+				Items="{Binding ProductionZones}"
+				SelectedItem="{Binding ProductionZone}"
+				HorizontalAlignment="Stretch">
+				<ComboBox.DataTemplates>
+					<DataTemplate>
+						<TextBlock Text="{Binding name}"/>
+					</DataTemplate>
+				</ComboBox.DataTemplates>
+			</ComboBox>
+			<TextBlock>
+				Номер задания:
+			</TextBlock>
+			<TextBox
+				Text="{Binding OrderNumber}"/>
+			<TextBlock>
+				Модель изделия:
+			</TextBlock>
+			<ComboBox
+				Items="{Binding Models}"
+				SelectedItem="{Binding Model}"
+				HorizontalAlignment="Stretch">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Vertical">
+							<TextBlock
+								Text="{Binding name}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<TextBlock>
+				Конфигурация изделия:
+			</TextBlock>
+			<ComboBox
+				Items="{Binding Configurations}"
+				SelectedItem="{Binding Configuration}"
+				HorizontalAlignment="Stretch">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<StackPanel
+							Orientation="Vertical">
+							<TextBlock
+								Text="{Binding name}"/>
+						</StackPanel>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<TextBlock>
+				Комментарий:
+			</TextBlock>
+			<TextBox
+				Height="200"				
+				VerticalContentAlignment="Top"
+				TextWrapping="Wrap"
+				AcceptsReturn="True"
+				Text="{Binding Comment}">
+			</TextBox>
+			<Grid				
+				ColumnDefinitions="*, *"
+				HorizontalAlignment="Stretch"
+				Margin="2">
+				<Button
+					Grid.Column="0"
+					HorizontalAlignment="Stretch"
+					Command="{Binding registerCmd}">
+					Регистрация
+				</Button>
+				<Button
+					Grid.Column="1"
+					HorizontalAlignment="Stretch"
+					Command="{Binding cancelCmd}">					
+					Отмена
+				</Button>
+			</Grid>
+		</StackPanel>
+
+		<Grid						
+			Grid.Column="1"
+			Grid.RowSpan="2"
+			RowDefinitions="Auto, *"
+			ColumnDefinitions="*, Auto, *">			
+			<TextBlock
+				Grid.Row="0"
+				Grid.Column="0">
+				Модификации:
+			</TextBlock>
+			<ListBox
+				Grid.Row="1"
+				Grid.Column="0"				
+				Items="{Binding AvailableModifications}"
+				SelectedItem="{Binding Modification}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock
+							Text="{Binding decimalNumber}">							
+						</TextBlock>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+
+			<StackPanel
+				Orientation="Vertical"
+				Grid.Row="2"
+				Grid.Column="1"
+				VerticalAlignment="Center">
+				<Button
+					Command="{Binding addModificationCmd}"
+					Background="Transparent"
+					HorizontalAlignment="Center"
+					MinWidth="30">
+					<Svg
+						Path="/Assets/svg/right_arrow.svg"
+						Height="20"
+						Width="20">
+					</Svg>
+				</Button>
+				<Button
+					Command="{Binding removeModificationCmd}"
+					Background="Transparent"
+					HorizontalAlignment="Center"
+					MinWidth="30">
+					<Svg
+						Path="/Assets/svg/left_arrow.svg"
+						Height="20"
+						Width="20">
+					</Svg>
+				</Button>
+			</StackPanel>
+
+			<TextBlock
+				Grid.Row="0"
+				Grid.Column="2">
+				Номенклатура:
+			</TextBlock>
+			<Grid
+				RowDefinitions="*, Auto"
+				Grid.Row="1"
+				Grid.Column="2">
+				<ListBox
+					Grid.Row="0"
+					Items="{Binding Nomenclatures}"
+					SelectedItem="{Binding Nomenclature}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Grid
+									ColumnDefinitions="*, Auto">
+									<TextBlock
+										Grid.Column="0"
+										Text="{Binding decimalNumber}"
+										VerticalAlignment="Center"/>
+									<TextBox
+										Grid.Column="1"
+										Text="{Binding amount}"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center"/>
+								</Grid>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+						<ListBox.Styles>
+							<Style Selector="TextBox">
+								<Setter Property="Padding" Value="4"/>
+								<Setter Property="Margin" Value="0"/>
+								<Setter Property="MinHeight" Value="20"/>
+							</Style>
+						</ListBox.Styles>
+				</ListBox>
+				<TextBlock
+					Grid.Row="1"
+					VerticalAlignment="Center"
+					HorizontalAlignment="Left"
+					Margin="4, 0, 0, 4">
+					Всего:
+				</TextBlock>
+				<TextBlock
+					Grid.Row="1"
+					VerticalAlignment="Center"
+					HorizontalAlignment="Right"
+					FontWeight="DemiBold"
+					Margin="4, 0, 4, 4"
+					Text="{Binding TotalAmount}"/>
+			</Grid>			
+		</Grid>
+
+		<!--<StackPanel
+			Grid.Row="0"
+			Grid.Column="1"
+			Orientation="Vertical">
+			<TextBlock>
+				Комментарий:
+			</TextBlock>
+			<TextBox>
+				
+			</TextBox>
+		</StackPanel>-->
+		
+		<Grid.Styles>
+			<Style Selector="TextBlock">
+				<Setter Property="Margin" Value="4, 2, 4, 2"/>
+			</Style>
+			<Style Selector="TextBox">
+				<Setter Property="Margin" Value="4, 2, 4, 2"/>
+			</Style>
+			<Style Selector="ComboBox">
+				<Setter Property="Margin" Value="4, 2, 4, 2"/>
+			</Style>
+			<Style Selector="ListBox">
+				<Setter Property="Margin" Value="4"/>
+			</Style>
+		</Grid.Styles>
+	</Grid>
+</UserControl>

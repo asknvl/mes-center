@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vmscommon="using:mes_center.ViewModels"
+		xmlns:viewscommon="using:mes_center.Views"
+		xmlns:vms="using:mes_center.arm_acceptorder.ViewModels"
+		xmlns:views="using:mes_center.arm_acceptorder.Views"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="mes_center.arm_acceptorder.Views.acceptorderWnd"
+        Title="АРМ Подтверждение задания"
+		Width="800"
+		Height="600"
+		WindowStartupLocation="CenterScreen">
+	<Window.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml"/>
+	</Window.Styles>
+	<Grid
+		VerticalAlignment="Stretch"
+		HorizontalAlignment="Stretch">
+		<ContentControl
+			Content="{Binding Content}">
+			<ContentControl.DataTemplates>
+				<DataTemplate DataType="{x:Type vmscommon:loginVM}">
+					<viewscommon:loginView/>
+				</DataTemplate>
+				<DataTemplate DataType="{x:Type vms:acceptorderInterfaceVM}">
+					<views:acceptorderInterfaceView/>
+				</DataTemplate>
+			</ContentControl.DataTemplates>
+		</ContentControl>
+	</Grid>
+</Window>

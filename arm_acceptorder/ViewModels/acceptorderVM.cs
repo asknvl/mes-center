@@ -1,5 +1,4 @@
-﻿using mes_center.Models.scanner;
-using mes_center.ViewModels;
+﻿using mes_center.ViewModels;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -7,14 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mes_center.arm_repair.ViewModels
+namespace mes_center.arm_acceptorder.ViewModels
 {
-    public class repairVM : LifeCycleViewModelBase, IScanner
+    public class acceptorderVM : LifeCycleViewModelBase
     {
-
         #region vars
         loginVM login;
-        int SessionID;
         #endregion
 
         #region properties
@@ -35,49 +32,34 @@ namespace mes_center.arm_repair.ViewModels
                 this.RaiseAndSetIfChanged(ref content, value);
             }
         }
-        #endregion
 
-        public repairVM()
+        public acceptorderVM()
         {
             login = new loginVM();
             login.LoginSucceededEvent += async () => {
 
                 try
                 {
-                    SessionID = await prodApi.OpenSession(null, login.Login, null); //TODO
-                    showMeterRepair(SessionID);
-                } catch (Exception ex)
+                    showAcceptOrder();
+                }
+                catch (Exception ex)
                 {
                     showError(ex.Message);
                 }
             };
 
             Content = login;
+
         }
+        #endregion
 
         #region helpers
-        void showMeterRepair(int sessionid)
+        void showAcceptOrder()
         {
-            var vm = new meterRepairVM(sessionid);
-            vm.CloseRequestEvent += () => {
-                Content = login;
-            };            
+            acceptorderInterfaceVM vm = new acceptorderInterfaceVM();
             Content = vm;
         }
         #endregion
 
-        #region public
-        public void OnScan(string text)
-        {
-            var c = Content as IScanner;
-            if (c != null)
-                c.OnScan(text);
-        }
-
-        public override void OnStopped()
-        {
-            base.OnStopped();
-        }
-        #endregion
     }
 }

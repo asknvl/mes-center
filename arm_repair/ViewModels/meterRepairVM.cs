@@ -75,7 +75,7 @@ namespace mes_center.arm_repair.ViewModels
 
                         try
                         {
-                            await serverApi.CloseSession(SessionID);
+                            await prodApi.CloseSession(SessionID);
 
                         } catch (Exception ex)
                         {
@@ -96,7 +96,7 @@ namespace mes_center.arm_repair.ViewModels
                 dlg.RepairFinishedEvent += async (stage, comment) => {
                     try
                     {
-                        await serverApi.SetMeterStagePassed(SessionID, SN, startTime, stage.code, comment);
+                        await prodApi.SetMeterStagePassed(SessionID, SN, startTime, stage.code, comment);
                     } catch (Exception ex)
                     {
                         showError($"Не удалось завершить ремонт {ex.Message}");
@@ -120,7 +120,7 @@ namespace mes_center.arm_repair.ViewModels
                 {
                     try
                     {
-                        await serverApi.DisposeMeter(SessionID, SN);
+                        await prodApi.DisposeMeter(SessionID, SN);
                     } catch (Exception ex)
                     {
                         showError($"Не удалось утилизировать ПУ {ex.Message}");
@@ -188,7 +188,7 @@ namespace mes_center.arm_repair.ViewModels
 
                     try
                     {
-                        info = await serverApi.GetMeterInfo(sn, 255);
+                        info = await prodApi.GetMeterInfo(sn, 255);
                         state = State.meterRepairing;
                     }
                     catch (Exception ex)

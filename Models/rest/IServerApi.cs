@@ -11,11 +11,14 @@ namespace mes_center.Models.rest
 {
     public interface IServerApi
     {
+        Task<List<ProductionZoneDTO>> GetProductionZones();
         Task<List<ModelDTO>> GetModels();
         Task<List<ConfigurationDTO>> GetConfigurations();
+        Task<List<ModificationDTO>> GetModifications(int model_id);
         Task<List<OrderDTO>> GetOrders(OrderDTO.OrderStatus[] statuses);
         OrderDTO GetOrder(string order_num);
-        Task<OrderDTO> OrderUpdate(string order_num, int amount_aux, OrderStatus status);
+        Task OrderCreate(RestOrderDTO order);
+        Task<OrderDTO> OrderUpdate(string order_num, OrderStatus status);
         Task<OrderDTO> OrderUpdate(string order_num, string comment);
         Task SetOrderStatus(string order_num, OrderStatus status, string comment);
         Task<List<ComponentDTO>> GetComponents(ModelDTO model);
@@ -34,6 +37,8 @@ namespace mes_center.Models.rest
         Task DeleteStrategy(int id);
         Task<MeterInfoDTO> GetMeterInfo(string sn, int stage);
         Task DisposeMeter(int session_id, string sn);
+
+        
     }
 
     public class ServerApiException : Exception

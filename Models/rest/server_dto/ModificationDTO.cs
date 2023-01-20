@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace mes_center.Models.rest.server_dto
 {
-    public class ConfigurationDTO
+    public class ModificationDTO
     {
         [JsonProperty]
         public int id { get; set; }
         [JsonProperty]
-        public string? name { get; set; }
-        //[JsonProperty]
-        //public string? data { get; set; }
-        //[JsonProperty]
-        //public string? comment { get; set; }
+        public string decimalNumber { get; set; }
+        [JsonProperty]
+        public string modificationCode { get; set; }
+        [JsonProperty]
+        public int weight { get; set; }
     }
 }

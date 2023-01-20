@@ -133,7 +133,7 @@ namespace mes_center.arm_regmeter.ViewModels
                 try
                 {
 
-                    await serverApi.CloseSession(SessionID);
+                    await prodApi.CloseSession(SessionID);
 
                     Close();
                 }
@@ -212,7 +212,7 @@ namespace mes_center.arm_regmeter.ViewModels
 
                     try
                     {
-                        await serverApi.SetMeterStagePassed(SessionID, meterDTO);
+                        await prodApi.SetMeterStagePassed(SessionID, meterDTO);
                     } catch (Exception ex)
                     {
                         showError(ex.Message);
@@ -240,7 +240,7 @@ namespace mes_center.arm_regmeter.ViewModels
                                                                 comment);
 
                 //await meter_created.produceAsync("meter_created", meterDTO.ToString());
-                await serverApi.SetMeterStagePassed(SessionID, meterDTO);
+                await prodApi.SetMeterStagePassed(SessionID, meterDTO);
 
                 await startRegistration();
             }
@@ -302,11 +302,11 @@ namespace mes_center.arm_regmeter.ViewModels
             await Task.Run(async () =>
             {
 
-                TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);
+                TotalAmount = await prodApi.GetMetersAmount(Order.order_num, 1);
                 if (TotalAmount > 0)
                 {
-                    var order = serverApi.GetOrder(Order.order_num);
-                    meterComponents = await serverApi.GetComponents(order.model);
+                    var order = prodApi.GetOrder(Order.order_num);
+                    meterComponents = await prodApi.GetComponents(order.model);
                     componentsList = new();
                     foreach (var dto in meterComponents)
                         componentsList.Add(new componentItemVM(dto) { ActionName = "Отсканируйте штрих код компонента:", Id = dto.id });
@@ -319,7 +319,7 @@ namespace mes_center.arm_regmeter.ViewModels
                     regStartTime = DateTime.UtcNow;
                 } else
                 {
-                    await serverApi.CloseSession(SessionID);
+                    await prodApi.CloseSession(SessionID);
 
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
@@ -338,10 +338,10 @@ namespace mes_center.arm_regmeter.ViewModels
 
             try
             {
-                SessionID = await serverApi.OpenSession(Order.order_num, AppContext.User.Login, null);                
+                SessionID = await prodApi.OpenSession(Order.order_num, AppContext.User.Login, null);                
                 //meter_created_response.start("meter_created_response");
 
-                TotalAmount = await serverApi.GetMetersAmount(Order.order_num, 1);
+                TotalAmount = await prodApi.GetMetersAmount(Order.order_num, 1);
 
                 await startRegistration();               
 
@@ -356,7 +356,7 @@ namespace mes_center.arm_regmeter.ViewModels
             base.OnStopped();
             try
             {
-                await serverApi.CloseSession(SessionID);
+                await prodApi.CloseSession(SessionID);
             }
             catch (Exception ex)
             {

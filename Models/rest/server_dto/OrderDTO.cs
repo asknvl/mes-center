@@ -49,36 +49,58 @@ namespace mes_center.Models.rest.server_dto
         public string? first_serial { get; set; }
 
         int _amount;
-        [JsonProperty]
-        public int amount {
-            get => _amount;
-            set
+        [JsonIgnore]
+        public int amount
+        {
+            //get => _amount;
+            //set
+            //{
+            //    _amount = value;
+
+            //    switch (model.phases)
+            //    {
+            //        case 1:
+            //            aux_amount_complete = (24 - _amount % 24);
+            //            break;
+            //        case 3:
+            //            aux_amount_complete = (16 - _amount % 16);
+            //            break;
+            //        default:
+            //            break;
+            //    }
+
+            //    sum_amount = amount + amount_aux;
+            //}
+
+            get
             {
-                _amount = value;
-
-                switch (model.phases)
-                {
-                    case 1:
-                        aux_amount_complete = (24 - _amount % 24);
-                        break;
-                    case 3:
-                        aux_amount_complete = (16 - _amount % 16);
-                        break;
-                    default:
-                        break;
+                int ttl = 0;
+                if (nomenclature != null && nomenclature.Count > 0)
+                {                 
+                    foreach (var item in nomenclature)
+                    {
+                        ttl += item.amount;
+                    }
                 }
-
-                sum_amount = amount + amount_aux;
+                return ttl;
             }
         }
         int _amount_aux;
         [JsonProperty]
-        public int amount_aux {
+        public int amount_aux
+        {
             get => _amount_aux;
             set => this.RaiseAndSetIfChanged(ref _amount_aux, value);
         }
+
+        List<NomenclatureDTO> _nomenclature;
         [JsonProperty]
-        public string? fwv { get; set; }
+        public List<NomenclatureDTO> nomenclature
+        {
+            get => _nomenclature;
+            set => this.RaiseAndSetIfChanged(ref _nomenclature, value);
+        }
+
         string _reg_date;
         [JsonProperty]
         public string? reg_date
@@ -119,6 +141,7 @@ namespace mes_center.Models.rest.server_dto
                 _comment = value;
             }
         }
+
         [JsonIgnore]
         public string text_status { get; set; }
         [JsonIgnore]
@@ -165,8 +188,7 @@ namespace mes_center.Models.rest.server_dto
         }
         public OrderDTO()
         {
-            order_num = String.Empty;
-            fwv = String.Empty;
+            order_num = String.Empty;            
             comment = String.Empty;
         }
 

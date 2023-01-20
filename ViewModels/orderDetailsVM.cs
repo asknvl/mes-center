@@ -73,7 +73,7 @@ namespace mes_center.ViewModels
                 {
                     //string serialnumber = await serverApi.GenerateSerialNumber(Order.order_num, Order.amount_aux, Order.comment);
 
-                    var res = await serverApi.OrderUpdate(Order.order_num, Order.amount_aux, OrderDTO.OrderStatus.READY_TO_EXECUTE);
+                    var res = await prodApi.OrderUpdate(Order.order_num, OrderDTO.OrderStatus.READY_TO_EXECUTE);
 
                 } catch (Exception ex)
                 {                    
@@ -84,7 +84,7 @@ namespace mes_center.ViewModels
             rejectOrderCmd = ReactiveCommand.CreateFromTask(async () => {
                 try
                 {
-                    await serverApi.SetOrderStatus(Order.order_num, OrderDTO.OrderStatus.REJECTED, Order.comment);
+                    await prodApi.SetOrderStatus(Order.order_num, OrderDTO.OrderStatus.REJECTED, Order.comment);
                 } catch (Exception ex)
                 {
                     showError(ex.Message);
@@ -94,7 +94,7 @@ namespace mes_center.ViewModels
             saveCommentCmd = ReactiveCommand.CreateFromTask(async () => {
                 try
                 {
-                    await serverApi.OrderUpdate(Order.order_num, Order.comment);
+                    await prodApi.OrderUpdate(Order.order_num, Order.comment);
 
                 } catch (Exception ex)
                 {

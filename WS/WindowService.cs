@@ -1,11 +1,15 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
+using mes_center.arm_acceptorder.ViewModels;
+using mes_center.arm_acceptorder.Views;
 using mes_center.arm_breakdown.ViewModels;
 using mes_center.arm_breakdown.Views;
 using mes_center.arm_packing.ViewModels;
 using mes_center.arm_packing.Views;
 using mes_center.arm_regmeter.ViewModels;
 using mes_center.arm_regmeter.Views;
+using mes_center.arm_regorder.ViewModels;
+using mes_center.arm_regorder.Views;
 using mes_center.arm_repair.ViewModels;
 using mes_center.arm_repair.Views;
 using mes_center.ViewModels;
@@ -113,6 +117,14 @@ namespace mes_center.WS
 
                 case packingVM:
                     wnd = new packingWnd();
+                    break;
+
+                case regorderVM:
+                    wnd = new regorderWnd();
+                    break;
+
+                case acceptorderVM:
+                    wnd = new acceptorderWnd();
                     break;
             }
 

@@ -566,6 +566,32 @@ namespace mes_center.Models.rest
             logger.inf(Tags.SAPI, $"CloseSession OK, id={id}");
         }
 
+        public async Task<int> GetMetersAmount(string order_num, string modificationCode)
+        {
+            logger.inf(Tags.SAPI, $"GetMetersAmount request, order_num={order_num} modificationCode={modificationCode}");
+            int res = 0;
+            var client = new RestClient($"{url}/orders/{order_num}/meters_for_stage/{modificationCode}");
+            var request = new RestRequest(Method.GET);
+            await Task.Run(() =>
+            {
+                IRestResponse response = client.Execute(request);
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    а 
+                    JObject json = JObject.Parse(response.Content);
+                    res = json["metersAmount"].ToObject<int>();
+                }
+                else
+                {
+                    string msg = $"GetMetersAmount {order_num} request fail (stasus code={response.StatusCode} response={response.Content})";
+                    logger?.err(Tags.SAPI, msg);
+                    throw new ServerApiException(msg);
+                }
+            });
+            logger.inf(Tags.SAPI, $"GetMetersAmount OK, amount={res}");
+            return res;
+        }
+
         public async Task<int> GetMetersAmount(string order_num, int stage)
         {
             logger.inf(Tags.SAPI, $"GetMetersAmount request, order_num={order_num} stage={stage}");

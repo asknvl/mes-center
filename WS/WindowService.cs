@@ -66,6 +66,10 @@ namespace mes_center.WS
                     wnd = new repairFinishDlg();
                     break;
 
+                    case selectModificationDlgVM:
+                    wnd = new selectModificationDlg();
+                    break;
+
                 case dialogVM:
                     wnd = new containerDlg();
                     break;

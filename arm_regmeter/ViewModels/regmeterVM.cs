@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using mes_center.Models.rest.server_dto;
 using mes_center.Models.scanner;
 using System.Diagnostics;
+using mes_center.ViewModels.dialogs;
 
 namespace mes_center.arm_regmeter.ViewModels
 {
@@ -56,15 +57,35 @@ namespace mes_center.arm_regmeter.ViewModels
                 Content = login;
             };
 
-            os.OrderSelectedEvent += (order) => {                
-                showMeterRegistration(order);
+            os.OrderSelectedEvent += (_order) => {
+
+                try
+                {
+                    var order = prodApi.GetOrder(_order.order_num);
+
+                    var sm = new selectModificationDlgVM(order);
+                    sm.ModificationSelectedEvent += (modification) => {
+                        showMeterRegistration(order, modification);                        
+                    };
+
+                    ws.ShowDialog(sm);
+
+                } catch (Exception ex)
+                {
+                    showError(ex.Message);
+                }
+
             };
             Content = os;
         }
 
-        async void showMeterRegistration(OrderDTO order)
+        async void showMeterRegistration(OrderDTO order, ModificationDTO modification)
         {
-            var total_amount = await prodApi.GetMetersAmount(order.order_num, 1);
+            //var total_amount = await prodApi.GetMetersAmount(order.order_num, 1);
+
+            var nomenclature = order.nomenclature.FirstOrDefault(n => n.decimalNumber.Equals(modification.decimalNumber));
+            var total_amount = nomenclature.amount;
+
             if (total_amount > 0)
             {
                 var mr = new meterRegistrationVM();
@@ -73,6 +94,8 @@ namespace mes_center.arm_regmeter.ViewModels
                     showOrderSelection();
                 };
                 mr.Order = order;
+                mr.Modification = modification;
+
                 Content = mr;
             }
             else

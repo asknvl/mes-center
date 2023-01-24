@@ -1,0 +1,64 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        x:Class="mes_center.Views.dialogs.selectModificationDlg"
+		CanResize="False"
+		Width="300"
+		Height="200"
+        Title="Выбор модификации">
+	<Window.Styles>
+		<StyleInclude Source="/Views/Styles/WindowStyle.axaml" />
+	</Window.Styles>
+	<Grid
+		Margin="4">
+		<Grid	
+			RowDefinitions="Auto, *, Auto">
+			<TextBlock
+				Grid.Row="0"
+				TextAlignment="Left"
+				TextWrapping="Wrap"
+				Margin="4">
+				Выберите модификацию для сборки:
+			</TextBlock>
+			<ListBox
+				Grid.Row="1"
+				Items="{Binding Nomenclatures}"
+				SelectedItem="{Binding Nomenclature}">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid
+							ColumnDefinitions="*, 70">
+							<TextBlock
+								Grid.Column="0"
+								Text="{Binding decimalNumber}"/>
+							<TextBlock
+								Grid.Column="1"								
+								HorizontalAlignment="Right"
+								Text="{Binding amount, StringFormat={}{0} шт}"
+								FontWeight="DemiBold"/>
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<Grid
+				Grid.Row="2"
+				ColumnDefinitions="*, *"
+				HorizontalAlignment="Right">
+				<Button		
+					Command="{Binding okCmd}"
+					Grid.Column="0"
+					HorizontalAlignment="Stretch">
+					OK
+				</Button>
+				<Button
+					Command="{Binding cancelCmd}"
+					Grid.Column="1"
+					HorizontalAlignment="Stretch">
+					Отмена
+				</Button>
+			</Grid>
+		</Grid>
+	</Grid>
+</Window>

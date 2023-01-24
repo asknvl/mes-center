@@ -31,6 +31,7 @@ namespace mes_center.Models.rest
         Task SetMeterStagePassed(int sessionid, MeterDTO meter);
         Task SetMeterStagePassed(int sessionid, string sn, DateTime start_dt, int next_stage, string comment);
         Task<int> GetMetersAmount(string order_num, int stage);
+        Task<int> GetMetersAmount(string order_num, string modificationCode);
         Task<List<StageDTO>> GetStages();
         Task<List<StrategyDTO>> GetStrategies();
         Task CreateStrategy(StrategyDTO strategy);

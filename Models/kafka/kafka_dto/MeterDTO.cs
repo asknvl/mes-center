@@ -20,6 +20,8 @@ namespace mes_center.Models.kafka.kafka_dto
         [JsonProperty]
         public bool is_ok { get; set; }
         [JsonProperty]
+        public string modificationCode { get; set; }
+        [JsonProperty]
         public string start_dt { get; set; }
         [JsonProperty]
         public string finish_dt { get; set; }
@@ -46,6 +48,7 @@ namespace mes_center.Models.kafka.kafka_dto
         public MeterDTO() { }
         public MeterDTO(int sessionID,
                         int stageCode,
+                        string modificationcode,
                         bool isOk,
                         DateTime beginTime,
                         DateTime endTime,
@@ -58,6 +61,7 @@ namespace mes_center.Models.kafka.kafka_dto
             //version = 1;
             sessionid = sessionID;
             stagecode = stageCode;
+            modificationCode = modificationcode;
             start_dt = beginTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
             finish_dt = endTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
             is_ok = isOk;

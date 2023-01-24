@@ -71,6 +71,7 @@ namespace mes_center.arm_regmeter.ViewModels
 
         ObservableCollection<componentItemVM> OrderComponentsList { get; set; } = new();       
         public OrderDTO Order { get; set; }
+        public ModificationDTO Modification { get; set; }
         #endregion
 
         #region commands
@@ -201,6 +202,7 @@ namespace mes_center.arm_regmeter.ViewModels
 
                     meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
                                                                     1,
+                                                                    Modification.modificationCode,
                                                                     isOk,
                                                                     regStartTime,
                                                                     DateTime.UtcNow,
@@ -230,6 +232,7 @@ namespace mes_center.arm_regmeter.ViewModels
             {
                 meterDTO = new kafka.kafka_dto.MeterDTO(SessionID,
                                                                 1,
+                                                                Modification.modificationCode,
                                                                 isOk,
                                                                 regStartTime,
                                                                 DateTime.UtcNow,
@@ -302,10 +305,19 @@ namespace mes_center.arm_regmeter.ViewModels
             await Task.Run(async () =>
             {
 
-                TotalAmount = await prodApi.GetMetersAmount(Order.order_num, 1);
+                //TotalAmount = await prodApi.GetMetersAmount(Order.order_num, 1);
+
+                var order = prodApi.GetOrder(Order.order_num);
+                //var nomenclature = order.nomenclature.FirstOrDefault(n => n.decimalNumber.Equals(Modification.decimalNumber));
+                //TotalAmount = nomenclature.amount;
+
+                TotalAmount = await prodApi.GetMetersAmount(Order.order_num, Modification.modificationCode);
+
                 if (TotalAmount > 0)
                 {
-                    var order = prodApi.GetOrder(Order.order_num);
+                    //var order = prodApi.GetOrder(Order.order_num);
+
+
                     meterComponents = await prodApi.GetComponents(order.model);
                     componentsList = new();
                     foreach (var dto in meterComponents)
@@ -338,10 +350,12 @@ namespace mes_center.arm_regmeter.ViewModels
 
             try
             {
-                SessionID = await prodApi.OpenSession(Order.order_num, AppContext.User.Login, null);                
+                SessionID = await prodApi.OpenSession(Order.order_num, AppContext.User.Login, null);
                 //meter_created_response.start("meter_created_response");
 
-                TotalAmount = await prodApi.GetMetersAmount(Order.order_num, 1);
+                //TotalAmount = await prodApi.GetMetersAmount(Order.order_num, 1);
+
+                TotalAmount = await prodApi.GetMetersAmount(Order.order_num, Modification.modificationCode);
 
                 await startRegistration();               
 
